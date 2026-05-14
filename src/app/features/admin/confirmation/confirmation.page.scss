@@ -1,0 +1,14 @@
+.toolbar-content { display: flex; align-items: center; justify-content: space-between; padding: 0 8px; .toolbar-logo { height: 36px; object-fit: contain; } }
+.icon-btn { background: transparent; border: none; color: var(--nc-white); font-size: 24px; cursor: pointer; display: flex; align-items: center; padding: 4px; }
+.page-container { padding: 16px; }
+.confirm-panel { max-width: 480px; margin: 0 auto; }
+.panel-title { color: var(--nc-blue-dark); font-size: var(--nc-font-size-xl); font-weight: var(--nc-font-weight-bold); text-align: center; text-transform: uppercase; margin: 0 0 16px; }
+
+.booking-card { margin-bottom: 14px; }
+.booking-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.booking-id { font-weight: var(--nc-font-weight-bold); color: var(--nc-blue-dark); font-size: var(--nc-font-size-sm); border: 1px solid var(--nc-gray-light); border-radius: var(--nc-radius-sm); padding: 4px 10px; }
+.booking-status { font-size: var(--nc-font-size-xs); font-weight: var(--nc-font-weight-bold); padding: 4px 10px; border-radius: var(--nc-radius-sm); &.status-pendiente { background: rgba(243,156,18,0.15); color: var(--nc-warning); } &.status-aprobada { background: rgba(46,204,113,0.15); color: var(--nc-success); } &.status-denegada { background: rgba(231,76,60,0.15); color: var(--nc-danger); } }
+.booking-detail { color: var(--nc-gray-dark); font-size: var(--nc-font-size-sm); margin-bottom: 4px; strong { color: var(--nc-blue-dark); } }
+.booking-actions { display: flex; gap: 10px; margin-top: 14px; ion-button { flex: 1; } }
+.chat-btn { --color: var(--nc-blue-dark); --border-color: var(--nc-blue-dark); margin-top: 10px; }
+.empty-state { text-align: center; color: var(--nc-gray-medium); padding: 32px; font-size: var(--nc-font-size-sm); }

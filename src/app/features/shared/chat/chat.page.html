@@ -1,0 +1,39 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <button class="icon-btn" (click)="goBack()"><ion-icon name="arrow-back-outline"></ion-icon></button>
+      <span class="chat-title">Chat — Solicitud #{{ bookingId }}</span>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="messages-container">
+    <div *ngFor="let msg of messages"
+         class="message-bubble"
+         [class.own]="isOwn(msg)"
+         [class.other]="!isOwn(msg)">
+      <span class="sender-name" *ngIf="!isOwn(msg)">{{ msg.senderName }}</span>
+      <div class="bubble-content">{{ msg.content }}</div>
+      <span class="msg-time">{{ msg.createdAt | date:'shortTime' }}</span>
+    </div>
+
+    <div *ngIf="messages.length === 0" class="empty-chat">
+      <p>Inicia la conversación con la dependencia.</p>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <div class="chat-input-bar">
+    <ion-input
+      [(ngModel)]="newMessage"
+      placeholder="Escribe un mensaje..."
+      class="chat-input"
+      (keyup.enter)="sendMessage()">
+    </ion-input>
+    <button class="send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+      <ion-icon name="send-outline"></ion-icon>
+    </button>
+  </div>
+</ion-footer>

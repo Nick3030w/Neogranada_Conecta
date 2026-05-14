@@ -1,0 +1,41 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <button class="icon-btn" (click)="goBack()"><ion-icon name="arrow-back-outline"></ion-icon></button>
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'">
+      <button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-container nc-animate-in">
+    <div class="nc-panel map-panel">
+      <h2 class="panel-title">MAPA</h2>
+
+      <ion-searchbar
+        [(ngModel)]="searchQuery"
+        placeholder="Buscar bloque o sede..."
+        class="map-searchbar"
+        animated>
+      </ion-searchbar>
+
+      <div class="blocks-list">
+        <div *ngFor="let block of filteredBlocks" class="block-item nc-card">
+          <div class="block-icon">
+            <ion-icon name="business-outline"></ion-icon>
+          </div>
+          <div class="block-info">
+            <span class="block-name">{{ block.name }}</span>
+            <span class="block-desc">{{ block.description }}</span>
+          </div>
+          <ion-icon name="chevron-forward-outline" class="block-arrow"></ion-icon>
+        </div>
+
+        <div *ngIf="filteredBlocks.length === 0" class="empty-state">
+          <p>No se encontraron bloques o sedes con ese nombre.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

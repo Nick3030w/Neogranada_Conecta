@@ -11,7 +11,7 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './availability.page.html',
   styleUrls: ['./availability.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent, IonHeader, IonToolbar, IonIcon, IonButton, IonSpinner],
+  imports: [CommonModule, IonContent, IonHeader, IonToolbar, IonIcon, IonButton],
 })
 export class AvailabilityPage {
   resourceId = '';

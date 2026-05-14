@@ -1,0 +1,31 @@
+.toolbar-content { display: flex; align-items: center; justify-content: space-between; padding: 0 8px; .toolbar-logo { height: 36px; object-fit: contain; } }
+.icon-btn { background: transparent; border: none; color: var(--nc-white); font-size: 24px; cursor: pointer; display: flex; align-items: center; padding: 4px; }
+.page-container { padding: 16px; }
+.notif-panel { max-width: 480px; margin: 0 auto; }
+.panel-title { color: var(--nc-blue-dark); font-size: var(--nc-font-size-xl); font-weight: var(--nc-font-weight-bold); text-align: center; text-transform: uppercase; margin: 0 0 16px; }
+
+.notif-list { display: flex; flex-direction: column; gap: 8px; }
+
+.notif-item {
+  display: flex; align-items: flex-start; gap: 12px; padding: 12px;
+  background: var(--nc-white-soft); border-radius: var(--nc-radius-sm);
+  border-left: 3px solid var(--nc-gray-light); position: relative;
+  transition: background var(--nc-transition-fast);
+
+  &.unread { border-left-color: var(--nc-gold); background: rgba(240, 192, 64, 0.05); }
+
+  .notif-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+
+  .notif-content { flex: 1; display: flex; flex-direction: column; gap: 2px;
+    .notif-title { color: var(--nc-blue-dark); font-weight: var(--nc-font-weight-bold); font-size: var(--nc-font-size-sm); }
+    .notif-body  { color: var(--nc-gray-dark); font-size: var(--nc-font-size-sm); }
+    .notif-time  { color: var(--nc-gray-medium); font-size: var(--nc-font-size-xs); margin-top: 2px; }
+  }
+
+  .unread-dot { width: 8px; height: 8px; background: var(--nc-gold); border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+}
+
+.empty-state { text-align: center; color: var(--nc-gray-medium); padding: 32px 16px;
+  ion-icon { font-size: 48px; display: block; margin-bottom: 8px; }
+  p { margin: 0; font-size: var(--nc-font-size-sm); }
+}

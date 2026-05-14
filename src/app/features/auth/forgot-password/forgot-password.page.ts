@@ -6,7 +6,7 @@ import {
   IonContent, IonButton, IonInput, IonSpinner, IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { mailOutline, arrowBackOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { mailOutline, arrowBackOutline, checkmarkCircleOutline, alertCircleOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -29,7 +29,7 @@ export class ForgotPasswordPage implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService
   ) {
-    addIcons({ mailOutline, arrowBackOutline, checkmarkCircleOutline });
+    addIcons({arrowBackOutline,checkmarkCircleOutline,mailOutline,alertCircleOutline});
   }
 
   ngOnInit(): void {

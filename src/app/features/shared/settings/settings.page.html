@@ -1,0 +1,61 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <button class="icon-btn" (click)="goBack()"><ion-icon name="arrow-back-outline"></ion-icon></button>
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'">
+      <button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-container nc-animate-in">
+    <div class="nc-panel settings-panel">
+
+      <!-- Ícono de configuración -->
+      <div class="settings-icon-wrapper">
+        <div class="settings-icon-bg">
+          <ion-icon name="settings-outline" class="nc-icon-gold"></ion-icon>
+        </div>
+      </div>
+      <h2 class="panel-title">CONFIGURACIÓN</h2>
+
+      <!-- Toggle notificaciones -->
+      <div class="setting-row">
+        <span class="setting-label">Silenciar notificaciones</span>
+        <ion-toggle
+          [checked]="notificationsMuted"
+          (ionChange)="toggleNotifications($event)"
+          color="warning">
+        </ion-toggle>
+      </div>
+
+      <!-- Toggle modo oscuro -->
+      <div class="setting-row">
+        <span class="setting-label">Modo oscuro</span>
+        <ion-toggle
+          [checked]="darkMode"
+          (ionChange)="toggleDarkMode($event)"
+          color="warning">
+        </ion-toggle>
+      </div>
+
+      <hr class="nc-divider">
+
+      <!-- Botones de acción -->
+      <ion-button expand="block" fill="outline" class="settings-btn" (click)="goToProfile()">
+        Ajustes de perfil
+      </ion-button>
+
+      <ion-button expand="block" fill="outline" class="settings-btn" (click)="changePassword()" [disabled]="loading">
+        <ion-spinner *ngIf="loading" name="crescent" slot="start" style="width:16px;height:16px"></ion-spinner>
+        Cambiar contraseña
+      </ion-button>
+
+      <ion-button expand="block" class="nc-btn-danger logout-btn" (click)="logout()">
+        Cerrar sesión
+      </ion-button>
+
+    </div>
+  </div>
+</ion-content>

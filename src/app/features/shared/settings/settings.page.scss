@@ -1,0 +1,16 @@
+.toolbar-content { display: flex; align-items: center; justify-content: space-between; padding: 0 8px; .toolbar-logo { height: 36px; object-fit: contain; } }
+.icon-btn { background: transparent; border: none; color: var(--nc-white); font-size: 24px; cursor: pointer; display: flex; align-items: center; padding: 4px; }
+.page-container { padding: 16px; }
+.settings-panel { max-width: 400px; margin: 0 auto; }
+
+.settings-icon-wrapper { display: flex; justify-content: center; margin-bottom: 8px; }
+.settings-icon-bg { width: 72px; height: 72px; background: var(--nc-blue-dark); border-radius: var(--nc-radius-md); display: flex; align-items: center; justify-content: center; ion-icon { font-size: 40px; } }
+
+.panel-title { color: var(--nc-blue-dark); font-size: var(--nc-font-size-xl); font-weight: var(--nc-font-weight-bold); text-align: center; text-transform: uppercase; margin: 0 0 20px; }
+
+.setting-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--nc-gray-light);
+  .setting-label { color: var(--nc-blue-dark); font-size: var(--nc-font-size-base); font-weight: var(--nc-font-weight-medium); }
+}
+
+.settings-btn { --color: var(--nc-blue-dark); --border-color: var(--nc-blue-dark); margin-bottom: 10px; font-weight: var(--nc-font-weight-medium); }
+.logout-btn { margin-top: 4px; }

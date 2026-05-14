@@ -1,0 +1,31 @@
+.toolbar-content {
+  display: flex; align-items: center; justify-content: space-between; padding: 0 8px;
+  .toolbar-logo { height: 36px; object-fit: contain; }
+}
+.icon-btn { background: transparent; border: none; color: var(--nc-white); font-size: 24px; cursor: pointer; display: flex; align-items: center; padding: 4px; }
+.page-container { padding: 16px; }
+.map-panel { max-width: 480px; margin: 0 auto; }
+.panel-title { color: var(--nc-blue-dark); font-size: var(--nc-font-size-xl); font-weight: var(--nc-font-weight-bold); text-align: center; text-transform: uppercase; margin: 0 0 12px; }
+
+.map-searchbar {
+  --background: var(--nc-white-soft);
+  --color: var(--nc-blue-dark);
+  --placeholder-color: var(--nc-gray-medium);
+  --border-radius: var(--nc-radius-sm);
+  --box-shadow: none;
+  border: 1.5px solid var(--nc-gray-light);
+  border-radius: var(--nc-radius-sm);
+  margin-bottom: 16px;
+  padding: 0;
+}
+
+.blocks-list { display: flex; flex-direction: column; gap: 10px; }
+
+.block-item {
+  display: flex; align-items: center; gap: 12px; padding: 14px; cursor: pointer;
+  .block-icon { width: 44px; height: 44px; background: var(--nc-blue-dark); border-radius: var(--nc-radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; ion-icon { color: var(--nc-gold); font-size: 22px; } }
+  .block-info { flex: 1; display: flex; flex-direction: column; gap: 2px; .block-name { color: var(--nc-blue-dark); font-weight: var(--nc-font-weight-bold); font-size: var(--nc-font-size-base); } .block-desc { color: var(--nc-gray-medium); font-size: var(--nc-font-size-sm); } }
+  .block-arrow { color: var(--nc-gray-medium); font-size: 18px; }
+}
+
+.empty-state { text-align: center; color: var(--nc-gray-medium); padding: 24px; font-size: var(--nc-font-size-sm); }

@@ -1,0 +1,57 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <button class="icon-btn" (click)="goBack()"><ion-icon name="arrow-back-outline"></ion-icon></button>
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'">
+      <button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-container nc-animate-in">
+    <div class="nc-panel profile-panel">
+
+      <!-- Avatar -->
+      <div class="avatar-section">
+        <div class="nc-avatar">{{ initials }}</div>
+        <h2 class="profile-name">HOLA {{ user?.fullName?.toUpperCase() }}</h2>
+      </div>
+
+      <hr class="nc-divider">
+
+      <form [formGroup]="form" (ngSubmit)="onSave()">
+
+        <div class="field-group">
+          <label class="nc-label">Nombre:</label>
+          <div class="input-wrapper" [class.input-error]="form.get('fullName')!.invalid && form.get('fullName')!.touched">
+            <ion-input formControlName="fullName" type="text" placeholder="Nombre completo"></ion-input>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="nc-label">Correo:</label>
+          <div class="input-wrapper disabled">
+            <ion-input [value]="user?.email" type="email" readonly></ion-input>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="nc-label">Programa:</label>
+          <div class="input-wrapper" [class.input-error]="form.get('academicProgram')!.invalid && form.get('academicProgram')!.touched">
+            <ion-input formControlName="academicProgram" type="text" placeholder="Programa académico"></ion-input>
+          </div>
+        </div>
+
+        <div class="success-msg" *ngIf="successMessage">{{ successMessage }}</div>
+        <div class="nc-error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+        <ion-button type="submit" expand="block" class="nc-btn-primary" [disabled]="loading">
+          <ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>
+          {{ loading ? 'Guardando...' : 'GUARDAR' }}
+        </ion-button>
+
+      </form>
+    </div>
+  </div>
+</ion-content>

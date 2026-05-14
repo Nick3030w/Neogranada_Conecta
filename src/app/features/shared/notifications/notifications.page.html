@@ -1,0 +1,38 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <button class="icon-btn" (click)="goBack()"><ion-icon name="arrow-back-outline"></ion-icon></button>
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'">
+      <button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-container nc-animate-in">
+    <div class="nc-panel notif-panel">
+      <h2 class="panel-title">CENTRO DE NOTIFICACIONES</h2>
+
+      <div class="notif-list">
+        <div *ngFor="let notif of notifications"
+             class="notif-item"
+             [class.unread]="!notif.read">
+          <div class="notif-icon" [style.color]="getIconColor(notif.type)">
+            <ion-icon [name]="getIcon(notif.type)"></ion-icon>
+          </div>
+          <div class="notif-content">
+            <span class="notif-title">{{ notif.title }}</span>
+            <span class="notif-body">{{ notif.body }}</span>
+            <span class="notif-time">{{ notif.createdAt | date:'short' }}</span>
+          </div>
+          <div class="unread-dot" *ngIf="!notif.read"></div>
+        </div>
+
+        <div *ngIf="notifications.length === 0" class="empty-state">
+          <ion-icon name="notifications-outline"></ion-icon>
+          <p>No tienes notificaciones.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

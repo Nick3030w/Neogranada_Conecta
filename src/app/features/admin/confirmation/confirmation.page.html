@@ -1,0 +1,46 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <button class="icon-btn" (click)="goBack()"><ion-icon name="arrow-back-outline"></ion-icon></button>
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'">
+      <button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-container nc-animate-in">
+    <div class="nc-panel confirm-panel">
+      <h2 class="panel-title">ESTADO DE CONFIRMACIÓN</h2>
+
+      <div *ngFor="let booking of pendingBookings" class="booking-card nc-card">
+        <div class="booking-header">
+          <span class="booking-id">Solicitud #{{ booking.id }}</span>
+          <span class="booking-status" [class]="'status-' + booking.status">{{ booking.status | titlecase }}</span>
+        </div>
+        <div class="booking-detail"><strong>Estudiante:</strong> {{ booking.studentName }}</div>
+        <div class="booking-detail"><strong>Recurso:</strong> {{ booking.resourceName }}</div>
+        <div class="booking-detail"><strong>Fecha:</strong> {{ booking.date }} — {{ booking.time }}</div>
+        <div class="booking-detail" *ngIf="booking.observations"><strong>Obs:</strong> {{ booking.observations }}</div>
+
+        <div class="booking-actions" *ngIf="booking.status === 'pendiente'">
+          <ion-button class="nc-btn-danger" (click)="deny(booking)">
+            <ion-icon name="close-outline" slot="start"></ion-icon>DENEGAR
+          </ion-button>
+          <ion-button class="nc-btn-success" (click)="approve(booking)">
+            <ion-icon name="checkmark-outline" slot="start"></ion-icon>ACEPTAR
+          </ion-button>
+        </div>
+
+        <ion-button *ngIf="booking.status !== 'pendiente'" expand="block" fill="outline"
+                    class="chat-btn" (click)="openChat(booking.id)">
+          <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>Chat con la dependencia
+        </ion-button>
+      </div>
+
+      <div *ngIf="pendingBookings.length === 0" class="empty-state">
+        <p>No hay solicitudes pendientes.</p>
+      </div>
+    </div>
+  </div>
+</ion-content>

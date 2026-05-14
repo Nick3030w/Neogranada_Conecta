@@ -1,0 +1,9 @@
+.toolbar-content { display: flex; align-items: center; justify-content: space-between; padding: 0 8px; .toolbar-logo { height: 36px; object-fit: contain; } }
+.icon-btn { background: transparent; border: none; color: var(--nc-white); font-size: 24px; cursor: pointer; display: flex; align-items: center; padding: 4px; }
+.page-container { padding: 16px; }
+.profile-panel { max-width: 400px; margin: 0 auto; }
+.avatar-section { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 8px; }
+.profile-name { color: var(--nc-blue-dark); font-size: var(--nc-font-size-md); font-weight: var(--nc-font-weight-bold); margin: 0; text-align: center; }
+.field-group { margin-bottom: 14px; }
+.input-wrapper { display: flex; align-items: center; background: var(--nc-white-soft); border: 1.5px solid var(--nc-gray-light); border-radius: var(--nc-radius-sm); padding: 0 8px; &:focus-within { border-color: var(--nc-gold); } &.input-error { border-color: var(--nc-danger); } &.disabled { opacity: 0.6; } ion-input { --background: transparent; --color: var(--nc-blue-dark); --placeholder-color: var(--nc-gray-medium); --padding-start: 0; flex: 1; font-size: var(--nc-font-size-base); } }
+.success-msg { color: var(--nc-success); font-size: var(--nc-font-size-sm); margin-bottom: 12px; text-align: center; }

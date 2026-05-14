@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
-  IonContent, IonHeader, IonToolbar, IonIcon, IonBadge,
+  IonContent, IonHeader, IonToolbar, IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -24,7 +24,7 @@ interface HomeMenuItem {
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent, IonHeader, IonToolbar, IonIcon, IonBadge],
+  imports: [CommonModule, IonContent, IonHeader, IonToolbar, IonIcon],
 })
 export class StudentHomePage implements OnInit {
   user: UserProfile | null = null;

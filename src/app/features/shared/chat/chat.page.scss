@@ -1,0 +1,22 @@
+.toolbar-content { display: flex; align-items: center; gap: 12px; padding: 0 8px; }
+.icon-btn { background: transparent; border: none; color: var(--nc-white); font-size: 24px; cursor: pointer; display: flex; align-items: center; padding: 4px; }
+.chat-title { color: var(--nc-white); font-size: var(--nc-font-size-base); font-weight: var(--nc-font-weight-bold); }
+
+.messages-container { padding: 16px; display: flex; flex-direction: column; gap: 10px; min-height: 100%; }
+
+.message-bubble {
+  max-width: 75%; display: flex; flex-direction: column; gap: 2px;
+  &.own { align-self: flex-end; align-items: flex-end; }
+  &.other { align-self: flex-start; align-items: flex-start; }
+  .sender-name { font-size: var(--nc-font-size-xs); color: var(--nc-gray-medium); padding: 0 4px; }
+  .bubble-content { padding: 10px 14px; border-radius: 16px; font-size: var(--nc-font-size-sm); line-height: 1.4; }
+  &.own .bubble-content { background: var(--nc-gold); color: var(--nc-blue-dark); border-bottom-right-radius: 4px; }
+  &.other .bubble-content { background: var(--nc-white); color: var(--nc-blue-dark); border-bottom-left-radius: 4px; box-shadow: var(--nc-shadow-sm); }
+  .msg-time { font-size: var(--nc-font-size-xs); color: var(--nc-gray-medium); padding: 0 4px; }
+}
+
+.empty-chat { flex: 1; display: flex; align-items: center; justify-content: center; p { color: var(--nc-gray-medium); font-size: var(--nc-font-size-sm); text-align: center; } }
+
+.chat-input-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--nc-blue-dark); border-top: 1px solid rgba(255,255,255,0.1); }
+.chat-input { --background: rgba(255,255,255,0.1); --color: var(--nc-white); --placeholder-color: rgba(255,255,255,0.5); --border-radius: 20px; --padding-start: 14px; --padding-end: 14px; flex: 1; font-size: var(--nc-font-size-sm); }
+.send-btn { background: var(--nc-gold); border: none; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; ion-icon { color: var(--nc-blue-dark); font-size: 18px; } &:disabled { opacity: 0.4; } }
