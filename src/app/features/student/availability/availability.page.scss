@@ -1,0 +1,4 @@
+.toolbar-content { display:flex; align-items:center; justify-content:space-between; padding:0 8px; .toolbar-logo{height:36px;object-fit:contain;} }
+.icon-btn { background:transparent; border:none; color:var(--nc-white); font-size:24px; cursor:pointer; display:flex; align-items:center; padding:4px; }
+.page-container { padding:16px; }
+.panel-title { color:var(--nc-blue-dark); font-size:var(--nc-font-size-xl); font-weight:var(--nc-font-weight-bold); text-align:center; text-transform:uppercase; margin:0 0 16px; }

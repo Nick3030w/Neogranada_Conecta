@@ -1,0 +1,8 @@
+.toolbar-content{display:flex;align-items:center;justify-content:space-between;padding:0 8px;.toolbar-logo{height:36px;object-fit:contain;}}
+.icon-btn{background:transparent;border:none;color:var(--nc-white);font-size:24px;cursor:pointer;display:flex;align-items:center;padding:4px;}
+.page-container{padding:16px;}
+.panel-title{color:var(--nc-blue-dark);font-size:var(--nc-font-size-xl);font-weight:var(--nc-font-weight-bold);text-align:center;text-transform:uppercase;margin:0 0 16px;}
+.field-row{display:flex;gap:12px;.half{flex:1;}}
+.field-group{margin-bottom:16px;}
+.input-wrapper{display:flex;align-items:center;background:var(--nc-white-soft);border:1.5px solid var(--nc-gray-light);border-radius:var(--nc-radius-sm);padding:0 8px;transition:border-color var(--nc-transition-fast);&:focus-within{border-color:var(--nc-gold);}&.input-error{border-color:var(--nc-danger);}.input-icon{color:var(--nc-gray-medium);font-size:18px;flex-shrink:0;margin-right:4px;}ion-input{--background:transparent;--color:var(--nc-blue-dark);--placeholder-color:var(--nc-gray-medium);--padding-start:0;flex:1;font-size:var(--nc-font-size-base);}ion-select{--color:var(--nc-blue-dark);--placeholder-color:var(--nc-gray-medium);width:100%;font-size:var(--nc-font-size-base);}}
+.textarea-wrapper{align-items:flex-start;padding:8px;}

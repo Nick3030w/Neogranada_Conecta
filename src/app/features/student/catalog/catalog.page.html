@@ -1,0 +1,32 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <button class="icon-btn" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </button>
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'">
+      <button class="icon-btn" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="catalog-container nc-animate-in">
+    <div class="nc-panel catalog-panel">
+      <h2 class="panel-title">CATÁLOGO</h2>
+      <div class="categories-grid">
+        <button *ngFor="let cat of categories" class="category-card nc-card"
+                (click)="selectCategory(cat.id)">
+          <div class="category-img-wrapper">
+            <img [src]="cat.imageUrl" [alt]="cat.label"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="category-emoji-fallback" style="display:none">{{ cat.icon }}</div>
+          </div>
+          <span class="category-label">{{ cat.label }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</ion-content>

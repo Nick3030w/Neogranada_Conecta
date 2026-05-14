@@ -1,0 +1,137 @@
+<ion-content class="nc-auth-bg">
+  <div class="register-container nc-animate-in">
+
+    <!-- Header -->
+    <div class="register-header">
+      <a routerLink="/auth/login" class="back-btn">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </a>
+      <div class="logo-wrapper">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img"
+             onerror="this.style.display='none'">
+      </div>
+      <h1 class="nc-page-title">NEOGRANADA<br>CONECTA</h1>
+      <p class="nc-page-subtitle">Crear cuenta de estudiante</p>
+    </div>
+
+    <!-- Panel de registro -->
+    <div class="nc-panel register-panel">
+
+      <form [formGroup]="form" (ngSubmit)="onRegister()">
+
+        <!-- Nombre completo -->
+        <div class="field-group">
+          <label class="nc-label">Nombre completo</label>
+          <div class="input-wrapper" [class.input-error]="fullName.invalid && fullName.touched">
+            <ion-icon name="person-outline" class="input-icon"></ion-icon>
+            <ion-input formControlName="fullName" type="text"
+              placeholder="Ej: Juan Pérez García" autocomplete="name">
+            </ion-input>
+          </div>
+          <span class="nc-error-msg" *ngIf="fullName.invalid && fullName.touched">
+            Ingresa tu nombre completo (mínimo 3 caracteres).
+          </span>
+        </div>
+
+        <!-- Correo institucional -->
+        <div class="field-group">
+          <label class="nc-label">Correo institucional</label>
+          <div class="input-wrapper" [class.input-error]="email.invalid && email.touched">
+            <ion-icon name="mail-outline" class="input-icon"></ion-icon>
+            <ion-input formControlName="email" type="email"
+              placeholder="usuario@unimilitar.edu.co"
+              autocomplete="email" inputmode="email">
+            </ion-input>
+          </div>
+          <span class="nc-error-msg" *ngIf="email.invalid && email.touched">
+            Ingresa un correo institucional válido.
+          </span>
+        </div>
+
+        <!-- Código estudiantil -->
+        <div class="field-group">
+          <label class="nc-label">Código estudiantil</label>
+          <div class="input-wrapper" [class.input-error]="studentCode.invalid && studentCode.touched">
+            <ion-icon name="card-outline" class="input-icon"></ion-icon>
+            <ion-input formControlName="studentCode" type="text"
+              placeholder="Ej: 1234567" inputmode="numeric">
+            </ion-input>
+          </div>
+          <span class="nc-error-msg" *ngIf="studentCode.invalid && studentCode.touched">
+            Ingresa un código estudiantil válido (6-10 dígitos).
+          </span>
+        </div>
+
+        <!-- Programa académico -->
+        <div class="field-group">
+          <label class="nc-label">Programa académico</label>
+          <div class="input-wrapper select-wrapper"
+               [class.input-error]="academicProgram.invalid && academicProgram.touched">
+            <ion-icon name="school-outline" class="input-icon"></ion-icon>
+            <ion-select formControlName="academicProgram"
+              placeholder="Selecciona tu programa"
+              interface="action-sheet"
+              cancelText="Cancelar">
+              <ion-select-option *ngFor="let p of programs" [value]="p">{{ p }}</ion-select-option>
+            </ion-select>
+          </div>
+          <span class="nc-error-msg" *ngIf="academicProgram.invalid && academicProgram.touched">
+            Selecciona tu programa académico.
+          </span>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="field-group">
+          <label class="nc-label">Contraseña</label>
+          <div class="input-wrapper" [class.input-error]="password.invalid && password.touched">
+            <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+            <ion-input formControlName="password" type="password"
+              placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+            </ion-input>
+          </div>
+          <span class="nc-error-msg" *ngIf="password.errors?.['weakPassword'] && password.touched">
+            {{ password.errors?.['weakPassword'] }}
+          </span>
+        </div>
+
+        <!-- Confirmar contraseña -->
+        <div class="field-group">
+          <label class="nc-label">Confirmar contraseña</label>
+          <div class="input-wrapper"
+               [class.input-error]="(form.errors?.['passwordMismatch'] || confirmPassword.invalid) && confirmPassword.touched">
+            <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+            <ion-input formControlName="confirmPassword" type="password"
+              placeholder="Repite tu contraseña" autocomplete="new-password">
+              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+            </ion-input>
+          </div>
+          <span class="nc-error-msg"
+                *ngIf="form.errors?.['passwordMismatch'] && confirmPassword.touched">
+            Las contraseñas no coinciden.
+          </span>
+        </div>
+
+        <!-- Error general -->
+        <div class="error-banner" *ngIf="errorMessage">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <!-- Botón registrar -->
+        <ion-button type="submit" expand="block" class="nc-btn-primary" [disabled]="loading">
+          <ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>
+          {{ loading ? 'Registrando...' : 'CREAR CUENTA' }}
+        </ion-button>
+
+      </form>
+
+      <hr class="nc-divider">
+      <p class="login-text">
+        ¿Ya tienes cuenta?
+        <a routerLink="/auth/login" class="login-link">Inicia sesión</a>
+      </p>
+
+    </div>
+  </div>
+</ion-content>

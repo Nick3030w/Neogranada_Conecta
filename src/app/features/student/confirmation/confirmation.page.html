@@ -1,0 +1,12 @@
+<ion-header class="ion-no-border"><ion-toolbar><div class="toolbar-content"><button class="icon-btn" (click)="goHome()"><ion-icon name="arrow-back-outline"></ion-icon></button><img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'"><button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button></div></ion-toolbar></ion-header>
+<ion-content><div class="page-container nc-animate-in"><div class="nc-panel confirmation-panel">
+  <h2 class="panel-title">ESTADO DE CONFIRMACIÓN</h2>
+  <div class="request-id">Solicitud #{{ bookingId }}</div>
+  <div class="status-area">
+    <ng-container *ngIf="status === 'pendiente'"><ion-spinner name="crescent" class="status-spinner"></ion-spinner><p class="status-text pending">Procesando solicitud...</p></ng-container>
+    <ng-container *ngIf="status === 'aprobada'"><ion-icon name="checkmark-circle-outline" class="status-icon success"></ion-icon><p class="status-text success">Solicitud confirmada</p></ng-container>
+    <ng-container *ngIf="status === 'denegada'"><ion-icon name="close-circle-outline" class="status-icon danger"></ion-icon><p class="status-text danger">Solicitud denegada</p></ng-container>
+  </div>
+  <ion-button *ngIf="status !== 'pendiente'" expand="block" fill="outline" class="chat-btn" (click)="goToChat()"><ion-icon name="chatbubbles-outline" slot="start"></ion-icon>Chat con la dependencia</ion-button>
+  <ion-button expand="block" class="nc-btn-primary" (click)="goHome()" style="margin-top:8px">CONTINUAR</ion-button>
+</div></div></ion-content>

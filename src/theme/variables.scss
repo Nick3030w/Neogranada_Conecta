@@ -1,0 +1,94 @@
+// ============================================================
+// NEOGRANADA CONECTA — Variables de diseño institucional UMNG
+// ============================================================
+
+// --- Colores institucionales ---
+:root {
+  --nc-blue-dark:       #1a2a4a;   // Fondo principal azul oscuro
+  --nc-blue-medium:     #1e3461;   // Azul medio para gradientes
+  --nc-blue-light:      #2a4a7f;   // Azul claro para hover/activo
+  --nc-gold:            #f0c040;   // Dorado institucional (acentos, íconos)
+  --nc-gold-dark:       #d4a820;   // Dorado oscuro para hover
+  --nc-gold-light:      #f5d060;   // Dorado claro para fondos suaves
+  --nc-white:           #ffffff;
+  --nc-white-soft:      #f8f9fa;   // Blanco suave para paneles
+  --nc-gray-light:      #e8ecf0;   // Gris claro para bordes
+  --nc-gray-medium:     #9aa5b4;   // Gris medio para texto secundario
+  --nc-gray-dark:       #4a5568;   // Gris oscuro para texto
+  --nc-success:         #2ecc71;   // Verde para disponible/aprobado
+  --nc-danger:          #e74c3c;   // Rojo para no disponible/denegado
+  --nc-warning:         #f39c12;   // Naranja para pendiente
+  --nc-overlay:         rgba(26, 42, 74, 0.85); // Overlay azul oscuro
+
+  // --- Tipografía ---
+  --nc-font-family:     'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --nc-font-size-xs:    11px;
+  --nc-font-size-sm:    13px;
+  --nc-font-size-base:  15px;
+  --nc-font-size-md:    17px;
+  --nc-font-size-lg:    20px;
+  --nc-font-size-xl:    24px;
+  --nc-font-size-xxl:   30px;
+  --nc-font-weight-regular: 400;
+  --nc-font-weight-medium:  500;
+  --nc-font-weight-bold:    700;
+
+  // --- Espaciados ---
+  --nc-spacing-xs:   4px;
+  --nc-spacing-sm:   8px;
+  --nc-spacing-md:   16px;
+  --nc-spacing-lg:   24px;
+  --nc-spacing-xl:   32px;
+  --nc-spacing-xxl:  48px;
+
+  // --- Bordes redondeados ---
+  --nc-radius-sm:    8px;
+  --nc-radius-md:    12px;
+  --nc-radius-lg:    20px;
+  --nc-radius-xl:    28px;
+  --nc-radius-full:  50%;
+
+  // --- Sombras ---
+  --nc-shadow-sm:    0 2px 8px rgba(0, 0, 0, 0.12);
+  --nc-shadow-md:    0 4px 16px rgba(0, 0, 0, 0.18);
+  --nc-shadow-lg:    0 8px 32px rgba(0, 0, 0, 0.24);
+  --nc-shadow-gold:  0 4px 16px rgba(240, 192, 64, 0.30);
+
+  // --- Transiciones ---
+  --nc-transition-fast:   0.15s ease;
+  --nc-transition-base:   0.25s ease;
+  --nc-transition-slow:   0.4s ease;
+
+  // --- Ionic overrides ---
+  --ion-background-color:         var(--nc-blue-dark);
+  --ion-text-color:                var(--nc-white);
+  --ion-toolbar-background:        var(--nc-blue-dark);
+  --ion-toolbar-color:             var(--nc-white);
+  --ion-tab-bar-background:        var(--nc-blue-dark);
+  --ion-tab-bar-color:             var(--nc-gray-medium);
+  --ion-tab-bar-color-selected:    var(--nc-gold);
+  --ion-color-primary:             var(--nc-gold);
+  --ion-color-primary-contrast:    var(--nc-blue-dark);
+  --ion-color-primary-shade:       var(--nc-gold-dark);
+  --ion-color-primary-tint:        var(--nc-gold-light);
+  --ion-color-danger:              var(--nc-danger);
+  --ion-color-success:             var(--nc-success);
+  --ion-color-warning:             var(--nc-warning);
+  --ion-font-family:               var(--nc-font-family);
+  --ion-item-background:           transparent;
+}
+
+// --- Modo oscuro (respeta preferencia del sistema) ---
+@media (prefers-color-scheme: dark) {
+  :root {
+    --nc-white-soft: #1e2d4a;
+    --nc-gray-light: #2a3a5a;
+  }
+}
+
+// --- Clase para modo oscuro manual ---
+.dark-theme {
+  --nc-white-soft: #1e2d4a;
+  --nc-gray-light: #2a3a5a;
+  --ion-background-color: #0f1a2e;
+}

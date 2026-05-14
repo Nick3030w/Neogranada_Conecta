@@ -1,0 +1,10 @@
+<ion-header class="ion-no-border"><ion-toolbar><div class="toolbar-content"><button class="icon-btn" (click)="goBack()"><ion-icon name="arrow-back-outline"></ion-icon></button><img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'"><button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button></div></ion-toolbar></ion-header>
+<ion-content><div class="page-container nc-animate-in"><div class="nc-panel calendar-panel">
+  <h2 class="panel-title">CALENDARIO</h2>
+  <div class="month-nav"><button class="nav-btn" (click)="prevMonth()"><ion-icon name="chevron-back-outline"></ion-icon></button><span class="month-label">{{ monthYear | titlecase }}</span><button class="nav-btn" (click)="nextMonth()"><ion-icon name="chevron-forward-outline"></ion-icon></button></div>
+  <div class="calendar-grid">
+    <div class="day-header" *ngFor="let d of ['D','L','M','X','J','V','S']">{{d}}</div>
+    <div *ngFor="let day of calendarDays" class="day-cell" [class.empty]="!day" [class.today]="day === currentDate.getDate()">{{ day }}</div>
+  </div>
+  <div class="bookings-counter"><span class="counter-label">Préstamos vigentes</span><span class="counter-badge">{{ activeBookingsCount }}</span></div>
+</div></div></ion-content>

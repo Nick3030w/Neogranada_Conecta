@@ -1,0 +1,12 @@
+<ion-header class="ion-no-border"><ion-toolbar><div class="toolbar-content"><button class="icon-btn" (click)="goBack()"><ion-icon name="arrow-back-outline"></ion-icon></button><img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'"><button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button></div></ion-toolbar></ion-header>
+<ion-content><div class="page-container nc-animate-in"><div class="nc-panel"><h2 class="panel-title">AGENDAMIENTO</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="field-row">
+    <div class="field-group half"><label class="nc-label">Fecha</label><div class="input-wrapper" [class.input-error]="date.invalid&&date.touched"><ion-icon name="calendar-outline" class="input-icon"></ion-icon><ion-input formControlName="date" type="date" [min]="today"></ion-input></div><span class="nc-error-msg" *ngIf="date.invalid&&date.touched">Requerido.</span></div>
+    <div class="field-group half"><label class="nc-label">Hora</label><div class="input-wrapper" [class.input-error]="time.invalid&&time.touched"><ion-icon name="time-outline" class="input-icon"></ion-icon><ion-input formControlName="time" type="time"></ion-input></div><span class="nc-error-msg" *ngIf="time.invalid&&time.touched">Requerido.</span></div>
+  </div>
+  <div class="field-group"><label class="nc-label">Servicio</label><div class="input-wrapper" [class.input-error]="service.invalid&&service.touched"><ion-select formControlName="service" placeholder="Selecciona el servicio" interface="action-sheet" cancelText="Cancelar"><ion-select-option *ngFor="let s of services" [value]="s">{{s}}</ion-select-option></ion-select></div><span class="nc-error-msg" *ngIf="service.invalid&&service.touched">Selecciona un servicio.</span></div>
+  <div class="field-group"><label class="nc-label">Observaciones</label><div class="input-wrapper textarea-wrapper"><ion-textarea formControlName="observations" placeholder="Observaciones adicionales (opcional)" rows="3" style="--background:transparent;--color:var(--nc-blue-dark);--placeholder-color:var(--nc-gray-medium)"></ion-textarea></div></div>
+  <ion-button type="submit" expand="block" class="nc-btn-primary" [disabled]="loading"><ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>{{ loading ? 'Enviando...' : 'CONTINUAR' }}</ion-button>
+</form>
+</div></div></ion-content>

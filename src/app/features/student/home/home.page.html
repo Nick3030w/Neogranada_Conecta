@@ -1,0 +1,43 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo"
+           onerror="this.style.display='none'">
+      <div class="toolbar-actions">
+        <button class="icon-btn" (click)="goToNotifications()">
+          <ion-icon name="notifications-outline"></ion-icon>
+        </button>
+        <button class="icon-btn" (click)="logout()">
+          <ion-icon name="log-out-outline"></ion-icon>
+        </button>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="home-container nc-animate-in">
+
+    <!-- Bienvenida -->
+    <div class="welcome-section">
+      <h1 class="welcome-title">BIENVENIDO A<br>NEOGRANADA<br>CONECTA</h1>
+      <p class="welcome-name">{{ firstName }}</p>
+    </div>
+
+    <!-- Grid de menú -->
+    <div class="nc-panel menu-panel">
+      <div class="menu-grid">
+        <button
+          *ngFor="let item of menuItems"
+          class="menu-item nc-card"
+          (click)="navigate(item.route)">
+          <div class="menu-icon-wrapper">
+            <ion-icon [name]="item.icon" class="nc-icon-gold"></ion-icon>
+          </div>
+          <span class="menu-label">{{ item.label }}</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

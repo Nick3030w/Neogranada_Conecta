@@ -1,0 +1,91 @@
+<ion-content class="nc-auth-bg">
+  <div class="login-container nc-animate-in">
+
+    <!-- Logo -->
+    <div class="logo-section">
+      <div class="logo-wrapper">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="logo-placeholder" style="display:none">
+          <span>UMNG</span>
+        </div>
+      </div>
+      <h1 class="nc-page-title">NEOGRANADA<br>CONECTA</h1>
+    </div>
+
+    <!-- Panel de login -->
+    <div class="nc-panel login-panel">
+
+      <form [formGroup]="form" (ngSubmit)="onLogin()">
+
+        <!-- Correo -->
+        <div class="field-group">
+          <label class="nc-label">Correo electrónico</label>
+          <div class="input-wrapper" [class.input-error]="email.invalid && email.touched">
+            <ion-icon name="mail-outline" class="input-icon"></ion-icon>
+            <ion-input
+              formControlName="email"
+              type="email"
+              placeholder="usuario@unimilitar.edu.co"
+              class="nc-input"
+              autocomplete="email"
+              inputmode="email">
+            </ion-input>
+          </div>
+          <span class="nc-error-msg" *ngIf="email.invalid && email.touched">
+            {{ email.errors?.['required'] ? 'El correo es requerido.' : 'Ingresa un correo válido.' }}
+          </span>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="field-group">
+          <label class="nc-label">Contraseña</label>
+          <div class="input-wrapper" [class.input-error]="password.invalid && password.touched">
+            <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+            <ion-input
+              formControlName="password"
+              type="password"
+              placeholder="••••••••"
+              class="nc-input"
+              autocomplete="current-password">
+              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+            </ion-input>
+          </div>
+          <span class="nc-error-msg" *ngIf="password.invalid && password.touched">
+            La contraseña es requerida.
+          </span>
+        </div>
+
+        <!-- Error general -->
+        <div class="error-banner" *ngIf="errorMessage">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <!-- Botón ingresar -->
+        <ion-button
+          type="submit"
+          expand="block"
+          class="nc-btn-primary login-btn"
+          [disabled]="loading">
+          <ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>
+          {{ loading ? 'Ingresando...' : 'INGRESAR' }}
+        </ion-button>
+
+        <!-- Olvidé contraseña -->
+        <div class="forgot-link">
+          <a routerLink="/auth/forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
+
+      </form>
+
+      <!-- Registro -->
+      <hr class="nc-divider">
+      <p class="register-text">
+        ¿No tienes cuenta?
+        <a routerLink="/auth/register" class="register-link">Regístrate aquí</a>
+      </p>
+
+    </div>
+  </div>
+</ion-content>
