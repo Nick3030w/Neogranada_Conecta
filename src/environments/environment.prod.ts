@@ -1,11 +1,11 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: 'TU_API_KEY_PROD',
-    authDomain: 'TU_PROJECT.firebaseapp.com',
-    projectId: 'TU_PROJECT_ID',
-    storageBucket: 'TU_PROJECT.appspot.com',
-    messagingSenderId: 'TU_SENDER_ID',
-    appId: 'TU_APP_ID_PROD',
+    apiKey: 'AIzaSyBb8MaasRIt4EaN-sOYCmlexKMj4IyQG4o',
+    authDomain: 'neoconecta-ceb6b.firebaseapp.com',
+    projectId: 'neoconecta-ceb6b',
+    storageBucket: 'neoconecta-ceb6b.firebasestorage.app',
+    messagingSenderId: '290266716177',
+    appId: '1:290266716177:web:7559cbc7cd9fb9018c79b0',
   },
 };
