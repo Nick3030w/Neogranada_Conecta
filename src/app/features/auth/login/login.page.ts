@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import {
-  IonContent, IonButton, IonInput, IonItem,
-  IonSpinner, IonIcon, IonText, IonInputPasswordToggle,
+  IonContent, IonButton, IonInput,
+  IonSpinner, IonIcon, IonInputPasswordToggle,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
@@ -19,8 +19,8 @@ import { AuthService } from '../../../core/services/auth.service';
     CommonModule,
     ReactiveFormsModule,
     RouterLink,
-    IonContent, IonButton, IonInput, IonItem,
-    IonSpinner, IonIcon, IonText, IonInputPasswordToggle,
+    IonContent, IonButton, IonInput,
+    IonSpinner, IonIcon, IonInputPasswordToggle,
   ],
 })
 export class LoginPage implements OnInit {
