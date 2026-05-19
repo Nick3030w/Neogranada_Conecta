@@ -1,28 +1,39 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border nc-header">
   <ion-toolbar>
-    <div class="toolbar-content">
-      <img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'">
-      <div class="toolbar-actions">
-        <button class="icon-btn" (click)="goToNotifications()"><ion-icon name="notifications-outline"></ion-icon></button>
-        <button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button>
+    <div class="nc-toolbar">
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="nc-toolbar-logo"
+           onerror="this.style.display='none'">
+      <div class="nc-toolbar-right">
+        <button class="nc-icon-btn" (click)="goToNotifications()">
+          <ion-icon name="notifications-outline"></ion-icon>
+        </button>
+        <button class="nc-icon-btn" (click)="logout()">
+          <ion-icon name="log-out-outline"></ion-icon>
+        </button>
       </div>
     </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="home-container nc-animate-in">
-    <div class="welcome-section">
+<ion-content class="home-content">
+  <div class="home-wrapper">
+
+    <div class="welcome-block">
       <h1 class="welcome-title">BIENVENIDO A<br>NEOGRANADA<br>CONECTA</h1>
-      <p class="welcome-name">{{ firstName }}</p>
     </div>
-    <div class="nc-panel menu-panel">
+
+    <div class="home-panel">
       <div class="menu-grid">
-        <button *ngFor="let item of menuItems" class="menu-item nc-card" (click)="navigate(item.route)">
-          <div class="menu-icon-wrapper"><ion-icon [name]="item.icon" class="nc-icon-gold"></ion-icon></div>
-          <span class="menu-label">{{ item.label }}</span>
+        <button *ngFor="let item of menuItems"
+                class="menu-tile"
+                (click)="navigate(item.route)">
+          <div class="tile-icon-box">
+            <ion-icon [name]="item.icon"></ion-icon>
+          </div>
+          <span class="tile-label">{{ item.label }}</span>
         </button>
       </div>
     </div>
+
   </div>
 </ion-content>

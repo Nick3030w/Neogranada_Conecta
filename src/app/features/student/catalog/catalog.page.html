@@ -1,32 +1,33 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border nc-header">
   <ion-toolbar>
-    <div class="toolbar-content">
-      <button class="icon-btn" (click)="goBack()">
-        <ion-icon name="arrow-back-outline"></ion-icon>
-      </button>
-      <img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'">
-      <button class="icon-btn" (click)="logout()">
+    <div class="nc-toolbar">
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="nc-toolbar-logo"
+           onerror="this.style.display='none'">
+      <button class="nc-icon-btn" (click)="logout()">
         <ion-icon name="log-out-outline"></ion-icon>
       </button>
     </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="catalog-container nc-animate-in">
-    <div class="nc-panel catalog-panel">
+<ion-content class="page-content">
+  <div class="page-wrapper nc-animate-in">
+    <div class="white-panel">
       <h2 class="panel-title">CATÁLOGO</h2>
-      <div class="categories-grid">
-        <button *ngFor="let cat of categories" class="category-card nc-card"
+
+      <div class="catalog-grid">
+        <button *ngFor="let cat of categories"
+                class="catalog-card"
                 (click)="selectCategory(cat.id)">
-          <div class="category-img-wrapper">
+          <div class="card-img-wrapper">
             <img [src]="cat.imageUrl" [alt]="cat.label"
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-            <div class="category-emoji-fallback" style="display:none">{{ cat.icon }}</div>
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="card-emoji-fallback" style="display:none">{{ cat.emoji }}</div>
           </div>
-          <span class="category-label">{{ cat.label }}</span>
+          <span class="card-label">{{ cat.label }}</span>
         </button>
       </div>
+
     </div>
   </div>
 </ion-content>

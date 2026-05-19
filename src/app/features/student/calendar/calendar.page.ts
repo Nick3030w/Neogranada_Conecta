@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonContent, IonHeader, IonToolbar, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, logOutOutline, chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
+import { logOutOutline, chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -16,27 +16,52 @@ import { AuthService } from '../../../core/services/auth.service';
 export class StudentCalendarPage {
   currentDate = new Date();
   activeBookingsCount = 0;
+  bookedDays: number[] = [];
 
-  get monthYear(): string {
-    return this.currentDate.toLocaleDateString('es-CO', { month: 'long', year: 'numeric' });
+  readonly dayHeaders = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
+
+  constructor(private router: Router, private authService: AuthService) {
+    addIcons({ logOutOutline, chevronBackOutline, chevronForwardOutline });
+  }
+
+  get monthName(): string {
+    return this.currentDate.toLocaleDateString('es-CO', { month: 'long' });
+  }
+
+  get currentYear(): number {
+    return this.currentDate.getFullYear();
   }
 
   get calendarDays(): (number | null)[] {
-    const year = this.currentDate.getFullYear();
+    const year  = this.currentDate.getFullYear();
     const month = this.currentDate.getMonth();
-    const firstDay = new Date(year, month, 1).getDay();
+    const firstDay    = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const days: (number | null)[] = Array(firstDay).fill(null);
     for (let i = 1; i <= daysInMonth; i++) days.push(i);
     return days;
   }
 
-  constructor(private router: Router, private authService: AuthService) {
-    addIcons({ arrowBackOutline, logOutOutline, chevronBackOutline, chevronForwardOutline });
+  isToday(day: number | null): boolean {
+    if (!day) return false;
+    const now = new Date();
+    return day === now.getDate()
+      && this.currentDate.getMonth()    === now.getMonth()
+      && this.currentDate.getFullYear() === now.getFullYear();
   }
 
-  prevMonth(): void { this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1); }
-  nextMonth(): void { this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1); }
+  hasBooking(day: number | null): boolean {
+    return !!day && this.bookedDays.includes(day);
+  }
+
+  prevMonth(): void {
+    this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1);
+  }
+
+  nextMonth(): void {
+    this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
+  }
+
   goBack(): void { this.router.navigate(['/student/home']); }
   async logout(): Promise<void> { await this.authService.logout(); }
 }

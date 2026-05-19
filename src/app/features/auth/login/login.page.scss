@@ -1,139 +1,190 @@
-.login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+// ── Login Page ──────────────────────────────────────────────
+ion-content.login-content {
+  --background: linear-gradient(175deg, #1a2a4a 0%, #1e3461 55%, #2a4a7f 100%);
+}
+
+.login-wrapper {
   min-height: 100%;
-  padding: var(--nc-spacing-xl) var(--nc-spacing-md) var(--nc-spacing-lg);
-}
-
-// --- Logo ---
-.logo-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: var(--nc-spacing-lg);
+  padding: 40px 20px 32px;
+}
 
-  .logo-wrapper {
-    width: 90px;
-    height: 90px;
-    margin-bottom: var(--nc-spacing-md);
+// --- Header con logo y título ---
+.login-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 28px;
+
+  .logo-box {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 12px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .logo-fallback {
+      width: 80px;
+      height: 80px;
+      background: #f0c040;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: #1a2a4a;
+    }
   }
 
-  .logo-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  .logo-placeholder {
-    width: 90px;
-    height: 90px;
-    background: var(--nc-gold);
-    border-radius: var(--nc-radius-full);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--nc-font-size-md);
-    font-weight: var(--nc-font-weight-bold);
-    color: var(--nc-blue-dark);
+  .app-title {
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1.15;
+    margin: 0;
   }
 }
 
-// --- Panel ---
+// --- Panel blanco redondeado ---
 .login-panel {
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px 24px 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
 }
 
 // --- Campos ---
-.field-group {
-  margin-bottom: var(--nc-spacing-md);
+.field-block {
+  margin-bottom: 16px;
 }
 
-.input-wrapper {
+.field-label {
+  display: block;
+  color: #4a5568;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.field-input-row {
   display: flex;
   align-items: center;
-  background: var(--nc-white-soft);
-  border: 1.5px solid var(--nc-gray-light);
-  border-radius: var(--nc-radius-sm);
-  padding: 0 var(--nc-spacing-sm);
-  transition: border-color var(--nc-transition-fast);
+  background: #f8f9fa;
+  border: 1.5px solid #e8ecf0;
+  border-radius: 8px;
+  padding: 0 10px;
+  transition: border-color 0.2s;
 
-  &:focus-within {
-    border-color: var(--nc-gold);
-  }
+  &:focus-within { border-color: #f0c040; }
+  &.has-error    { border-color: #e74c3c; }
 
-  &.input-error {
-    border-color: var(--nc-danger);
-  }
-
-  .input-icon {
-    color: var(--nc-gray-medium);
+  .field-icon {
+    color: #9aa5b4;
     font-size: 18px;
     flex-shrink: 0;
-    margin-right: var(--nc-spacing-xs);
+    margin-right: 6px;
   }
 
   ion-input {
     --background: transparent;
-    --color: var(--nc-blue-dark);
-    --placeholder-color: var(--nc-gray-medium);
+    --color: #1a2a4a;
+    --placeholder-color: #9aa5b4;
     --padding-start: 0;
     --padding-end: 0;
-    font-size: var(--nc-font-size-base);
+    font-size: 14px;
     flex: 1;
   }
 }
 
-// --- Error banner ---
-.error-banner {
-  display: flex;
-  align-items: center;
-  gap: var(--nc-spacing-xs);
-  background: rgba(231, 76, 60, 0.1);
-  border: 1px solid var(--nc-danger);
-  border-radius: var(--nc-radius-sm);
-  padding: var(--nc-spacing-sm) var(--nc-spacing-md);
-  margin-bottom: var(--nc-spacing-md);
-  color: var(--nc-danger);
-  font-size: var(--nc-font-size-sm);
-
-  ion-icon {
-    font-size: 18px;
-    flex-shrink: 0;
-  }
+.field-error {
+  display: block;
+  color: #e74c3c;
+  font-size: 11px;
+  margin-top: 3px;
 }
 
-// --- Botón login ---
-.login-btn {
-  margin-top: var(--nc-spacing-sm);
-  margin-bottom: var(--nc-spacing-sm);
+// --- Error general ---
+.error-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(231,76,60,0.08);
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #e74c3c;
+  font-size: 13px;
+  margin-bottom: 14px;
+
+  ion-icon { font-size: 16px; flex-shrink: 0; }
+}
+
+// --- Botón primario dorado ---
+.btn-primary {
+  width: 100%;
+  height: 46px;
+  background: #f0c040;
+  color: #1a2a4a;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(240,192,64,0.35);
+  transition: opacity 0.15s;
+  margin-top: 4px;
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+  &:active   { opacity: 0.85; }
+
+  ion-spinner { width: 20px; height: 20px; color: #1a2a4a; }
 }
 
 // --- Links ---
-.forgot-link {
+.forgot-row {
   text-align: center;
-  margin-top: var(--nc-spacing-sm);
+  margin-top: 12px;
 
-  a {
-    color: var(--nc-blue-dark);
-    font-size: var(--nc-font-size-sm);
+  .forgot-link {
+    color: #4a5568;
+    font-size: 12px;
     text-decoration: none;
-    opacity: 0.7;
-
-    &:hover { opacity: 1; }
+    opacity: 0.75;
   }
 }
 
-.register-text {
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e8ecf0, transparent);
+  margin: 18px 0;
+}
+
+.register-row {
   text-align: center;
-  color: var(--nc-gray-dark);
-  font-size: var(--nc-font-size-sm);
+  color: #4a5568;
+  font-size: 13px;
   margin: 0;
 
-  .register-link {
-    color: var(--nc-gold-dark);
-    font-weight: var(--nc-font-weight-bold);
+  .link-gold {
+    color: #d4a820;
+    font-weight: 700;
     text-decoration: none;
   }
 }

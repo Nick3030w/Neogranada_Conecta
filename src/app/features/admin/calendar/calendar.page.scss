@@ -1,10 +1,35 @@
-.toolbar-content{display:flex;align-items:center;justify-content:space-between;padding:0 8px;.toolbar-logo{height:36px;object-fit:contain;}}
-.icon-btn{background:transparent;border:none;color:var(--nc-white);font-size:24px;cursor:pointer;display:flex;align-items:center;padding:4px;}
-.page-container{padding:16px;}
-.calendar-panel{max-width:400px;margin:0 auto;}
-.panel-title{color:var(--nc-blue-dark);font-size:var(--nc-font-size-xl);font-weight:var(--nc-font-weight-bold);text-align:center;text-transform:uppercase;margin:0 0 16px;}
-.month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;.nav-btn{background:transparent;border:none;color:var(--nc-blue-dark);font-size:20px;cursor:pointer;padding:4px;}.month-label{color:var(--nc-blue-dark);font-weight:var(--nc-font-weight-bold);font-size:var(--nc-font-size-base);text-transform:capitalize;}}
-.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px;}
-.day-header{text-align:center;font-size:var(--nc-font-size-xs);font-weight:var(--nc-font-weight-bold);color:var(--nc-gray-dark);padding:4px 0;}
-.day-cell{text-align:center;padding:8px 4px;font-size:var(--nc-font-size-sm);color:var(--nc-blue-dark);border-radius:var(--nc-radius-sm);&.empty{visibility:hidden;}&.today{background:var(--nc-gold);color:var(--nc-blue-dark);font-weight:var(--nc-font-weight-bold);}}
-.bookings-counter{display:flex;align-items:center;justify-content:space-between;background:var(--nc-blue-dark);border-radius:var(--nc-radius-sm);padding:12px 16px;.counter-label{color:var(--nc-white);font-size:var(--nc-font-size-sm);font-weight:var(--nc-font-weight-medium);}.counter-badge{background:var(--nc-gold);color:var(--nc-blue-dark);font-weight:var(--nc-font-weight-bold);font-size:var(--nc-font-size-md);border-radius:var(--nc-radius-sm);padding:4px 12px;}}
+ion-content.page-content { --background: linear-gradient(175deg, #1a2a4a 0%, #1e3461 55%, #2a4a7f 100%); }
+.nc-header ion-toolbar { --background: transparent; --border-color: transparent; }
+.nc-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 4px 16px;
+  .nc-toolbar-logo { height: 38px; object-fit: contain; }
+}
+.nc-icon-btn { background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer; display: flex; align-items: center; padding: 6px; border-radius: 50%; }
+.page-wrapper { padding: 16px 16px 32px; min-height: 100%; }
+.white-panel { background: #fff; border-radius: 20px; padding: 24px 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+.panel-title { color: #1a2a4a; font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-align: center; margin: 0 0 20px; }
+
+// Navegación mes
+.month-nav { display: flex; align-items: center; justify-content: space-between; background: #f8f9fa; border-radius: 10px; padding: 8px 12px; margin-bottom: 16px;
+  .nav-arrow { background: transparent; border: none; color: #1a2a4a; font-size: 20px; cursor: pointer; display: flex; align-items: center; padding: 4px; }
+  .month-selector { display: flex; gap: 8px; align-items: center;
+    .month-label { color: #1a2a4a; font-size: 14px; font-weight: 700; text-transform: capitalize; }
+    .year-label  { color: #9aa5b4; font-size: 13px; }
+  }
+}
+
+// Grid calendario
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 16px; }
+
+.cal-day-header { text-align: center; font-size: 11px; font-weight: 700; color: #9aa5b4; padding: 4px 0; }
+
+.cal-day { text-align: center; padding: 8px 2px; font-size: 13px; color: #1a2a4a; border-radius: 8px; min-height: 32px; display: flex; align-items: center; justify-content: center;
+  &.empty { visibility: hidden; }
+  &.today { background: #f0c040; color: #1a2a4a; font-weight: 700; }
+  &.has-booking { background: rgba(240,192,64,0.2); color: #1a2a4a; font-weight: 600; }
+}
+
+// Barra préstamos totales
+.bookings-bar { display: flex; align-items: center; justify-content: space-between; background: #1a2a4a; border-radius: 10px; padding: 12px 16px;
+  .bookings-label { color: #fff; font-size: 13px; font-weight: 600; }
+  .bookings-count { background: #f0c040; color: #1a2a4a; font-size: 18px; font-weight: 800; border-radius: 8px; padding: 4px 14px; min-width: 44px; text-align: center; }
+}

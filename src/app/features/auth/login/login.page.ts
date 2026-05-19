@@ -7,7 +7,7 @@ import {
   IonSpinner, IonIcon, IonInputPasswordToggle,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import { mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline, alertCircleOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -32,7 +32,7 @@ export class LoginPage implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService
   ) {
-    addIcons({ mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline });
+    addIcons({mailOutline,lockClosedOutline,alertCircleOutline,eyeOutline,eyeOffOutline});
   }
 
   ngOnInit(): void {

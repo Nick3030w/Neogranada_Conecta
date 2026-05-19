@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonContent, IonHeader, IonToolbar, IonIcon, IonButton, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, logOutOutline, checkmarkOutline, closeOutline, chatbubblesOutline } from 'ionicons/icons';
+import { arrowBackOutline, logOutOutline, checkmarkOutline, closeOutline, chatbubblesOutline, checkmarkCircleOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 import { Booking } from '../../../core/interfaces/booking.interface';
 
@@ -27,7 +27,7 @@ export class AdminConfirmationPage {
   ];
 
   constructor(private router: Router, private authService: AuthService) {
-    addIcons({ arrowBackOutline, logOutOutline, checkmarkOutline, closeOutline, chatbubblesOutline });
+    addIcons({logOutOutline,chatbubblesOutline,checkmarkCircleOutline,arrowBackOutline,checkmarkOutline,closeOutline});
   }
 
   approve(booking: Booking): void {

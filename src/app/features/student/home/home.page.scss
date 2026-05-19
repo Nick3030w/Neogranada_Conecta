@@ -1,104 +1,126 @@
-.toolbar-content {
+// ── Student Home ─────────────────────────────────────────────
+ion-content.home-content {
+  --background: linear-gradient(175deg, #1a2a4a 0%, #1e3461 55%, #2a4a7f 100%);
+}
+
+// --- Toolbar ---
+.nc-header ion-toolbar {
+  --background: transparent;
+  --border-color: transparent;
+}
+
+.nc-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--nc-spacing-sm);
+  padding: 4px 16px;
 
-  .toolbar-logo {
-    height: 36px;
+  .nc-toolbar-logo {
+    height: 38px;
     object-fit: contain;
   }
 
-  .toolbar-actions {
+  .nc-toolbar-right {
     display: flex;
-    gap: var(--nc-spacing-sm);
+    gap: 4px;
   }
 }
 
-.icon-btn {
+.nc-icon-btn {
   background: transparent;
   border: none;
-  color: var(--nc-white);
+  color: #ffffff;
   font-size: 24px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  padding: var(--nc-spacing-xs);
+  padding: 6px;
+  border-radius: 50%;
+  transition: background 0.15s;
+
+  &:active { background: rgba(255,255,255,0.1); }
 }
 
-.home-container {
-  padding: var(--nc-spacing-md);
+// --- Contenido ---
+.home-wrapper {
+  padding: 16px 16px 32px;
   min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.welcome-section {
+// --- Título bienvenida ---
+.welcome-block {
+  padding: 20px 0 28px;
   text-align: center;
-  padding: var(--nc-spacing-lg) 0 var(--nc-spacing-xl);
 
   .welcome-title {
-    color: var(--nc-white);
-    font-size: var(--nc-font-size-xxl);
-    font-weight: var(--nc-font-weight-bold);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    line-height: 1.2;
-    margin: 0 0 var(--nc-spacing-sm);
-  }
-
-  .welcome-name {
-    color: var(--nc-gold);
-    font-size: var(--nc-font-size-lg);
-    font-weight: var(--nc-font-weight-medium);
-    margin: 0;
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 2px;
+    line-height: 1.2;
+    margin: 0;
   }
 }
 
-.menu-panel {
-  padding: var(--nc-spacing-lg);
+// --- Panel blanco ---
+.home-panel {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  flex: 1;
 }
 
+// --- Grid 2 columnas ---
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--nc-spacing-md);
+  gap: 16px;
 }
 
-.menu-item {
+.menu-tile {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--nc-spacing-lg) var(--nc-spacing-md);
-  background: var(--nc-white);
-  border: none;
+  gap: 10px;
+  padding: 20px 12px;
+  background: #ffffff;
+  border: 1.5px solid #e8ecf0;
+  border-radius: 14px;
   cursor: pointer;
-  border-radius: var(--nc-radius-md);
-  box-shadow: var(--nc-shadow-sm);
-  transition: transform var(--nc-transition-base), box-shadow var(--nc-transition-base);
-  gap: var(--nc-spacing-sm);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
 
   &:active {
     transform: scale(0.95);
-    box-shadow: var(--nc-shadow-md);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
   }
 
-  .menu-icon-wrapper {
-    width: 56px;
-    height: 56px;
-    background: var(--nc-blue-dark);
-    border-radius: var(--nc-radius-md);
+  .tile-icon-box {
+    width: 60px;
+    height: 60px;
+    background: #1a2a4a;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    ion-icon {
+      font-size: 32px;
+      color: #f0c040;
+    }
   }
 
-  .menu-label {
-    color: var(--nc-blue-dark);
-    font-size: var(--nc-font-size-xs);
-    font-weight: var(--nc-font-weight-bold);
+  .tile-label {
+    color: #1a2a4a;
+    font-size: 11px;
+    font-weight: 700;
     text-align: center;
     letter-spacing: 0.5px;
+    text-transform: uppercase;
   }
 }

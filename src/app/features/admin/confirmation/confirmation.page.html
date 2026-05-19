@@ -1,46 +1,69 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border nc-header">
   <ion-toolbar>
-    <div class="toolbar-content">
-      <button class="icon-btn" (click)="goBack()"><ion-icon name="arrow-back-outline"></ion-icon></button>
-      <img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'">
-      <button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button>
+    <div class="nc-toolbar">
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="nc-toolbar-logo"
+           onerror="this.style.display='none'">
+      <button class="nc-icon-btn" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </button>
     </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="page-container nc-animate-in">
-    <div class="nc-panel confirm-panel">
-      <h2 class="panel-title">ESTADO DE CONFIRMACIÓN</h2>
+<ion-content class="page-content">
+  <div class="page-wrapper nc-animate-in">
+    <div class="white-panel">
+      <h2 class="panel-title">ESTADO DE<br>CONFIRMACIÓN</h2>
 
-      <div *ngFor="let booking of pendingBookings" class="booking-card nc-card">
-        <div class="booking-header">
-          <span class="booking-id">Solicitud #{{ booking.id }}</span>
-          <span class="booking-status" [class]="'status-' + booking.status">{{ booking.status | titlecase }}</span>
-        </div>
-        <div class="booking-detail"><strong>Estudiante:</strong> {{ booking.studentName }}</div>
-        <div class="booking-detail"><strong>Recurso:</strong> {{ booking.resourceName }}</div>
-        <div class="booking-detail"><strong>Fecha:</strong> {{ booking.date }} — {{ booking.time }}</div>
-        <div class="booking-detail" *ngIf="booking.observations"><strong>Obs:</strong> {{ booking.observations }}</div>
+      <!-- Lista de solicitudes pendientes -->
+      <div *ngFor="let booking of pendingBookings" class="booking-card">
 
-        <div class="booking-actions" *ngIf="booking.status === 'pendiente'">
-          <ion-button class="nc-btn-danger" (click)="deny(booking)">
-            <ion-icon name="close-outline" slot="start"></ion-icon>DENEGAR
-          </ion-button>
-          <ion-button class="nc-btn-success" (click)="approve(booking)">
-            <ion-icon name="checkmark-outline" slot="start"></ion-icon>ACEPTAR
-          </ion-button>
+        <!-- ID de solicitud -->
+        <div class="request-id-row">
+          <span class="request-id">Solicitud #{{ booking.id }}</span>
         </div>
 
-        <ion-button *ngIf="booking.status !== 'pendiente'" expand="block" fill="outline"
-                    class="chat-btn" (click)="openChat(booking.id)">
-          <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>Chat con la dependencia
-        </ion-button>
+        <!-- Detalle -->
+        <div class="booking-detail-row" *ngIf="booking.status !== 'pendiente'">
+          <span class="detail-label">Estudiante:</span>
+          <span class="detail-value">{{ booking.studentName }}</span>
+        </div>
+        <div class="booking-detail-row">
+          <span class="detail-label">Recurso:</span>
+          <span class="detail-value">{{ booking.resourceName }}</span>
+        </div>
+        <div class="booking-detail-row">
+          <span class="detail-label">Fecha:</span>
+          <span class="detail-value">{{ booking.date }} — {{ booking.time }}</span>
+        </div>
+
+        <!-- Botones DENEGAR / ACEPTAR -->
+        <div class="action-btns" *ngIf="booking.status === 'pendiente'">
+          <button class="btn-deny" (click)="deny(booking)">DENEGAR</button>
+          <button class="btn-accept" (click)="approve(booking)">ACEPTAR</button>
+        </div>
+
+        <!-- Estado aprobado/denegado -->
+        <div class="status-badge approved" *ngIf="booking.status === 'aprobada'">✓ Solicitud aprobada</div>
+        <div class="status-badge denied"   *ngIf="booking.status === 'denegada'">✗ Solicitud denegada</div>
+
+        <!-- Botón continuar -->
+        <button class="btn-continue" (click)="goBack()">CONTINUAR</button>
+
+        <!-- Chat -->
+        <button class="btn-chat" (click)="openChat(booking.id)">
+          <ion-icon name="chatbubbles-outline"></ion-icon>
+          Chat con la dependencia
+        </button>
+
       </div>
 
+      <!-- Sin solicitudes -->
       <div *ngIf="pendingBookings.length === 0" class="empty-state">
-        <p>No hay solicitudes pendientes.</p>
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        <p>No hay solicitudes pendientes</p>
       </div>
+
     </div>
   </div>
 </ion-content>

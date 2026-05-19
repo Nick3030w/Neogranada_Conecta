@@ -1,2 +1,39 @@
-<ion-header class="ion-no-border"><ion-toolbar><div class="toolbar-content"><button class="icon-btn" (click)="goBack()"><ion-icon name="arrow-back-outline"></ion-icon></button><img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'"><button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button></div></ion-toolbar></ion-header>
-<ion-content><div class="page-container nc-animate-in"><div class="nc-panel"><h2 class="panel-title">ESTADO DE DISPONIBILIDAD</h2><p style="color:var(--nc-blue-dark);text-align:center">Categoría: {{ resourceId }}</p><div class="nc-status-available" style="margin:16px 0">Artículo disponible</div><ion-button expand="block" class="nc-btn-primary" (click)="goToBooking()">AGENDAR</ion-button><ion-button expand="block" fill="outline" class="nc-btn-secondary" (click)="goBack()" style="margin-top:8px">VOLVER AL CATÁLOGO</ion-button></div></div></ion-content>
+<ion-header class="ion-no-border nc-header">
+  <ion-toolbar>
+    <div class="nc-toolbar">
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="nc-toolbar-logo"
+           onerror="this.style.display='none'">
+      <button class="nc-icon-btn" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="page-content">
+  <div class="page-wrapper nc-animate-in">
+    <div class="white-panel">
+      <h2 class="panel-title">ESTADO DE<br>DISPONIBILIDAD</h2>
+
+      <!-- Artículo seleccionado -->
+      <div class="item-selected-label">Artículo seleccionado</div>
+
+      <div class="item-preview">
+        <div class="item-img-box">
+          <div class="item-emoji">{{ getCategoryEmoji() }}</div>
+        </div>
+      </div>
+
+      <!-- Estado disponible -->
+      <div class="availability-badge available">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        Artículo disponible
+      </div>
+
+      <!-- Botones -->
+      <button class="btn-primary" (click)="goToBooking()">AGENDAR</button>
+      <button class="btn-outline" (click)="goBack()">VOLVER AL CATÁLOGO</button>
+
+    </div>
+  </div>
+</ion-content>

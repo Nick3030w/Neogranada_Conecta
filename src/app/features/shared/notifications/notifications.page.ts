@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonContent, IonHeader, IonToolbar, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, logOutOutline, notificationsOutline, checkmarkCircleOutline, closeCircleOutline, timeOutline, chatbubblesOutline } from 'ionicons/icons';
+import { arrowBackOutline, logOutOutline, notificationsOutline, checkmarkCircleOutline, closeCircleOutline, timeOutline, chatbubblesOutline, notificationsOffOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 import { AppNotification } from '../../../core/interfaces/notification.interface';
 
@@ -23,7 +23,7 @@ export class NotificationsPage {
   ];
 
   constructor(private router: Router, private authService: AuthService) {
-    addIcons({ arrowBackOutline, logOutOutline, notificationsOutline, checkmarkCircleOutline, closeCircleOutline, timeOutline, chatbubblesOutline });
+    addIcons({logOutOutline,notificationsOffOutline,arrowBackOutline,notificationsOutline,checkmarkCircleOutline,closeCircleOutline,timeOutline,chatbubblesOutline});
   }
 
   getIcon(type: string): string {

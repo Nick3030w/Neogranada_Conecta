@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent, IonHeader, IonToolbar, IonIcon, IonButton, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, logOutOutline, checkmarkCircleOutline, closeCircleOutline, chatbubblesOutline } from 'ionicons/icons';
+import { arrowBackOutline, logOutOutline, checkmarkCircleOutline, closeCircleOutline, chatbubblesOutline, checkmarkOutline, closeOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class ConfirmationPage {
   status: 'pendiente' | 'aprobada' | 'denegada' = 'pendiente';
 
   constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {
-    addIcons({ arrowBackOutline, logOutOutline, checkmarkCircleOutline, closeCircleOutline, chatbubblesOutline });
+    addIcons({logOutOutline,checkmarkOutline,closeOutline,chatbubblesOutline,arrowBackOutline,checkmarkCircleOutline,closeCircleOutline});
     this.bookingId = this.route.snapshot.paramMap.get('bookingId') ?? '';
   }
 

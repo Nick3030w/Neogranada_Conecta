@@ -1,28 +1,34 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border nc-header">
   <ion-toolbar>
-    <div class="toolbar-content">
-      <button class="icon-btn" (click)="goBack()"><ion-icon name="arrow-back-outline"></ion-icon></button>
-      <img src="assets/images/logo-umng.png" alt="UMNG" class="toolbar-logo" onerror="this.style.display='none'">
-      <button class="icon-btn" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon></button>
+    <div class="nc-toolbar">
+      <img src="assets/images/logo-umng.png" alt="UMNG" class="nc-toolbar-logo"
+           onerror="this.style.display='none'">
+      <button class="nc-icon-btn" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </button>
     </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="page-container nc-animate-in">
-    <div class="nc-panel map-panel">
+<ion-content class="page-content">
+  <div class="page-wrapper nc-animate-in">
+    <div class="white-panel">
       <h2 class="panel-title">MAPA</h2>
 
-      <ion-searchbar
-        [(ngModel)]="searchQuery"
-        placeholder="Buscar bloque o sede..."
-        class="map-searchbar"
-        animated>
-      </ion-searchbar>
+      <!-- Buscador -->
+      <div class="search-row">
+        <ion-icon name="search-outline" class="search-icon"></ion-icon>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          placeholder="Buscar bloque o sede..."
+          class="search-input">
+      </div>
 
+      <!-- Lista de bloques -->
       <div class="blocks-list">
-        <div *ngFor="let block of filteredBlocks" class="block-item nc-card">
-          <div class="block-icon">
+        <div *ngFor="let block of filteredBlocks" class="block-row">
+          <div class="block-icon-box">
             <ion-icon name="business-outline"></ion-icon>
           </div>
           <div class="block-info">
@@ -36,6 +42,7 @@
           <p>No se encontraron bloques o sedes con ese nombre.</p>
         </div>
       </div>
+
     </div>
   </div>
 </ion-content>
