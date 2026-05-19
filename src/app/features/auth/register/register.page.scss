@@ -26,14 +26,22 @@
   }
 
   .logo-wrapper {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     margin-bottom: var(--nc-spacing-sm);
+    background: #ffffff;
+    border-radius: 50%;
+    padding: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     .logo-img {
-      width: 100%;
-      height: 100%;
+      width: 68px;
+      height: 68px;
       object-fit: contain;
+      display: block;
     }
   }
 }
@@ -41,6 +49,23 @@
 .register-panel {
   width: 100%;
   max-width: 400px;
+
+  // El panel de registro va sobre fondo azul oscuro → sin fondo blanco
+  &.nc-panel {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  // Labels blancos sobre fondo oscuro
+  .nc-label {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  // Mensajes de error en rojo claro legible
+  .nc-error-msg {
+    color: #ff8a80;
+  }
 }
 
 .field-group {
@@ -50,8 +75,8 @@
 .input-wrapper {
   display: flex;
   align-items: center;
-  background: var(--nc-white-soft);
-  border: 1.5px solid var(--nc-gray-light);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--nc-radius-sm);
   padding: 0 var(--nc-spacing-sm);
   transition: border-color var(--nc-transition-fast);
@@ -65,7 +90,7 @@
   }
 
   .input-icon {
-    color: var(--nc-gray-medium);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 18px;
     flex-shrink: 0;
     margin-right: var(--nc-spacing-xs);
@@ -73,8 +98,8 @@
 
   ion-input {
     --background: transparent;
-    --color: var(--nc-blue-dark);
-    --placeholder-color: var(--nc-gray-medium);
+    --color: #ffffff;
+    --placeholder-color: rgba(255, 255, 255, 0.5);
     --padding-start: 0;
     flex: 1;
     font-size: var(--nc-font-size-base);
@@ -83,8 +108,8 @@
 
 .select-wrapper {
   ion-select {
-    --color: var(--nc-blue-dark);
-    --placeholder-color: var(--nc-gray-medium);
+    --color: #ffffff;
+    --placeholder-color: rgba(255, 255, 255, 0.5);
     width: 100%;
     font-size: var(--nc-font-size-base);
   }
@@ -107,12 +132,12 @@
 
 .login-text {
   text-align: center;
-  color: var(--nc-gray-dark);
+  color: rgba(255, 255, 255, 0.8);
   font-size: var(--nc-font-size-sm);
   margin: 0;
 
   .login-link {
-    color: var(--nc-gold-dark);
+    color: var(--nc-gold);
     font-weight: var(--nc-font-weight-bold);
     text-decoration: none;
   }

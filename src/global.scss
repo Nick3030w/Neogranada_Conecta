@@ -272,3 +272,104 @@ ion-header {
   margin: 0 auto;
   box-shadow: var(--nc-shadow-gold);
 }
+
+// ============================================================
+// Action Sheet — opciones legibles sobre fondo claro
+// ============================================================
+ion-action-sheet {
+  // Contenedor principal del sheet
+  .action-sheet-wrapper {
+    .action-sheet-container {
+      background: #ffffff !important;
+    }
+  }
+
+  // Grupo de botones
+  .action-sheet-group {
+    background: #ffffff !important;
+  }
+
+  // Cada opción
+  .action-sheet-button {
+    color: #1a2a4a !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    background: #ffffff !important;
+
+    &:hover,
+    &:active {
+      background: #f0f4f8 !important;
+    }
+
+    // Texto interno del botón
+    .action-sheet-button-inner {
+      color: #1a2a4a !important;
+    }
+  }
+
+  // Botón cancelar — dorado
+  .action-sheet-cancel {
+    .action-sheet-button-inner {
+      color: #c8a000 !important;
+      font-weight: 700 !important;
+    }
+  }
+
+  // Título del sheet (si lo hay)
+  .action-sheet-title {
+    color: #1a2a4a !important;
+    background: #f8f9fa !important;
+    font-weight: 700 !important;
+  }
+}
+
+// También aplica a ion-select con interface="action-sheet"
+.select-action-sheet {
+  .action-sheet-button {
+    color: #1a2a4a !important;
+  }
+}
+
+// ============================================================
+// Toolbar logo — visible en todas las pantallas
+// ============================================================
+.nc-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 16px;
+
+  .nc-toolbar-logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+    background: #ffffff;
+    border-radius: 50%;
+    padding: 3px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  }
+
+  .nc-toolbar-right {
+    display: flex;
+    gap: 4px;
+  }
+}
+
+.nc-header ion-toolbar {
+  --background: transparent;
+  --border-color: transparent;
+}
+
+.nc-icon-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 50%;
+}

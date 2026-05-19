@@ -1,9 +1,8 @@
 <ion-header class="ion-no-border nc-header">
   <ion-toolbar>
     <div class="nc-toolbar">
-      <img src="assets/images/logo-umng.png" alt="UMNG" class="nc-toolbar-logo"
-           onerror="this.style.display='none'">
-      <button class="nc-icon-btn" (click)="logout()">
+      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
+      <button class="nc-icon-btn" (click)="goBack()">
         <ion-icon name="log-out-outline"></ion-icon>
       </button>
     </div>
@@ -23,7 +22,7 @@
             <label class="field-label">Fecha</label>
             <div class="field-select-row" [class.has-error]="date.invalid && date.touched">
               <ion-icon name="calendar-outline" class="field-icon"></ion-icon>
-              <ion-input formControlName="date" type="date" [min]="today"></ion-input>
+              <ion-input formControlName="date" type="date" [min]="today" style="min-width:0"></ion-input>
             </div>
             <span class="field-error" *ngIf="date.invalid && date.touched">Requerido.</span>
           </div>
@@ -32,7 +31,7 @@
             <label class="field-label">Hora</label>
             <div class="field-select-row" [class.has-error]="time.invalid && time.touched">
               <ion-icon name="time-outline" class="field-icon"></ion-icon>
-              <ion-input formControlName="time" type="time"></ion-input>
+              <ion-input formControlName="time" type="time" style="min-width:0"></ion-input>
             </div>
             <span class="field-error" *ngIf="time.invalid && time.touched">Requerido.</span>
           </div>

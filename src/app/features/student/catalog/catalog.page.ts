@@ -39,5 +39,6 @@ export class CatalogPage {
     this.router.navigate(['/student/availability', categoryId]);
   }
 
+  goBack(): void { this.router.navigate(['/student/home']); }
   async logout(): Promise<void> { await this.authService.logout(); }
 }

@@ -5,30 +5,129 @@ ion-content.page-content { --background: linear-gradient(175deg, #1a2a4a 0%, #1e
 }
 .nc-icon-btn { background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer; display: flex; align-items: center; padding: 6px; border-radius: 50%; }
 .page-wrapper { padding: 16px 16px 32px; min-height: 100%; }
-.white-panel { background: #fff; border-radius: 20px; padding: 24px 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
-.panel-title { color: #1a2a4a; font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-align: center; margin: 0 0 20px; }
 
-.row-fields { display: flex; gap: 12px; }
-.field-block { margin-bottom: 16px; &.half { flex: 1; } }
-.field-label { display: block; color: #4a5568; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+/* Panel transparente sobre fondo azul — igual que registro */
+.white-panel {
+  background: transparent;
+  border-radius: 20px;
+  padding: 8px 4px;
+}
 
-.field-select-row { display: flex; align-items: center; background: #f8f9fa; border: 1.5px solid #e8ecf0; border-radius: 8px; padding: 0 10px; transition: border-color 0.2s;
+.panel-title {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  margin: 0 0 20px;
+}
+
+/* Fila fecha + hora: dos columnas iguales sin desbordamiento */
+.row-fields {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.field-block {
+  margin-bottom: 16px;
+  &.half {
+    flex: 1;
+    min-width: 0; /* evita que el contenido empuje fuera del flex */
+  }
+}
+
+/* Labels blancos */
+.field-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+/* Inputs / selects sobre fondo oscuro */
+.field-select-row {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 0 10px;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* corta cualquier desbordamiento */
+
   &:focus-within { border-color: #f0c040; }
   &.has-error { border-color: #e74c3c; }
-  .field-icon { color: #9aa5b4; font-size: 16px; flex-shrink: 0; margin-right: 6px; }
-  ion-input { --background: transparent; --color: #1a2a4a; --placeholder-color: #9aa5b4; --padding-start: 0; font-size: 13px; flex: 1; }
-  ion-select { --color: #1a2a4a; --placeholder-color: #9aa5b4; width: 100%; font-size: 13px; }
+
+  .field-icon {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-right: 6px;
+  }
+
+  ion-input {
+    --background: transparent;
+    --color: #ffffff;
+    --placeholder-color: rgba(255, 255, 255, 0.5);
+    --padding-start: 0;
+    font-size: 13px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  ion-select {
+    --color: #ffffff;
+    --placeholder-color: rgba(255, 255, 255, 0.5);
+    width: 100%;
+    font-size: 13px;
+  }
 }
 
-.field-textarea-row { background: #f8f9fa; border: 1.5px solid #e8ecf0; border-radius: 8px; padding: 8px 10px;
+/* Textarea */
+.field-textarea-row {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 8px 10px;
+
   &:focus-within { border-color: #f0c040; }
-  ion-textarea { --background: transparent; --color: #1a2a4a; --placeholder-color: #9aa5b4; --padding-start: 0; font-size: 13px; }
+
+  ion-textarea {
+    --background: transparent;
+    --color: #ffffff;
+    --placeholder-color: rgba(255, 255, 255, 0.5);
+    --padding-start: 0;
+    font-size: 13px;
+  }
 }
 
-.field-error { display: block; color: #e74c3c; font-size: 11px; margin-top: 3px; }
-.error-box { background: rgba(231,76,60,0.08); border: 1px solid #e74c3c; border-radius: 8px; padding: 10px 14px; color: #e74c3c; font-size: 13px; margin-bottom: 14px; }
+.field-error { display: block; color: #ff8a80; font-size: 11px; margin-top: 3px; }
+.error-box { background: rgba(231,76,60,0.15); border: 1px solid #e74c3c; border-radius: 8px; padding: 10px 14px; color: #ff8a80; font-size: 13px; margin-bottom: 14px; }
 
-.btn-primary { width: 100%; height: 46px; background: #f0c040; color: #1a2a4a; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(240,192,64,0.35); margin-top: 4px;
+.btn-primary {
+  width: 100%;
+  height: 46px;
+  background: #f0c040;
+  color: #1a2a4a;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(240,192,64,0.35);
+  margin-top: 4px;
+
   &:disabled { opacity: 0.6; }
   ion-spinner { width: 20px; height: 20px; color: #1a2a4a; }
 }

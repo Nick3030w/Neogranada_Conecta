@@ -24,5 +24,6 @@ export class ConfirmationPage {
 
   goToChat(): void { this.router.navigate(['/student/chat', this.bookingId]); }
   goHome(): void { this.router.navigate(['/student/home']); }
+  goBack(): void { this.router.navigate(['/student/booking', this.bookingId || 'new']); }
   async logout(): Promise<void> { await this.authService.logout(); }
 }

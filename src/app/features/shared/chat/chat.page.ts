@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent, IonHeader, IonToolbar, IonIcon, IonFooter, IonInput, IonButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, sendOutline } from 'ionicons/icons';
+import { arrowBackOutline, sendOutline, logOutOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 import { ChatMessage } from '../../../core/interfaces/chat.interface';
 
@@ -21,7 +21,7 @@ export class ChatPage implements OnInit {
   messages: ChatMessage[] = [];
 
   constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {
-    addIcons({ arrowBackOutline, sendOutline });
+    addIcons({logOutOutline,sendOutline,arrowBackOutline});
     this.bookingId = this.route.snapshot.paramMap.get('bookingId') ?? '';
   }
 

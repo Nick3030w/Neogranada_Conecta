@@ -1,6 +1,7 @@
-// ── Login Page ──────────────────────────────────────────────
+// ── Login Page ───────────────────────────────────────────────
+
 ion-content.login-content {
-  --background: linear-gradient(175deg, #1a2a4a 0%, #1e3461 55%, #2a4a7f 100%);
+  --background: #1a2e5a; // azul marino como base
 }
 
 .login-wrapper {
@@ -8,119 +9,133 @@ ion-content.login-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 20px 32px;
+  background: #1a2e5a; // todo el wrapper es azul por defecto
 }
 
-// --- Header con logo y título ---
+// ── Header: logo + título (zona azul) ────────────────────────
 .login-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 28px;
+  padding: 44px 24px 0;
+  width: 100%;
+  background: #1a2e5a;
 
-  .logo-box {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 12px;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .logo-fallback {
-      width: 80px;
-      height: 80px;
-      background: #f0c040;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 18px;
-      color: #1a2a4a;
-    }
+  .logo-img {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    margin-bottom: 14px;
   }
 
   .app-title {
+    font-family: 'Lilita One', cursive;
     color: #ffffff;
-    font-size: 28px;
-    font-weight: 800;
+    font-size: 36px;
+    font-weight: 400;
     text-align: center;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    line-height: 1.15;
+    letter-spacing: 1px;
+    line-height: 1.1;
     margin: 0;
   }
 }
 
-// --- Panel blanco redondeado ---
+// ── Curva SVG ─────────────────────────────────────────────────
+// El SVG tiene fondo azul arriba y dorado abajo
+// La curva cóncava hacia arriba crea la transición redondeada
+.curve-divider {
+  width: 100%;
+  line-height: 0;
+  margin-top: 24px;
+  background: #1a2e5a; // color de fondo detrás del SVG (zona azul)
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 56px;
+  }
+}
+
+// ── Zona dorada: desde la curva hacia abajo ───────────────────
+.login-bottom {
+  width: 100%;
+  flex: 1;
+  background: #8a6a00;
+  display: flex;
+  justify-content: center;
+  padding: 0 20px 32px;
+}
+
+// ── Panel blanco ──────────────────────────────────────────────
 .login-panel {
   width: 100%;
   max-width: 380px;
   background: #ffffff;
   border-radius: 20px;
-  padding: 28px 24px 24px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  padding: 26px 22px 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+  // Se monta ligeramente sobre la curva para que no haya gap
+  margin-top: -4px;
 }
 
-// --- Campos ---
+// ── Campos ────────────────────────────────────────────────────
 .field-block {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .field-label {
   display: block;
-  color: #4a5568;
-  font-size: 13px;
-  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 14px;
+  font-weight: 700;
   margin-bottom: 6px;
 }
 
 .field-input-row {
   display: flex;
   align-items: center;
-  background: #f8f9fa;
-  border: 1.5px solid #e8ecf0;
+  background: #ffffff;
+  border: 2px solid #1a1a1a;
   border-radius: 8px;
   padding: 0 10px;
+  height: 48px;
   transition: border-color 0.2s;
 
-  &:focus-within { border-color: #f0c040; }
+  &:focus-within { border-color: #c9a000; }
   &.has-error    { border-color: #e74c3c; }
 
   .field-icon {
-    color: #9aa5b4;
-    font-size: 18px;
+    color: #1a1a1a;
+    font-size: 20px;
     flex-shrink: 0;
-    margin-right: 6px;
+    margin-right: 8px;
   }
 
   ion-input {
     --background: transparent;
-    --color: #1a2a4a;
-    --placeholder-color: #9aa5b4;
+    --color: #1a1a1a;
+    --placeholder-color: #aaa;
     --padding-start: 0;
     --padding-end: 0;
-    font-size: 14px;
+    font-size: 15px;
     flex: 1;
   }
 }
 
+// ── Errores ───────────────────────────────────────────────────
 .field-error {
   display: block;
   color: #e74c3c;
   font-size: 11px;
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
-// --- Error general ---
 .error-box {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(231,76,60,0.08);
+  background: rgba(231, 76, 60, 0.08);
   border: 1px solid #e74c3c;
   border-radius: 8px;
   padding: 10px 14px;
@@ -131,59 +146,48 @@ ion-content.login-content {
   ion-icon { font-size: 16px; flex-shrink: 0; }
 }
 
-// --- Botón primario dorado ---
-.btn-primary {
+// ── Botón VERIFICAR ───────────────────────────────────────────
+.btn-verificar {
   width: 100%;
-  height: 46px;
-  background: #f0c040;
-  color: #1a2a4a;
+  height: 50px;
+  background: #c9a000;
+  color: #ffffff;
   border: none;
   border-radius: 10px;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 14px rgba(240,192,64,0.35);
-  transition: opacity 0.15s;
   margin-top: 4px;
+  box-shadow: 0 4px 14px rgba(201, 160, 0, 0.4);
+  transition: opacity 0.15s;
 
   &:disabled { opacity: 0.6; cursor: not-allowed; }
   &:active   { opacity: 0.85; }
 
-  ion-spinner { width: 20px; height: 20px; color: #1a2a4a; }
+  ion-spinner { width: 20px; height: 20px; color: #ffffff; }
 }
 
-// --- Links ---
-.forgot-row {
-  text-align: center;
-  margin-top: 12px;
-
-  .forgot-link {
-    color: #4a5568;
-    font-size: 12px;
-    text-decoration: none;
-    opacity: 0.75;
-  }
-}
-
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #e8ecf0, transparent);
-  margin: 18px 0;
-}
-
+// ── Registro ──────────────────────────────────────────────────
 .register-row {
-  text-align: center;
-  color: #4a5568;
-  font-size: 13px;
-  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
 
-  .link-gold {
-    color: #d4a820;
+  .register-text {
+    color: #4a5568;
+    font-size: 13px;
+  }
+
+  .register-link {
+    color: #c9a000;
+    font-size: 13px;
     font-weight: 700;
     text-decoration: none;
   }

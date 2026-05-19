@@ -1,84 +1,85 @@
 <ion-content class="login-content">
   <div class="login-wrapper">
 
-    <!-- Logo + Título -->
+    <!-- ── Zona azul: logo + título ── -->
     <div class="login-header">
-      <div class="logo-box">
-        <img src="assets/images/logo-umng.png" alt="UMNG"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="logo-fallback" style="display:none">
-          <span>UMNG</span>
-        </div>
-      </div>
+      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
       <h1 class="app-title">NEOGRANADA<br>CONECTA</h1>
     </div>
 
-    <!-- Panel blanco -->
-    <div class="login-panel">
-
-      <form [formGroup]="form" (ngSubmit)="onLogin()">
-
-        <!-- Correo electrónico -->
-        <div class="field-block">
-          <label class="field-label">Correo electrónico</label>
-          <div class="field-input-row" [class.has-error]="email.invalid && email.touched">
-            <ion-icon name="mail-outline" class="field-icon"></ion-icon>
-            <ion-input
-              formControlName="email"
-              type="email"
-              placeholder="correo@ejemplo.com"
-              autocomplete="email"
-              inputmode="email">
-            </ion-input>
-          </div>
-          <span class="field-error" *ngIf="email.invalid && email.touched">
-            {{ email.errors?.['required'] ? 'Campo requerido.' : 'Correo inválido.' }}
-          </span>
-        </div>
-
-        <!-- Contraseña -->
-        <div class="field-block">
-          <label class="field-label">Contraseña</label>
-          <div class="field-input-row" [class.has-error]="password.invalid && password.touched">
-            <ion-icon name="lock-closed-outline" class="field-icon"></ion-icon>
-            <ion-input
-              formControlName="password"
-              type="password"
-              placeholder="••••••••"
-              autocomplete="current-password">
-              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-            </ion-input>
-          </div>
-          <span class="field-error" *ngIf="password.invalid && password.touched">
-            Campo requerido.
-          </span>
-        </div>
-
-        <!-- Error general -->
-        <div class="error-box" *ngIf="errorMessage">
-          <ion-icon name="alert-circle-outline"></ion-icon>
-          {{ errorMessage }}
-        </div>
-
-        <!-- Botón ingresar -->
-        <button type="submit" class="btn-primary" [disabled]="loading">
-          <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
-          <span *ngIf="!loading">INGRESAR</span>
-        </button>
-
-        <!-- Olvidé contraseña -->
-        <div class="forgot-row">
-          <a routerLink="/auth/forgot-password" class="forgot-link">¿Olvidaste tu contraseña?</a>
-        </div>
-
-      </form>
-
-      <div class="divider"></div>
-      <p class="register-row">
-        ¿No tienes cuenta?
-        <a routerLink="/auth/register" class="link-gold">Regístrate aquí</a>
-      </p>
-
+    <!-- ── Curva de transición azul → dorado ── -->
+    <!-- El rect dorado llena el fondo; el path azul crea la curva cóncava -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fondo dorado completo -->
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <!-- Forma azul con borde inferior curvo (cóncavo hacia arriba) -->
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
     </div>
+
+    <!-- ── Zona dorada: panel blanco ── -->
+    <div class="login-bottom">
+      <div class="login-panel">
+
+        <form [formGroup]="form" (ngSubmit)="onLogin()">
+
+          <!-- Correo electrónico -->
+          <div class="field-block">
+            <label class="field-label">Correo electronico</label>
+            <div class="field-input-row" [class.has-error]="email.invalid && email.touched">
+              <ion-icon name="mail-outline" class="field-icon"></ion-icon>
+              <ion-input
+                formControlName="email"
+                type="email"
+                autocomplete="email"
+                inputmode="email">
+              </ion-input>
+            </div>
+            <span class="field-error" *ngIf="email.invalid && email.touched">
+              {{ email.errors?.['required'] ? 'Campo requerido.' : 'Correo inválido.' }}
+            </span>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="field-block">
+            <label class="field-label">Contraseña</label>
+            <div class="field-input-row" [class.has-error]="password.invalid && password.touched">
+              <ion-icon name="lock-closed-outline" class="field-icon"></ion-icon>
+              <ion-input
+                formControlName="password"
+                type="password"
+                autocomplete="current-password">
+                <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+              </ion-input>
+            </div>
+            <span class="field-error" *ngIf="password.invalid && password.touched">
+              Campo requerido.
+            </span>
+          </div>
+
+          <!-- Error general -->
+          <div class="error-box" *ngIf="errorMessage">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            {{ errorMessage }}
+          </div>
+
+          <!-- Botón verificar -->
+          <button type="submit" class="btn-verificar" [disabled]="loading">
+            <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+            <span *ngIf="!loading">VERIFICAR</span>
+          </button>
+
+        </form>
+
+        <!-- Registro -->
+        <div class="register-row">
+          <span class="register-text">¿No tienes cuenta?</span>
+          <a routerLink="/auth/register" class="register-link">Regístrate aquí</a>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </ion-content>

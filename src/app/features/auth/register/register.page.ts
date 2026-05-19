@@ -57,17 +57,8 @@ export class RegisterPage implements OnInit {
   errorMessage = '';
 
   readonly programs = [
-    'Ingeniería Civil',
     'Ingeniería Industrial',
     'Ingeniería Mecatrónica',
-    'Ingeniería Multimedia',
-    'Administración de Empresas',
-    'Contaduría Pública',
-    'Derecho',
-    'Medicina',
-    'Psicología',
-    'Relaciones Internacionales',
-    'Otro',
   ];
 
   constructor(
