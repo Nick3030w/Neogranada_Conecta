@@ -17,6 +17,7 @@ import { AuthService } from '../../../core/services/auth.service';
 export class BookingPage implements OnInit {
   form!: FormGroup;
   loading = false;
+  errorMessage = '';
   resourceId = '';
   today = new Date().toISOString().split('T')[0];
 

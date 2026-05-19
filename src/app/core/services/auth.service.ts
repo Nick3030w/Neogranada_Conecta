@@ -54,7 +54,7 @@ export class AuthService {
     academicProgram: string;
     password: string;
   }): Promise<void> {
-    this.validateInstitutionalEmail(data.email);
+    // Sin restricción de dominio: se acepta cualquier correo válido
 
     const credential = await createUserWithEmailAndPassword(
       this.auth,
@@ -110,7 +110,6 @@ export class AuthService {
 
   /** Envía correo de recuperación de contraseña */
   async sendPasswordReset(email: string): Promise<void> {
-    this.validateInstitutionalEmail(email);
     await sendPasswordResetEmail(this.auth, email);
   }
 
@@ -156,7 +155,7 @@ export class AuthService {
       'auth/email-already-in-use':    'Este correo ya está registrado. Intenta iniciar sesión.',
       'auth/invalid-email':           'El correo ingresado no es válido.',
       'auth/weak-password':           'La contraseña debe tener al menos 6 caracteres.',
-      'auth/user-not-found':          'No encontramos una cuenta con ese correo institucional.',
+      'auth/user-not-found':          'No encontramos una cuenta con ese correo.',
       'auth/wrong-password':          'Correo o contraseña incorrectos. Verifica tus datos.',
       'auth/invalid-credential':      'Correo o contraseña incorrectos. Verifica tus datos.',
       'auth/too-many-requests':       'Demasiados intentos fallidos. Intenta más tarde.',
