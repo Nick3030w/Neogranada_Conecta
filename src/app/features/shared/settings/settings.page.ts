@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { IonContent, IonHeader, IonToolbar, IonIcon, IonButton, IonToggle, IonSpinner } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, IonToggle } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, logOutOutline, settingsOutline } from 'ionicons/icons';
+import { logOutOutline, construct } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent, IonHeader, IonToolbar, IonIcon, IonButton, IonToggle, IonSpinner],
+  imports: [CommonModule, IonContent, IonIcon, IonToggle],
 })
 export class SettingsPage implements OnInit {
   notificationsMuted = false;
@@ -19,7 +19,7 @@ export class SettingsPage implements OnInit {
   loading = false;
 
   constructor(private router: Router, private authService: AuthService) {
-    addIcons({ arrowBackOutline, logOutOutline, settingsOutline });
+    addIcons({ logOutOutline, construct });
   }
 
   ngOnInit(): void {
@@ -32,13 +32,6 @@ export class SettingsPage implements OnInit {
     this.notificationsMuted = event.detail.checked;
     const user = this.authService.currentUser;
     if (user) await this.authService.updateProfile(user.uid, { notificationsMuted: this.notificationsMuted });
-  }
-
-  async toggleDarkMode(event: CustomEvent): Promise<void> {
-    this.darkMode = event.detail.checked;
-    document.body.classList.toggle('dark-theme', this.darkMode);
-    const user = this.authService.currentUser;
-    if (user) await this.authService.updateProfile(user.uid, { darkMode: this.darkMode });
   }
 
   goToProfile(): void {

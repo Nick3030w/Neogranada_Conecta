@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { IonContent, IonHeader, IonToolbar, IonIcon, IonButton, IonSpinner } from '@ionic/angular/standalone';
+import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, logOutOutline, checkmarkOutline, closeOutline, chatbubblesOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { logOutOutline, chatbubbleOutline, checkmarkCircleOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 import { Booking } from '../../../core/interfaces/booking.interface';
 
@@ -12,10 +12,9 @@ import { Booking } from '../../../core/interfaces/booking.interface';
   templateUrl: './confirmation.page.html',
   styleUrls: ['./confirmation.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent, IonHeader, IonToolbar, IonIcon, IonButton, IonSpinner],
+  imports: [CommonModule, IonContent, IonIcon],
 })
 export class AdminConfirmationPage {
-  // Datos de ejemplo — se reemplazarán con Firestore
   pendingBookings: Booking[] = [
     {
       id: '0001', studentId: 'uid1', studentName: 'Juan Pérez',
@@ -27,7 +26,7 @@ export class AdminConfirmationPage {
   ];
 
   constructor(private router: Router, private authService: AuthService) {
-    addIcons({logOutOutline,chatbubblesOutline,checkmarkCircleOutline,arrowBackOutline,checkmarkOutline,closeOutline});
+    addIcons({ logOutOutline, chatbubbleOutline, checkmarkCircleOutline });
   }
 
   approve(booking: Booking): void {

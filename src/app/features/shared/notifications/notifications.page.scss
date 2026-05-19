@@ -1,39 +1,167 @@
-ion-content.page-content { --background: linear-gradient(175deg, #1a2a4a 0%, #1e3461 55%, #2a4a7f 100%); }
-.nc-header ion-toolbar { --background: transparent; --border-color: transparent; }
-.nc-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 4px 16px;
-  .nc-toolbar-logo { height: 38px; object-fit: contain; }
+// ── Notifications Page ───────────────────────────────────────
+
+ion-content.notif-content {
+  --background: #1a2e5a;
 }
-.nc-icon-btn { background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer; display: flex; align-items: center; padding: 6px; border-radius: 50%; }
 
-.page-wrapper { padding: 16px 16px 32px; min-height: 100%; }
+.notif-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1a2e5a;
+}
 
-.white-panel { background: #fff; border-radius: 20px; padding: 24px 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+// ── Zona azul ────────────────────────────────────────────────
+.notif-header {
+  display: flex;
+  flex-direction: column;
+  padding: 44px 20px 0;
+  background: #1a2e5a;
+}
 
-.panel-title { color: #1a2a4a; font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 20px; text-align: center; }
+.header-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
 
-.notif-list { display: flex; flex-direction: column; gap: 8px; }
+  .logo-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+  }
+}
 
+.back-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+
+  .back-icon {
+    font-size: 32px;
+    color: #f0c040;
+  }
+}
+
+.page-title {
+  font-family: 'Lilita One', cursive;
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  margin: 0 0 4px;
+  width: 100%;
+}
+
+// ── Curva SVG ─────────────────────────────────────────────────
+.curve-divider {
+  width: 100%;
+  line-height: 0;
+  background: #1a2e5a;
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 56px;
+  }
+}
+
+// ── Zona dorada ───────────────────────────────────────────────
+.notif-bottom {
+  flex: 1;
+  background: #8a6a00;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px 32px;
+}
+
+// ── Panel blanco ──────────────────────────────────────────────
+.notif-panel {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 20px 16px 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+  margin-top: -4px;
+}
+
+// ── Lista de notificaciones ───────────────────────────────────
+.notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// Cada fila de notificación
 .notif-row {
-  display: flex; align-items: center; gap: 12px;
-  background: #f8f9fa; border-radius: 10px; padding: 12px 14px;
-  border-left: 3px solid #e8ecf0; position: relative;
-  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f5f5f5;
+  border: 2px solid #1a1a1a;
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+  transition: opacity 0.15s;
 
-  &.unread { border-left-color: #f0c040; background: rgba(240,192,64,0.06); }
-
-  .notif-icon-box { width: 36px; height: 36px; background: #1a2a4a; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    ion-icon { font-size: 18px; }
+  // No leída: borde dorado
+  &.unread {
+    border-color: #c9a000;
   }
-
-  .notif-text { flex: 1; display: flex; flex-direction: column; gap: 2px;
-    .notif-title { color: #1a2a4a; font-size: 13px; font-weight: 700; }
-    .notif-body  { color: #4a5568; font-size: 12px; line-height: 1.3; }
-  }
-
-  .unread-dot { width: 8px; height: 8px; background: #f0c040; border-radius: 50%; flex-shrink: 0; }
 }
 
-.empty-notif { text-align: center; padding: 32px 0; color: #9aa5b4;
-  ion-icon { font-size: 48px; display: block; margin-bottom: 8px; }
+// Caja del ícono campana
+.notif-icon-box {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .notif-bell {
+    font-size: 36px;
+    color: #c9a000;
+  }
+}
+
+// Texto de la notificación
+.notif-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  .notif-title {
+    color: #1a1a1a;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .notif-body {
+    color: #333;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+}
+
+// Estado vacío
+.empty-notif {
+  text-align: center;
+  padding: 40px 0;
+  color: #9aa5b4;
+
+  ion-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
   p { margin: 0; font-size: 14px; }
 }

@@ -5,8 +5,7 @@ import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   calendar, construct, checkmarkCircle,
-  personCircle, notifications,
-} from 'ionicons/icons';
+  personCircle, notifications, logOutOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserProfile } from '../../../core/interfaces/user.interface';
 
@@ -21,7 +20,7 @@ export class AdminHomePage implements OnInit {
   user: UserProfile | null = null;
 
   constructor(private authService: AuthService, private router: Router) {
-    addIcons({ calendar, construct, checkmarkCircle, personCircle, notifications });
+    addIcons({notifications,logOutOutline,calendar,construct,checkmarkCircle,personCircle});
   }
 
   ngOnInit(): void {

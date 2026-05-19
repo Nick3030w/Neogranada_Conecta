@@ -5,10 +5,15 @@
     <div class="home-header">
       <div class="header-top-row">
         <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
-        <button class="notif-btn" (click)="goToNotifications()">
-          <ion-icon name="notifications" class="notif-icon"></ion-icon>
-          <span class="notif-dot"></span>
-        </button>
+        <div class="header-top-actions">
+          <button class="notif-btn" (click)="goToNotifications()">
+            <ion-icon name="notifications" class="notif-icon"></ion-icon>
+            <span class="notif-dot"></span>
+          </button>
+          <button class="logout-btn" (click)="logout()">
+            <ion-icon name="log-out-outline" class="logout-icon"></ion-icon>
+          </button>
+        </div>
       </div>
       <h1 class="welcome-title">BIENVENIDO A<br>NEOGRANADA<br>CONECTA</h1>
     </div>

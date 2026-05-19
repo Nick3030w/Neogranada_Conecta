@@ -1,68 +1,80 @@
-<ion-header class="ion-no-border nc-header">
-  <ion-toolbar>
-    <div class="nc-toolbar">
-      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
-      <button class="nc-icon-btn" (click)="goBack()">
-        <ion-icon name="log-out-outline"></ion-icon>
-      </button>
+<ion-content class="conf-content">
+  <div class="conf-wrapper">
+
+    <!-- ── Zona azul: logo + botón salir + título ── -->
+    <div class="conf-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="back-btn" (click)="goBack()">
+          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
+        </button>
+      </div>
+      <h1 class="page-title">ESTADO DE<br>CONFIRMACIÓN</h1>
     </div>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content class="page-content">
-  <div class="page-wrapper nc-animate-in">
-    <div class="white-panel">
-      <h2 class="panel-title">ESTADO DE<br>CONFIRMACIÓN</h2>
+    <!-- ── Curva SVG azul → dorado ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
 
-      <!-- Lista de solicitudes pendientes -->
-      <div *ngFor="let booking of pendingBookings" class="booking-card">
+    <!-- ── Zona dorada ── -->
+    <div class="conf-bottom">
 
-        <!-- ID de solicitud -->
-        <div class="request-id-row">
-          <span class="request-id">Solicitud #{{ booking.id }}</span>
+      <!-- Tarjeta por cada solicitud -->
+      <div *ngFor="let booking of pendingBookings" class="conf-panel">
+
+        <!-- Solicitud #XXXX -->
+        <div class="request-id-pill">
+          <span>Solicitud #{{ booking.id.padStart(4,'0') }}</span>
         </div>
 
-        <!-- Detalle -->
-        <div class="booking-detail-row" *ngIf="booking.status !== 'pendiente'">
-          <span class="detail-label">Estudiante:</span>
-          <span class="detail-value">{{ booking.studentName }}</span>
-        </div>
-        <div class="booking-detail-row">
-          <span class="detail-label">Recurso:</span>
-          <span class="detail-value">{{ booking.resourceName }}</span>
-        </div>
-        <div class="booking-detail-row">
-          <span class="detail-label">Fecha:</span>
-          <span class="detail-value">{{ booking.date }} — {{ booking.time }}</span>
+        <!-- Detalle de la solicitud -->
+        <div class="booking-details">
+          <div class="detail-row" *ngIf="booking.studentName">
+            <span class="detail-label">Estudiante:</span>
+            <span class="detail-value">{{ booking.studentName }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Recurso:</span>
+            <span class="detail-value">{{ booking.resourceName }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Fecha:</span>
+            <span class="detail-value">{{ booking.date }} — {{ booking.time }}</span>
+          </div>
         </div>
 
-        <!-- Botones DENEGAR / ACEPTAR -->
+        <!-- Botones DENEGAR / ACEPTAR (solo si pendiente) -->
         <div class="action-btns" *ngIf="booking.status === 'pendiente'">
           <button class="btn-deny" (click)="deny(booking)">DENEGAR</button>
           <button class="btn-accept" (click)="approve(booking)">ACEPTAR</button>
         </div>
 
-        <!-- Estado aprobado/denegado -->
+        <!-- Badge estado -->
         <div class="status-badge approved" *ngIf="booking.status === 'aprobada'">✓ Solicitud aprobada</div>
         <div class="status-badge denied"   *ngIf="booking.status === 'denegada'">✗ Solicitud denegada</div>
 
-        <!-- Botón continuar -->
-        <button class="btn-continue" (click)="goBack()">CONTINUAR</button>
+        <!-- Botón CONFIRMAR -->
+        <button class="btn-confirmar" (click)="goBack()">CONFIRMAR</button>
 
-        <!-- Chat -->
+        <!-- Botón Chat -->
         <button class="btn-chat" (click)="openChat(booking.id)">
-          <ion-icon name="chatbubbles-outline"></ion-icon>
-          Chat con la dependencia
+          <ion-icon name="chatbubble-outline" class="chat-icon"></ion-icon>
+          <span>Chat con la dependencia</span>
         </button>
 
       </div>
 
       <!-- Sin solicitudes -->
-      <div *ngIf="pendingBookings.length === 0" class="empty-state">
-        <ion-icon name="checkmark-circle-outline"></ion-icon>
-        <p>No hay solicitudes pendientes</p>
+      <div *ngIf="pendingBookings.length === 0" class="conf-panel empty-panel">
+        <ion-icon name="checkmark-circle-outline" class="empty-icon"></ion-icon>
+        <p class="empty-text">No hay solicitudes pendientes</p>
       </div>
 
     </div>
+
   </div>
 </ion-content>

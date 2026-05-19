@@ -1,39 +1,50 @@
-<ion-header class="ion-no-border nc-header">
-  <ion-toolbar>
-    <div class="nc-toolbar">
-      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
-      <button class="nc-icon-btn" (click)="goBack()">
-        <ion-icon name="log-out-outline"></ion-icon>
-      </button>
+<ion-content class="notif-content">
+  <div class="notif-wrapper">
+
+    <!-- ── Zona azul: logo + botón salir + título ── -->
+    <div class="notif-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="back-btn" (click)="goBack()">
+          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
+        </button>
+      </div>
+      <h1 class="page-title">CENTRO DE<br>NOTIFICACIONES</h1>
     </div>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content class="page-content">
-  <div class="page-wrapper nc-animate-in">
+    <!-- ── Curva SVG azul → dorado ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
 
-    <!-- Panel blanco -->
-    <div class="white-panel">
-      <h2 class="panel-title">CENTRO DE NOTIFICACIONES</h2>
+    <!-- ── Zona dorada: panel blanco ── -->
+    <div class="notif-bottom">
+      <div class="notif-panel">
 
-      <div class="notif-list">
-        <div *ngFor="let notif of notifications"
-             class="notif-row"
-             [class.unread]="!notif.read">
-          <div class="notif-icon-box">
-            <ion-icon [name]="getIcon(notif.type)" [style.color]="getIconColor(notif.type)"></ion-icon>
+        <!-- Lista de notificaciones -->
+        <div class="notif-list">
+          <div *ngFor="let notif of notifications"
+               class="notif-row"
+               [class.unread]="!notif.read">
+            <div class="notif-icon-box">
+              <ion-icon name="notifications" class="notif-bell"></ion-icon>
+            </div>
+            <div class="notif-text">
+              <span class="notif-title">{{ notif.title }}</span>
+              <span class="notif-body">{{ notif.body }}</span>
+            </div>
           </div>
-          <div class="notif-text">
-            <span class="notif-title">{{ notif.title }}</span>
-            <span class="notif-body">{{ notif.body }}</span>
+
+          <!-- Estado vacío -->
+          <div *ngIf="notifications.length === 0" class="empty-notif">
+            <ion-icon name="notifications-off-outline"></ion-icon>
+            <p>Sin notificaciones</p>
           </div>
-          <div class="unread-dot" *ngIf="!notif.read"></div>
         </div>
 
-        <div *ngIf="notifications.length === 0" class="empty-notif">
-          <ion-icon name="notifications-off-outline"></ion-icon>
-          <p>Sin notificaciones</p>
-        </div>
       </div>
     </div>
 

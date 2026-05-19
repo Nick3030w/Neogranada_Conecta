@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonContent, IonHeader, IonToolbar, IonIcon, IonButton, IonInput, IonSpinner } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, IonInput, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, logOutOutline, personOutline } from 'ionicons/icons';
+import { logOutOutline, personOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserProfile } from '../../../core/interfaces/user.interface';
 
@@ -13,7 +13,7 @@ import { UserProfile } from '../../../core/interfaces/user.interface';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IonContent, IonHeader, IonToolbar, IonIcon, IonButton, IonInput, IonSpinner],
+  imports: [CommonModule, ReactiveFormsModule, IonContent, IonIcon, IonInput, IonSpinner],
 })
 export class ProfilePage implements OnInit {
   form!: FormGroup;
@@ -22,8 +22,12 @@ export class ProfilePage implements OnInit {
   successMessage = '';
   errorMessage = '';
 
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
-    addIcons({ arrowBackOutline, logOutOutline, personOutline });
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {
+    addIcons({ logOutOutline, personOutline });
   }
 
   ngOnInit(): void {
@@ -34,8 +38,8 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  get initials(): string {
-    return (this.user?.fullName ?? 'U').split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase();
+  get isAdmin(): boolean {
+    return this.authService.currentUser?.role === 'admin';
   }
 
   async onSave(): Promise<void> {
@@ -45,7 +49,7 @@ export class ProfilePage implements OnInit {
     this.errorMessage = '';
     try {
       await this.authService.updateProfile(this.user!.uid, {
-        fullName: this.form.value.fullName.trim(),
+        fullName:        this.form.value.fullName.trim(),
         academicProgram: this.form.value.academicProgram.trim(),
       });
       this.successMessage = 'Perfil actualizado correctamente.';

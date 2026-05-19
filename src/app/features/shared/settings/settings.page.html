@@ -1,69 +1,67 @@
-<ion-header class="ion-no-border nc-header">
-  <ion-toolbar>
-    <div class="nc-toolbar">
-      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
-      <button class="nc-icon-btn" (click)="goBack()">
-        <ion-icon name="log-out-outline"></ion-icon>
-      </button>
-    </div>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="settings-content">
+  <div class="settings-wrapper">
 
-<ion-content class="page-content">
-  <div class="page-wrapper nc-animate-in">
+    <!-- ── Zona azul: logo + botón salir + ícono + título ── -->
+    <div class="settings-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="back-btn" (click)="goBack()">
+          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
+        </button>
+      </div>
 
-    <!-- Ícono engranaje dorado -->
-    <div class="settings-icon-block">
+      <!-- Ícono engranaje dorado -->
       <div class="gear-box">
-        <ion-icon name="settings-outline"></ion-icon>
+        <ion-icon name="construct" class="gear-icon"></ion-icon>
       </div>
-      <h2 class="page-title">CONFIGURACIÓN</h2>
+
+      <h1 class="page-title">CONFIGURACIÓN</h1>
     </div>
 
-    <!-- Panel blanco -->
-    <div class="white-panel">
+    <!-- ── Curva SVG azul → dorado ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
 
-      <!-- Toggle silenciar notificaciones -->
-      <div class="setting-row">
-        <span class="setting-label">Silenciar notificaciones</span>
-        <ion-toggle
-          [checked]="notificationsMuted"
-          (ionChange)="toggleNotifications($event)"
-          color="warning">
-        </ion-toggle>
-      </div>
+    <!-- ── Zona dorada: panel blanco ── -->
+    <div class="settings-bottom">
+      <div class="settings-panel">
 
-      <!-- Toggle modo oscuro -->
-      <div class="setting-row">
-        <span class="setting-label">Modo oscuro</span>
-        <ion-toggle
-          [checked]="darkMode"
-          (ionChange)="toggleDarkMode($event)"
-          color="warning">
-        </ion-toggle>
-      </div>
+        <!-- Toggle silenciar notificaciones -->
+        <div class="setting-row">
+          <span class="setting-label">Silenciar  notificaciones</span>
+          <ion-toggle
+            [checked]="notificationsMuted"
+            (ionChange)="toggleNotifications($event)"
+            color="warning">
+          </ion-toggle>
+        </div>
 
-      <div class="settings-divider"></div>
+        <!-- Botones de acción -->
+        <button class="action-btn" (click)="goToProfile()">
+          Ajustes de perfil
+        </button>
 
-      <!-- Botones de acción -->
-      <button class="settings-action-btn" (click)="goToProfile()">
-        Ajustes de perfil
-      </button>
+        <button class="action-btn" (click)="changePassword()" [disabled]="loading">
+          Cambiar contraseña
+        </button>
 
-      <button class="settings-action-btn" (click)="changePassword()" [disabled]="loading">
-        Cambiar contraseña
-      </button>
+        <button class="action-btn" (click)="logout()">
+          Cerrar sesión
+        </button>
 
-      <button class="settings-action-btn danger-btn" (click)="logout()">
-        Cerrar sesión
-      </button>
+        <!-- Botones CANCELAR / CONFIRMAR dentro del panel -->
+        <div class="bottom-actions">
+          <button class="btn-cancel" (click)="goBack()">CANCELAR</button>
+          <button class="btn-confirm" (click)="goBack()">CONFIRMAR</button>
+        </div>
 
-      <!-- Botones cancelar / confirmar -->
-      <div class="bottom-actions">
-        <button class="btn-cancel" (click)="goBack()">CANCELAR</button>
-        <button class="btn-confirm" (click)="goBack()">CONFIRMAR</button>
       </div>
 
     </div>
+
   </div>
 </ion-content>

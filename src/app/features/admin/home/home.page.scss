@@ -19,7 +19,7 @@ ion-content.home-content {
   background: #1a2e5a;
 }
 
-// Fila superior: logo izquierda, campana derecha
+// Fila superior: logo izquierda, acciones derecha
 .header-top-row {
   display: flex;
   align-items: flex-start;
@@ -31,6 +31,12 @@ ion-content.home-content {
     height: 80px;
     object-fit: contain;
   }
+}
+
+.header-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 // Campana con punto rojo
@@ -55,6 +61,19 @@ ion-content.home-content {
     background: #e74c3c;
     border-radius: 50%;
     border: 2px solid #1a2e5a;
+  }
+}
+
+// Botón salir
+.logout-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+
+  .logout-icon {
+    font-size: 32px;
+    color: #f0c040;
   }
 }
 

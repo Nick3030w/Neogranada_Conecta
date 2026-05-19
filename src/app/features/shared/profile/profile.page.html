@@ -1,59 +1,82 @@
-<ion-header class="ion-no-border nc-header">
-  <ion-toolbar>
-    <div class="nc-toolbar">
-      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
-      <button class="nc-icon-btn" (click)="goBack()">
-        <ion-icon name="log-out-outline"></ion-icon>
-      </button>
-    </div>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="profile-content">
+  <div class="profile-wrapper">
 
-<ion-content class="page-content">
-  <div class="page-wrapper nc-animate-in">
-
-    <!-- Avatar -->
-    <div class="avatar-block">
-      <div class="avatar-circle">
-        <ion-icon name="person-outline"></ion-icon>
-      </div>
-      <h2 class="profile-greeting">HOLA {{ user?.fullName?.toUpperCase() }}</h2>
-    </div>
-
-    <!-- Panel blanco -->
-    <div class="white-panel">
-      <form [formGroup]="form" (ngSubmit)="onSave()">
-
-        <div class="field-block">
-          <label class="field-label">Nombre:</label>
-          <div class="field-input-row" [class.has-error]="form.get('fullName')!.invalid && form.get('fullName')!.touched">
-            <ion-input formControlName="fullName" type="text" placeholder="Nombre completo"></ion-input>
-          </div>
-        </div>
-
-        <div class="field-block">
-          <label class="field-label">Correo:</label>
-          <div class="field-input-row disabled-field">
-            <ion-input [value]="user?.email" type="email" readonly></ion-input>
-          </div>
-        </div>
-
-        <div class="field-block">
-          <label class="field-label">Programa:</label>
-          <div class="field-input-row" [class.has-error]="form.get('academicProgram')!.invalid && form.get('academicProgram')!.touched">
-            <ion-input formControlName="academicProgram" type="text" placeholder="Programa académico"></ion-input>
-          </div>
-        </div>
-
-        <div class="success-msg" *ngIf="successMessage">{{ successMessage }}</div>
-        <div class="error-msg"   *ngIf="errorMessage">{{ errorMessage }}</div>
-
-        <button type="submit" class="btn-primary" [disabled]="loading">
-          <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
-          <span *ngIf="!loading">GUARDAR</span>
+    <!-- ── Zona azul: logo + botón salir + avatar + saludo ── -->
+    <div class="profile-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="back-btn" (click)="goBack()">
+          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
         </button>
+      </div>
 
-      </form>
+      <!-- Avatar circular gris -->
+      <div class="avatar-circle">
+        <ion-icon name="person-outline" class="avatar-icon"></ion-icon>
+      </div>
+
+      <!-- Saludo -->
+      <h1 class="profile-greeting">HOLA {{ user?.fullName?.toUpperCase() ?? 'USUARIO' }}</h1>
     </div>
+
+    <!-- ── Curva SVG azul → dorado ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
+
+    <!-- ── Zona dorada: panel blanco ── -->
+    <div class="profile-bottom">
+      <div class="profile-panel">
+
+        <form [formGroup]="form" (ngSubmit)="onSave()">
+
+          <!-- Nombre -->
+          <div class="field-block">
+            <div class="field-box" [class.has-error]="form.get('fullName')!.invalid && form.get('fullName')!.touched">
+              <span class="field-label">Nombre:</span>
+              <ion-input
+                formControlName="fullName"
+                type="text"
+                [placeholder]="user?.fullName ?? 'Tu nombre completo'">
+              </ion-input>
+            </div>
+          </div>
+
+          <!-- Correo (solo lectura) -->
+          <div class="field-block">
+            <div class="field-box disabled-field">
+              <span class="field-label">Correo:</span>
+              <ion-input
+                [value]="user?.email ?? ''"
+                type="email"
+                readonly>
+              </ion-input>
+            </div>
+          </div>
+
+          <!-- Cargo / Programa (según rol) -->
+          <div class="field-block">
+            <div class="field-box" [class.has-error]="form.get('academicProgram')!.invalid && form.get('academicProgram')!.touched">
+              <span class="field-label">{{ isAdmin ? 'Cargo:' : 'Programa:' }}</span>
+              <ion-input
+                formControlName="academicProgram"
+                type="text"
+                [placeholder]="isAdmin ? 'Tu cargo' : 'Tu programa académico'">
+              </ion-input>
+            </div>
+          </div>
+
+          <!-- Mensajes -->
+          <div class="success-msg" *ngIf="successMessage">{{ successMessage }}</div>
+          <div class="error-msg"   *ngIf="errorMessage">{{ errorMessage }}</div>
+
+        </form>
+
+      </div>
+    </div>
+
   </div>
 </ion-content>
