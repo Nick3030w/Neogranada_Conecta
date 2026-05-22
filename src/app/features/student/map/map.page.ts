@@ -22,9 +22,6 @@ export class MapPage {
     { id: 'A', name: 'Bloque A', description: 'Facultad de Ingeniería' },
     { id: 'B', name: 'Bloque B', description: 'Facultad de Ciencias Económicas' },
     { id: 'C', name: 'Bloque C', description: 'Facultad de Derecho' },
-    { id: 'D', name: 'Bloque D', description: 'Laboratorios y Talleres' },
-    { id: 'E', name: 'Bloque E', description: 'Biblioteca y Recursos Académicos' },
-    { id: 'F', name: 'Bloque F', description: 'Bienestar Universitario' },
   ];
 
   constructor(private router: Router, private authService: AuthService) {
