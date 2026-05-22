@@ -41,10 +41,14 @@
           </div>
         </div>
 
-        <!-- Badge de disponibilidad -->
-        <div class="availability-badge" [class.available]="isAvailable" [class.unavailable]="!isAvailable">
+        <!-- Badge de disponibilidad — clickeable si está disponible -->
+        <button class="availability-badge"
+                [class.available]="isAvailable"
+                [class.unavailable]="!isAvailable"
+                [disabled]="!isAvailable"
+                (click)="goToBooking()">
           <span>{{ isAvailable ? 'Articulo disponible' : 'Artículo no disponible' }}</span>
-        </div>
+        </button>
 
         <!-- Botón VOLVER A CATÁLOGO -->
         <button class="btn-back" (click)="goBack()">VOLVER A CATALOGO</button>
