@@ -1,47 +1,64 @@
-<ion-header class="ion-no-border nc-header">
-  <ion-toolbar>
-    <div class="nc-toolbar">
-      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
-      <button class="nc-icon-btn" (click)="goBack()">
-        <ion-icon name="log-out-outline"></ion-icon>
-      </button>
-    </div>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="map-content">
+  <div class="map-wrapper">
 
-<ion-content class="page-content">
-  <div class="page-wrapper nc-animate-in">
-    <div class="white-panel">
-      <h2 class="panel-title">MAPA</h2>
-
-      <!-- Buscador -->
-      <div class="search-row">
-        <ion-icon name="search-outline" class="search-icon"></ion-icon>
-        <input
-          type="text"
-          [(ngModel)]="searchQuery"
-          placeholder="Buscar bloque o sede..."
-          class="search-input">
+    <!-- ── Zona azul: logo + botón salir + título ── -->
+    <div class="map-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="back-btn" (click)="goBack()">
+          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
+        </button>
       </div>
+      <h1 class="page-title">MAPA</h1>
+    </div>
 
-      <!-- Lista de bloques -->
-      <div class="blocks-list">
-        <div *ngFor="let block of filteredBlocks" class="block-row">
-          <div class="block-icon-box">
-            <ion-icon name="business-outline"></ion-icon>
-          </div>
-          <div class="block-info">
-            <span class="block-name">{{ block.name }}</span>
-            <span class="block-desc">{{ block.description }}</span>
-          </div>
-          <ion-icon name="chevron-forward-outline" class="block-arrow"></ion-icon>
+    <!-- ── Curva SVG azul → dorado ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
+
+    <!-- ── Zona dorada: panel blanco ── -->
+    <div class="map-bottom">
+      <div class="map-panel">
+
+        <!-- Buscador -->
+        <div class="search-box">
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="Buscar bloque o sede..."
+            class="search-input">
+          <ion-icon name="search-outline" class="search-icon"></ion-icon>
         </div>
 
-        <div *ngIf="filteredBlocks.length === 0" class="empty-state">
-          <p>No se encontraron bloques o sedes con ese nombre.</p>
-        </div>
-      </div>
+        <!-- Lista de bloques -->
+        <div class="blocks-list">
+          <button *ngFor="let block of filteredBlocks"
+                  class="block-row"
+                  (click)="selectBlock(block)">
+            <!-- Círculo dorado con ícono edificio -->
+            <div class="block-icon-circle">
+              <ion-icon name="business" class="block-icon"></ion-icon>
+            </div>
+            <!-- Nombre del bloque -->
+            <span class="block-name">{{ block.name | uppercase }}</span>
+            <!-- Flecha circular derecha -->
+            <div class="block-arrow-circle">
+              <ion-icon name="arrow-forward-circle" class="arrow-icon"></ion-icon>
+            </div>
+          </button>
 
+          <!-- Estado vacío -->
+          <div *ngIf="filteredBlocks.length === 0" class="empty-state">
+            <p>No se encontraron bloques con ese nombre.</p>
+          </div>
+        </div>
+
+      </div>
     </div>
+
   </div>
 </ion-content>

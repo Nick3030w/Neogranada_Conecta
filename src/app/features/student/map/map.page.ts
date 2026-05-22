@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonContent, IonHeader, IonToolbar, IonIcon, IonSearchbar } from '@ionic/angular/standalone';
+import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, logOutOutline, businessOutline, chevronForwardOutline, searchOutline } from 'ionicons/icons';
+import { logOutOutline, searchOutline, business, arrowForwardCircle } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 import { CampusBlock } from '../../../core/interfaces/campus-block.interface';
 
@@ -13,7 +13,7 @@ import { CampusBlock } from '../../../core/interfaces/campus-block.interface';
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonContent, IonHeader, IonToolbar, IonIcon, IonSearchbar],
+  imports: [CommonModule, FormsModule, IonContent, IonIcon],
 })
 export class MapPage {
   searchQuery = '';
@@ -28,7 +28,7 @@ export class MapPage {
   ];
 
   constructor(private router: Router, private authService: AuthService) {
-    addIcons({logOutOutline,searchOutline,businessOutline,chevronForwardOutline,arrowBackOutline});
+    addIcons({ logOutOutline, searchOutline, business, arrowForwardCircle });
   }
 
   get filteredBlocks(): CampusBlock[] {
@@ -37,6 +37,11 @@ export class MapPage {
     return this.blocks.filter(
       (b) => b.name.toLowerCase().includes(q) || b.description.toLowerCase().includes(q)
     );
+  }
+
+  selectBlock(block: CampusBlock): void {
+    // TODO: navegar al detalle del bloque o abrir mapa
+    console.log('Bloque seleccionado:', block.name);
   }
 
   goBack(): void { this.router.navigate(['/student/home']); }

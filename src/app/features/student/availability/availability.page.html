@@ -1,38 +1,56 @@
-<ion-header class="ion-no-border nc-header">
-  <ion-toolbar>
-    <div class="nc-toolbar">
-      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
-      <button class="nc-icon-btn" (click)="goBack()">
-        <ion-icon name="log-out-outline"></ion-icon>
-      </button>
+<ion-content class="avail-content">
+  <div class="avail-wrapper">
+
+    <!-- ── Zona azul: logo + botón salir + título ── -->
+    <div class="avail-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="back-btn" (click)="goBack()">
+          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
+        </button>
+      </div>
+      <h1 class="page-title">ESTADO DE<br>DISPONIBILIDAD</h1>
     </div>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content class="page-content">
-  <div class="page-wrapper nc-animate-in">
-    <div class="white-panel">
-      <h2 class="panel-title">ESTADO DE<br>DISPONIBILIDAD</h2>
+    <!-- ── Curva SVG azul → dorado ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
 
-      <!-- Artículo seleccionado -->
-      <div class="item-selected-label">Artículo seleccionado</div>
+    <!-- ── Zona dorada: panel blanco ── -->
+    <div class="avail-bottom">
+      <div class="avail-panel">
 
-      <div class="item-preview">
-        <div class="item-img-box">
-          <div class="item-emoji">{{ getCategoryEmoji() }}</div>
+        <!-- Pill "Artículo seleccionado" -->
+        <div class="selected-pill">
+          <span>Articulo seleccionado</span>
         </div>
+
+        <!-- Imagen / ícono del artículo -->
+        <div class="item-img-box">
+          <img [src]="categoryImageUrl"
+               [alt]="resourceId"
+               class="item-img"
+               (error)="onImgError($event)">
+          <!-- Fallback con ícono si no hay imagen -->
+          <div class="item-img-fallback" [style.display]="showFallback ? 'flex' : 'none'">
+            <ion-icon [name]="categoryIcon" class="fallback-icon"></ion-icon>
+          </div>
+        </div>
+
+        <!-- Badge de disponibilidad -->
+        <div class="availability-badge" [class.available]="isAvailable" [class.unavailable]="!isAvailable">
+          <span>{{ isAvailable ? 'Articulo disponible' : 'Artículo no disponible' }}</span>
+        </div>
+
+        <!-- Botón VOLVER A CATÁLOGO -->
+        <button class="btn-back" (click)="goBack()">VOLVER A CATALOGO</button>
+
       </div>
-
-      <!-- Estado disponible -->
-      <div class="availability-badge available">
-        <ion-icon name="checkmark-circle-outline"></ion-icon>
-        Artículo disponible
-      </div>
-
-      <!-- Botones -->
-      <button class="btn-primary" (click)="goToBooking()">AGENDAR</button>
-      <button class="btn-outline" (click)="goBack()">VOLVER AL CATÁLOGO</button>
-
     </div>
+
   </div>
 </ion-content>
