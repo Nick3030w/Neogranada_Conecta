@@ -1,10 +1,12 @@
 export type ResourceCategory =
   | 'laboratorio'
   | 'aula'
-  | 'material_ludico'
+  | 'biblioteca'
   | 'elementos_deportivos'
-  | 'botiquin'
-  | 'base_datos';
+  | 'base_datos'
+  | 'instrumentos_musicales'
+  | 'material_ludico'
+  | 'botiquin';
 
 export type ResourceStatus = 'disponible' | 'no_disponible';
 

@@ -1,8 +1,230 @@
-.toolbar-content{display:flex;align-items:center;justify-content:space-between;padding:0 8px;.toolbar-logo{height:36px;object-fit:contain;}}
-.icon-btn{background:transparent;border:none;color:var(--nc-white);font-size:24px;cursor:pointer;display:flex;align-items:center;padding:4px;}
-.page-container{padding:16px;}
-.panel-title{color:var(--nc-blue-dark);font-size:var(--nc-font-size-xl);font-weight:var(--nc-font-weight-bold);text-align:center;text-transform:uppercase;margin:0 0 16px;}
-.video-wrapper{background:var(--nc-blue-dark);border-radius:var(--nc-radius-md);height:200px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;}
-.video-placeholder{display:flex;flex-direction:column;align-items:center;gap:12px;.video-logo{height:60px;object-fit:contain;}.play-icon{font-size:48px;color:var(--nc-gold);}}
-.progress-bar{height:4px;background:var(--nc-gray-light);border-radius:2px;margin-bottom:16px;.progress-fill{height:100%;width:0%;background:var(--nc-gold);border-radius:2px;}}
-.rating-section{display:flex;justify-content:center;gap:32px;.rate-btn{background:transparent;border:2px solid var(--nc-gray-light);border-radius:var(--nc-radius-full);width:56px;height:56px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:24px;color:var(--nc-gray-medium);transition:all var(--nc-transition-fast);&.active{border-color:var(--nc-gold);color:var(--nc-gold);background:rgba(240,192,64,0.1);}}}
+// ── Tutorial Page ─────────────────────────────────────────────
+
+ion-content.tutorial-content {
+  --background: #1a2e5a;
+}
+
+.tutorial-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1a2e5a;
+}
+
+// ── Zona azul ────────────────────────────────────────────────
+.tutorial-header {
+  display: flex;
+  flex-direction: column;
+  padding: 44px 20px 0;
+  background: #1a2e5a;
+}
+
+.header-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  .logo-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+  }
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+
+  .back-icon {
+    font-size: 32px;
+    color: #f0c040;
+  }
+}
+
+.page-title {
+  font-family: 'Lilita One', cursive;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  margin: 0 0 4px;
+  width: 100%;
+}
+
+// ── Curva SVG ─────────────────────────────────────────────────
+.curve-divider {
+  width: 100%;
+  line-height: 0;
+  background: #1a2e5a;
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 56px;
+  }
+}
+
+// ── Zona dorada ───────────────────────────────────────────────
+.tutorial-bottom {
+  flex: 1;
+  background: #8a6a00;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px 32px;
+}
+
+// ── Panel blanco ──────────────────────────────────────────────
+.tutorial-panel {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 20px 16px 28px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+  margin-top: -4px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// ── Reproductor de video ──────────────────────────────────────
+.video-box {
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: 14px;
+  border: 2px solid #1a1a1a;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  background: #e8e8e8;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+
+  &:active { opacity: 0.9; }
+}
+
+.video-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: #f0f0f0;
+  padding: 12px;
+}
+
+// Overlay semitransparente con ícono play
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.15);
+
+  .play-icon {
+    font-size: 64px;
+    color: rgba(255, 255, 255, 0.85);
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+  }
+}
+
+// Tiempo en esquina inferior derecha
+.video-time {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(0,0,0,0.45);
+  border-radius: 4px;
+  padding: 2px 6px;
+  letter-spacing: 0.5px;
+}
+
+// ── Barra de progreso roja ────────────────────────────────────
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: #d0d0d0;
+  border-radius: 4px;
+  position: relative;
+  margin: 0 4px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #e74c3c;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+// Círculo rojo al final del progreso
+.progress-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  background: #e74c3c;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  transition: left 0.3s;
+}
+
+// ── Botones like / dislike ────────────────────────────────────
+.rating-row {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 8px;
+}
+
+.rate-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid #1a1a1a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 4px 4px 0px rgba(0,0,0,0.25);
+  transition: transform 0.15s, opacity 0.15s;
+
+  &:active { transform: scale(0.92); }
+
+  .rate-icon {
+    font-size: 38px;
+  }
+}
+
+// Dislike — fondo salmón/rojo suave
+.dislike-btn {
+  background: #e8857a;
+
+  .rate-icon { color: #1a1a1a; }
+
+  &.active {
+    background: #e74c3c;
+    .rate-icon { color: #ffffff; }
+  }
+}
+
+// Like — fondo verde suave
+.like-btn {
+  background: #8fbc8f;
+
+  .rate-icon { color: #1a1a1a; }
+
+  &.active {
+    background: #4caf50;
+    .rate-icon { color: #ffffff; }
+  }
+}

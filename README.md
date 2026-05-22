@@ -124,28 +124,6 @@ npx cap sync android
 npx cap open android
 ```
 
----
-
-## 🔐 Estado del proyecto
-
-🚧 En desarrollo
-
-Actualmente se está trabajando en:
-- Sistema de autenticación
-- Gestión de reservas
-- Integración backend
-- Notificaciones
-- Optimización UI/UX
-
----
-
-## 👨‍💻 Autor
-
-Proyecto desarrollado como trabajo académico de Ingeniería de Sistemas.
-
-Universidad Militar Nueva Granada.
-
----
 
 ## 📄 Licencia
 
