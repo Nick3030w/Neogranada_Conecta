@@ -1,38 +1,85 @@
-<ion-header class="ion-no-border nc-header">
-  <ion-toolbar>
-    <div class="nc-toolbar">
-      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
-      <div class="nc-toolbar-right">
-        <button class="nc-icon-btn" (click)="goToNotifications()">
-          <ion-icon name="notifications-outline"></ion-icon>
-        </button>
-        <button class="nc-icon-btn" (click)="logout()">
-          <ion-icon name="log-out-outline"></ion-icon>
-        </button>
-      </div>
-    </div>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content class="home-content">
   <div class="home-wrapper">
 
-    <!-- Título de bienvenida -->
-    <div class="welcome-block">
+    <!-- ── Zona azul: logo + campana + logout + título ── -->
+    <div class="home-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <div class="header-top-actions">
+          <button class="notif-btn" (click)="goToNotifications()">
+            <ion-icon name="notifications" class="notif-icon"></ion-icon>
+            <span class="notif-dot"></span>
+          </button>
+          <button class="logout-btn" (click)="logout()">
+            <ion-icon name="log-out-outline" class="logout-icon"></ion-icon>
+          </button>
+        </div>
+      </div>
       <h1 class="welcome-title">BIENVENIDO A<br>NEOGRANADA<br>CONECTA</h1>
     </div>
 
-    <!-- Panel blanco con grid -->
-    <div class="home-panel">
-      <div class="menu-grid">
-        <button *ngFor="let item of menuItems"
-                class="menu-tile"
-                (click)="navigate(item.route)">
-          <div class="tile-icon-box">
-            <ion-icon [name]="item.icon"></ion-icon>
-          </div>
-          <span class="tile-label">{{ item.label }}</span>
-        </button>
+    <!-- ── Curva SVG azul → dorado ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
+
+    <!-- ── Zona dorada: panel blanco con grid ── -->
+    <div class="home-bottom">
+      <div class="home-panel">
+        <div class="menu-grid">
+
+          <!-- CATÁLOGO -->
+          <button class="menu-tile" (click)="navigate('/student/catalog')">
+            <div class="tile-img-box tile-yellow">
+              <ion-icon name="newspaper" class="tile-icon"></ion-icon>
+            </div>
+            <span class="tile-label">CATALOGO</span>
+          </button>
+
+          <!-- TUTORIAL -->
+          <button class="menu-tile" (click)="navigate('/student/tutorial')">
+            <div class="tile-img-box tile-gray">
+              <ion-icon name="film" class="tile-icon"></ion-icon>
+            </div>
+            <span class="tile-label">TUTORIAL</span>
+          </button>
+
+          <!-- CALENDARIO -->
+          <button class="menu-tile" (click)="navigate('/student/calendar')">
+            <div class="tile-img-box tile-yellow">
+              <ion-icon name="calendar" class="tile-icon"></ion-icon>
+            </div>
+            <span class="tile-label">CALENDARIO</span>
+          </button>
+
+          <!-- CONFIGURACIÓN -->
+          <button class="menu-tile" (click)="navigate('/student/settings')">
+            <div class="tile-img-box tile-gray">
+              <ion-icon name="construct" class="tile-icon"></ion-icon>
+            </div>
+            <span class="tile-label">CONFIGURACIÓN</span>
+          </button>
+
+          <!-- MAPA -->
+          <button class="menu-tile" (click)="navigate('/student/map')">
+            <div class="tile-img-box tile-yellow">
+              <ion-icon name="map" class="tile-icon"></ion-icon>
+            </div>
+            <span class="tile-label">MAPA</span>
+          </button>
+
+          <!-- PERFIL -->
+          <button class="menu-tile" (click)="navigate('/student/profile')">
+            <div class="tile-img-box tile-gray">
+              <ion-icon name="person-circle" class="tile-icon"></ion-icon>
+            </div>
+            <span class="tile-label">PERFIL</span>
+          </button>
+
+        </div>
       </div>
     </div>
 
