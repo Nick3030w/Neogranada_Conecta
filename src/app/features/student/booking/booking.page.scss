@@ -1,133 +1,256 @@
-ion-content.page-content { --background: linear-gradient(175deg, #1a2a4a 0%, #1e3461 55%, #2a4a7f 100%); }
-.nc-header ion-toolbar { --background: transparent; --border-color: transparent; }
-.nc-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 4px 16px;
-  .nc-toolbar-logo { height: 38px; object-fit: contain; }
-}
-.nc-icon-btn { background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer; display: flex; align-items: center; padding: 6px; border-radius: 50%; }
-.page-wrapper { padding: 16px 16px 32px; min-height: 100%; }
+// ── Booking Page ─────────────────────────────────────────────
 
-/* Panel transparente sobre fondo azul — igual que registro */
-.white-panel {
-  background: transparent;
-  border-radius: 20px;
-  padding: 8px 4px;
-}
+ion-content.booking-content { --background: #1a2e5a; }
 
-.panel-title {
-  color: #ffffff;
-  font-size: 22px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-align: center;
-  margin: 0 0 20px;
-}
-
-/* Fila fecha + hora: dos columnas iguales sin desbordamiento */
-.row-fields {
+.booking-wrapper {
+  min-height: 100%;
   display: flex;
-  gap: 12px;
-  width: 100%;
-  box-sizing: border-box;
+  flex-direction: column;
+  background: #1a2e5a;
 }
+
+// ── Zona azul ────────────────────────────────────────────────
+.booking-header {
+  display: flex;
+  flex-direction: column;
+  padding: 44px 20px 0;
+  background: #1a2e5a;
+}
+
+.header-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  .logo-img { width: 80px; height: 80px; object-fit: contain; }
+}
+
+.back-btn {
+  background: transparent; border: none; cursor: pointer; padding: 4px;
+  .back-icon { font-size: 32px; color: #f0c040; }
+}
+
+.page-title {
+  font-family: 'Lilita One', cursive;
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  margin: 0 0 4px;
+  width: 100%;
+}
+
+// ── Curva SVG ─────────────────────────────────────────────────
+.curve-divider {
+  width: 100%; line-height: 0; background: #1a2e5a;
+  svg { display: block; width: 100%; height: 56px; }
+}
+
+// ── Zona dorada ───────────────────────────────────────────────
+.booking-bottom {
+  flex: 1;
+  background: #8a6a00;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px 32px;
+}
+
+// ── Panel blanco ──────────────────────────────────────────────
+.booking-panel {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 24px 20px 28px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+  margin-top: -4px;
+}
+
+// ── Fila fecha + hora ─────────────────────────────────────────
+.row-fields { display: flex; gap: 12px; }
 
 .field-block {
-  margin-bottom: 16px;
-  &.half {
-    flex: 1;
-    min-width: 0; /* evita que el contenido empuje fuera del flex */
-  }
+  margin-bottom: 18px;
+  position: relative; // para el dropdown absoluto
+  &.half { flex: 1; min-width: 0; }
 }
 
-/* Labels blancos */
 .field-label {
   display: block;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-/* Inputs / selects sobre fondo oscuro */
-.field-select-row {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  padding: 0 10px;
-  transition: border-color 0.2s;
-  width: 100%;
-  box-sizing: border-box;
-  overflow: hidden; /* corta cualquier desbordamiento */
-
-  &:focus-within { border-color: #f0c040; }
-  &.has-error { border-color: #e74c3c; }
-
-  .field-icon {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 16px;
-    flex-shrink: 0;
-    margin-right: 6px;
-  }
-
-  ion-input {
-    --background: transparent;
-    --color: #ffffff;
-    --placeholder-color: rgba(255, 255, 255, 0.5);
-    --padding-start: 0;
-    font-size: 13px;
-    flex: 1;
-    min-width: 0;
-  }
-
-  ion-select {
-    --color: #ffffff;
-    --placeholder-color: rgba(255, 255, 255, 0.5);
-    width: 100%;
-    font-size: 13px;
-  }
-}
-
-/* Textarea */
-.field-textarea-row {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  padding: 8px 10px;
-
-  &:focus-within { border-color: #f0c040; }
-
-  ion-textarea {
-    --background: transparent;
-    --color: #ffffff;
-    --placeholder-color: rgba(255, 255, 255, 0.5);
-    --padding-start: 0;
-    font-size: 13px;
-  }
-}
-
-.field-error { display: block; color: #ff8a80; font-size: 11px; margin-top: 3px; }
-.error-box { background: rgba(231,76,60,0.15); border: 1px solid #e74c3c; border-radius: 8px; padding: 10px 14px; color: #ff8a80; font-size: 13px; margin-bottom: 14px; }
-
-.btn-primary {
-  width: 100%;
-  height: 46px;
-  background: #f0c040;
-  color: #1a2a4a;
-  border: none;
-  border-radius: 10px;
+  font-family: 'Lilita One', cursive;
   font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  letter-spacing: 1px;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+}
+
+// Caja de campo — fondo amarillo
+.field-select-box {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 4px 14px rgba(240,192,64,0.35);
-  margin-top: 4px;
+  background: #e8d080;
+  border: 2px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 0 8px;
+  height: 46px;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.2s;
 
-  &:disabled { opacity: 0.6; }
-  ion-spinner { width: 20px; height: 20px; color: #1a2a4a; }
+  &.has-error { border-color: #e74c3c; }
+  &.gray-box  { background: #b0bec5; }
+
+  .field-icon  { font-size: 20px; color: #1a1a1a; flex-shrink: 0; margin-right: 4px; }
+  .field-value { flex: 1; font-size: 13px; font-weight: 600; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .caret-icon  { font-size: 14px; color: #1a1a1a; flex-shrink: 0; transition: transform 0.2s; &.open { transform: rotate(180deg); } }
+}
+
+// Select nativo (servicio)
+.native-select {
+  flex: 1; border: none; background: transparent;
+  font-size: 14px; font-weight: 600; color: #1a1a1a;
+  outline: none; appearance: none; cursor: pointer; width: 100%;
+}
+
+// ── Dropdown panel base ───────────────────────────────────────
+.dropdown-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 2px solid #1a2e5a;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  z-index: 100;
+  overflow: hidden;
+}
+
+// ── Calendario desplegable ────────────────────────────────────
+.cal-dropdown { padding: 12px 10px; }
+
+.cal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.cal-nav-btn {
+  background: #1a2e5a;
+  border: none;
+  border-radius: 6px;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  ion-icon { font-size: 16px; color: #f0c040; }
+}
+
+.cal-month-label {
+  font-family: 'Lilita One', cursive;
+  font-size: 13px;
+  color: #1a2e5a;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cal-head {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #1a2e5a;
+  padding: 3px 0;
+}
+
+.cal-cell {
+  text-align: center;
+  font-size: 12px;
+  color: #1a1a1a;
+  border-radius: 6px;
+  min-height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &.empty   { visibility: hidden; pointer-events: none; }
+  &.past    { color: #bbb; pointer-events: none; }
+  &.today   { background: #e8d080; font-weight: 700; }
+  &.selected { background: #1a2e5a; color: #f0c040; font-weight: 700; border-radius: 6px; }
+  &:not(.empty):not(.past):not(.selected):hover { background: #f0f0f0; }
+}
+
+// ── Picker de horas ───────────────────────────────────────────
+.time-dropdown { max-height: 200px; overflow-y: auto; }
+
+.time-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 10px;
+}
+
+.time-slot {
+  background: #e8d080;
+  border: 1.5px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 8px 4px;
+  font-family: 'Lilita One', cursive;
+  font-size: 13px;
+  color: #1a1a1a;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s;
+  box-shadow: 1px 1px 0px rgba(0,0,0,0.15);
+
+  &.selected { background: #1a2e5a; color: #f0c040; border-color: #1a2e5a; }
+  &:not(.selected):hover { background: #d4b84a; }
+}
+
+// ── Textarea ──────────────────────────────────────────────────
+.field-textarea-box {
+  border: 2px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #f5f5f5;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+  &:focus-within { border-color: #c9a000; }
+}
+
+.native-textarea {
+  width: 100%; border: none; background: transparent;
+  font-size: 14px; color: #1a1a1a; outline: none;
+  resize: none; font-family: inherit; line-height: 1.5;
+  &::placeholder { color: #888; }
+}
+
+// ── Errores ───────────────────────────────────────────────────
+.field-error { display: block; color: #e74c3c; font-size: 11px; margin-top: 4px; }
+.error-box {
+  background: rgba(231,76,60,0.08); border: 1px solid #e74c3c;
+  border-radius: 8px; padding: 10px 14px; color: #e74c3c;
+  font-size: 13px; margin-bottom: 14px;
+}
+
+// ── Botón CONTINUAR ───────────────────────────────────────────
+.btn-continuar {
+  width: 100%; height: 52px;
+  background: #c9a000; color: #ffffff;
+  border: none; border-radius: 12px;
+  font-family: 'Lilita One', cursive;
+  font-size: 18px; font-weight: 400; letter-spacing: 1px;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; gap: 8px;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.25);
+  margin-top: 8px; transition: opacity 0.15s;
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+  &:active   { opacity: 0.85; }
+  ion-spinner { width: 20px; height: 20px; color: #ffffff; }
 }

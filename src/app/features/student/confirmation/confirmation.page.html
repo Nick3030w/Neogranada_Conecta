@@ -1,60 +1,77 @@
-<ion-header class="ion-no-border nc-header">
-  <ion-toolbar>
-    <div class="nc-toolbar">
-      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
-      <button class="nc-icon-btn" (click)="goBack()">
-        <ion-icon name="log-out-outline"></ion-icon>
-      </button>
-    </div>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="conf-content">
+  <div class="conf-wrapper">
 
-<ion-content class="page-content">
-  <div class="page-wrapper nc-animate-in">
-    <div class="white-panel">
-      <h2 class="panel-title">ESTADO DE<br>CONFIRMACIÓN</h2>
-
-      <!-- ID solicitud -->
-      <div class="request-id-row">
-        <span class="request-id">Solicitud #{{ bookingId }}</span>
+    <!-- ── Zona azul: logo + botón salir + título ── -->
+    <div class="conf-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="back-btn" (click)="goBack()">
+          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
+        </button>
       </div>
+      <h1 class="page-title">ESTADO DE<br>CONFIRMACIÓN</h1>
+    </div>
 
-      <!-- Estado visual -->
-      <div class="status-area">
+    <!-- ── Curva SVG azul → dorado ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
 
-        <!-- Pendiente: spinner -->
-        <ng-container *ngIf="status === 'pendiente'">
-          <ion-spinner name="crescent" class="status-spinner"></ion-spinner>
-          <p class="status-text pending">Procesando solicitud...</p>
-        </ng-container>
+    <!-- ── Zona dorada: panel blanco ── -->
+    <div class="conf-bottom">
+      <div class="conf-panel">
 
-        <!-- Aprobada -->
-        <ng-container *ngIf="status === 'aprobada'">
-          <div class="status-icon-circle success">
+        <!-- Pill de estado superior -->
+        <div class="status-pill top-pill">
+          <span *ngIf="status === 'pendiente'">Procesando solicitud</span>
+          <span *ngIf="status === 'aprobada'">Solicitud aprobada</span>
+          <span *ngIf="status === 'denegada'">Solicitud denegada</span>
+        </div>
+
+        <!-- Spinner animado (pendiente) -->
+        <div class="spinner-area" *ngIf="status === 'pendiente'">
+          <div class="custom-spinner">
+            <div class="spinner-blade" *ngFor="let b of blades; let i = index"
+                 [style.transform]="'rotate(' + (i * 45) + 'deg)'"
+                 [style.animation-delay]="'-' + ((8 - i) * 0.125) + 's'">
+            </div>
+          </div>
+        </div>
+
+        <!-- Ícono aprobada -->
+        <div class="status-icon-area" *ngIf="status === 'aprobada'">
+          <div class="status-circle success">
             <ion-icon name="checkmark-outline"></ion-icon>
           </div>
-          <p class="status-text success">Solicitud confirmada</p>
-        </ng-container>
+        </div>
 
-        <!-- Denegada -->
-        <ng-container *ngIf="status === 'denegada'">
-          <div class="status-icon-circle danger">
+        <!-- Ícono denegada -->
+        <div class="status-icon-area" *ngIf="status === 'denegada'">
+          <div class="status-circle danger">
             <ion-icon name="close-outline"></ion-icon>
           </div>
-          <p class="status-text danger">Solicitud denegada</p>
-        </ng-container>
+        </div>
+
+        <!-- Pill "Solicitud confirmada / denegada" -->
+        <div class="status-pill confirmed-pill" [class.denied-pill]="status === 'denegada'">
+          <span *ngIf="status === 'pendiente'">Solicitud confirmada</span>
+          <span *ngIf="status === 'aprobada'">Solicitud confirmada</span>
+          <span *ngIf="status === 'denegada'">Solicitud denegada</span>
+        </div>
+
+        <!-- Botón Chat con la dependencia -->
+        <button class="btn-chat" (click)="goToChat()">
+          <div class="chat-icon-box">
+            <ion-icon name="chatbubble-outline" class="chat-icon"></ion-icon>
+          </div>
+          <span>Chat con la dependencia</span>
+        </button>
 
       </div>
-
-      <!-- Botón continuar -->
-      <button class="btn-continue" (click)="goHome()">CONTINUAR</button>
-
-      <!-- Chat con dependencia -->
-      <button class="btn-chat" (click)="goToChat()">
-        <ion-icon name="chatbubbles-outline"></ion-icon>
-        Chat con la dependencia
-      </button>
-
     </div>
+
   </div>
 </ion-content>

@@ -1,79 +1,132 @@
-<ion-header class="ion-no-border nc-header">
-  <ion-toolbar>
-    <div class="nc-toolbar">
-      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
-      <button class="nc-icon-btn" (click)="goBack()">
-        <ion-icon name="log-out-outline"></ion-icon>
-      </button>
-    </div>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="booking-content">
+  <div class="booking-wrapper">
 
-<ion-content class="page-content">
-  <div class="page-wrapper nc-animate-in">
-    <div class="white-panel">
-      <h2 class="panel-title">AGENDAMIENTO</h2>
-
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
-        <!-- Fecha y Hora en fila -->
-        <div class="row-fields">
-          <div class="field-block half">
-            <label class="field-label">Fecha</label>
-            <div class="field-select-row" [class.has-error]="date.invalid && date.touched">
-              <ion-icon name="calendar-outline" class="field-icon"></ion-icon>
-              <ion-input formControlName="date" type="date" [min]="today" style="min-width:0"></ion-input>
-            </div>
-            <span class="field-error" *ngIf="date.invalid && date.touched">Requerido.</span>
-          </div>
-
-          <div class="field-block half">
-            <label class="field-label">Hora</label>
-            <div class="field-select-row" [class.has-error]="time.invalid && time.touched">
-              <ion-icon name="time-outline" class="field-icon"></ion-icon>
-              <ion-input formControlName="time" type="time" style="min-width:0"></ion-input>
-            </div>
-            <span class="field-error" *ngIf="time.invalid && time.touched">Requerido.</span>
-          </div>
-        </div>
-
-        <!-- Servicio -->
-        <div class="field-block">
-          <label class="field-label">Servicio</label>
-          <div class="field-select-row" [class.has-error]="service.invalid && service.touched">
-            <ion-select formControlName="service"
-              placeholder="Selecciona el servicio"
-              interface="action-sheet"
-              cancelText="Cancelar">
-              <ion-select-option *ngFor="let s of services" [value]="s">{{ s }}</ion-select-option>
-            </ion-select>
-          </div>
-          <span class="field-error" *ngIf="service.invalid && service.touched">Selecciona un servicio.</span>
-        </div>
-
-        <!-- Observaciones -->
-        <div class="field-block">
-          <label class="field-label">Observaciones</label>
-          <div class="field-textarea-row">
-            <ion-textarea
-              formControlName="observations"
-              placeholder="Escribe tus observaciones aquí..."
-              rows="4"
-              auto-grow="false">
-            </ion-textarea>
-          </div>
-        </div>
-
-        <!-- Error general -->
-        <div class="error-box" *ngIf="errorMessage">{{ errorMessage }}</div>
-
-        <!-- Botón continuar -->
-        <button type="submit" class="btn-primary" [disabled]="loading">
-          <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
-          <span *ngIf="!loading">CONTINUAR</span>
+    <!-- ── Zona azul ── -->
+    <div class="booking-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="back-btn" (click)="goBack()">
+          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
         </button>
-
-      </form>
+      </div>
+      <h1 class="page-title">AGENDAMIENTO</h1>
     </div>
+
+    <!-- ── Curva SVG ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
+
+    <!-- ── Zona dorada: panel blanco ── -->
+    <div class="booking-bottom">
+      <div class="booking-panel">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+          <!-- Fecha y Hora en fila -->
+          <div class="row-fields">
+
+            <!-- ── FECHA ── -->
+            <div class="field-block half">
+              <label class="field-label">Fecha</label>
+              <div class="field-select-box" (click)="toggleCalendar()" [class.has-error]="date.invalid && date.touched">
+                <ion-icon name="calendar-outline" class="field-icon"></ion-icon>
+                <span class="field-value">{{ selectedDateLabel }}</span>
+                <ion-icon name="caret-down" class="caret-icon" [class.open]="showCalendar"></ion-icon>
+              </div>
+              <span class="field-error" *ngIf="date.invalid && date.touched">Requerido.</span>
+
+              <!-- Calendario desplegable -->
+              <div class="dropdown-panel cal-dropdown" *ngIf="showCalendar">
+                <div class="cal-nav">
+                  <button type="button" class="cal-nav-btn" (click)="calPrevMonth()">
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+                  </button>
+                  <span class="cal-month-label">{{ calMonthName }} {{ calYear }}</span>
+                  <button type="button" class="cal-nav-btn" (click)="calNextMonth()">
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                  </button>
+                </div>
+                <div class="cal-grid">
+                  <div class="cal-head" *ngFor="let d of dayHeaders">{{ d }}</div>
+                  <div *ngFor="let day of calendarDays"
+                       class="cal-cell"
+                       [class.empty]="!day"
+                       [class.today]="isToday(day)"
+                       [class.selected]="isSelected(day)"
+                       [class.past]="isPast(day)"
+                       (click)="selectDate(day)">
+                    <span *ngIf="day">{{ day }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── HORA ── -->
+            <div class="field-block half">
+              <label class="field-label">Hora</label>
+              <div class="field-select-box" (click)="toggleTimePicker()" [class.has-error]="time.invalid && time.touched">
+                <ion-icon name="time-outline" class="field-icon"></ion-icon>
+                <span class="field-value">{{ selectedTimeLabel }}</span>
+                <ion-icon name="caret-down" class="caret-icon" [class.open]="showTimePicker"></ion-icon>
+              </div>
+              <span class="field-error" *ngIf="time.invalid && time.touched">Requerido.</span>
+
+              <!-- Picker de horas desplegable -->
+              <div class="dropdown-panel time-dropdown" *ngIf="showTimePicker">
+                <div class="time-list">
+                  <button *ngFor="let slot of timeSlots"
+                          type="button"
+                          class="time-slot"
+                          [class.selected]="slot === form.get('time')!.value"
+                          (click)="selectTime(slot)">
+                    {{ slot }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Servicio -->
+          <div class="field-block">
+            <label class="field-label">Servicio</label>
+            <div class="field-select-box gray-box" [class.has-error]="service.invalid && service.touched">
+              <select formControlName="service" class="native-select">
+                <option value="" disabled selected></option>
+                <option *ngFor="let s of services" [value]="s">{{ s }}</option>
+              </select>
+              <ion-icon name="caret-down" class="caret-icon"></ion-icon>
+            </div>
+            <span class="field-error" *ngIf="service.invalid && service.touched">Selecciona un servicio.</span>
+          </div>
+
+          <!-- Observaciones -->
+          <div class="field-block">
+            <label class="field-label">Observaciones</label>
+            <div class="field-textarea-box">
+              <textarea formControlName="observations"
+                        placeholder="Escribe tus observaciones aquí..."
+                        rows="4"
+                        class="native-textarea">
+              </textarea>
+            </div>
+          </div>
+
+          <!-- Error general -->
+          <div class="error-box" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+          <!-- Botón CONTINUAR -->
+          <button type="submit" class="btn-continuar" [disabled]="loading">
+            <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+            <span *ngIf="!loading">CONTINUAR</span>
+          </button>
+
+        </form>
+      </div>
+    </div>
+
   </div>
 </ion-content>

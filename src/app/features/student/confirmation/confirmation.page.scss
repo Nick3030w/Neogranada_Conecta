@@ -1,34 +1,214 @@
-ion-content.page-content { --background: linear-gradient(175deg, #1a2a4a 0%, #1e3461 55%, #2a4a7f 100%); }
-.nc-header ion-toolbar { --background: transparent; --border-color: transparent; }
-.nc-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 4px 16px;
-  .nc-toolbar-logo { height: 38px; object-fit: contain; }
-}
-.nc-icon-btn { background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer; display: flex; align-items: center; padding: 6px; border-radius: 50%; }
-.page-wrapper { padding: 16px 16px 32px; min-height: 100%; }
-.white-panel { background: #fff; border-radius: 20px; padding: 24px 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
-.panel-title { color: #1a2a4a; font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-align: center; line-height: 1.2; margin: 0 0 20px; }
+// ── Student Confirmation Page ────────────────────────────────
 
-.request-id-row { display: flex; justify-content: center; margin-bottom: 24px;
-  .request-id { border: 1.5px solid #e8ecf0; border-radius: 8px; padding: 8px 24px; color: #1a2a4a; font-size: 14px; font-weight: 600; }
+ion-content.conf-content {
+  --background: #1a2e5a;
 }
 
-.status-area { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px 0 28px; }
-
-.status-spinner { width: 56px; height: 56px; color: #f0c040; }
-
-.status-icon-circle { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  ion-icon { font-size: 36px; color: #fff; }
-  &.success { background: #2ecc71; box-shadow: 0 4px 16px rgba(46,204,113,0.35); }
-  &.danger  { background: #e74c3c; box-shadow: 0 4px 16px rgba(231,76,60,0.35); }
+.conf-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1a2e5a;
 }
 
-.status-text { font-size: 16px; font-weight: 700; margin: 0;
-  &.pending { color: #f39c12; }
-  &.success { color: #2ecc71; }
-  &.danger  { color: #e74c3c; }
+// ── Zona azul ────────────────────────────────────────────────
+.conf-header {
+  display: flex;
+  flex-direction: column;
+  padding: 44px 20px 0;
+  background: #1a2e5a;
 }
 
-.btn-continue { width: 100%; height: 46px; background: #f0c040; color: #1a2a4a; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 1px; margin-bottom: 12px; box-shadow: 0 4px 14px rgba(240,192,64,0.35); }
-.btn-chat { width: 100%; height: 42px; background: transparent; color: #1a2a4a; border: 1.5px solid #e8ecf0; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-  ion-icon { font-size: 18px; }
+.header-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  .logo-img { width: 80px; height: 80px; object-fit: contain; }
+}
+
+.back-btn {
+  background: transparent; border: none; cursor: pointer; padding: 4px;
+  .back-icon { font-size: 32px; color: #f0c040; }
+}
+
+.page-title {
+  font-family: 'Lilita One', cursive;
+  color: #ffffff;
+  font-size: 34px;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  margin: 0 0 4px;
+  width: 100%;
+}
+
+// ── Curva SVG ─────────────────────────────────────────────────
+.curve-divider {
+  width: 100%; line-height: 0; background: #1a2e5a;
+  svg { display: block; width: 100%; height: 56px; }
+}
+
+// ── Zona dorada ───────────────────────────────────────────────
+.conf-bottom {
+  flex: 1;
+  background: #8a6a00;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px 32px;
+}
+
+// ── Panel blanco ──────────────────────────────────────────────
+.conf-panel {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 28px 20px 28px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+  margin-top: -4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+// ── Pills de estado ───────────────────────────────────────────
+.status-pill {
+  width: 100%;
+  border-radius: 24px;
+  padding: 14px 20px;
+  text-align: center;
+  border: 2px solid #1a1a1a;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+
+  span {
+    font-family: 'Lilita One', cursive;
+    font-size: 16px;
+    color: #1a1a1a;
+  }
+}
+
+// Pill superior — blanco
+.top-pill {
+  background: #ffffff;
+}
+
+// Pill inferior — verde confirmado
+.confirmed-pill {
+  background: #8fbc8f;
+  border-color: #1a1a1a;
+
+  span { color: #1a1a1a; }
+}
+
+// Pill inferior — rojo denegado
+.denied-pill {
+  background: #e8857a;
+
+  span { color: #1a1a1a; }
+}
+
+// ── Spinner personalizado (rueda de carga) ────────────────────
+.spinner-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+}
+
+.custom-spinner {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.spinner-blade {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 8px;
+  height: 22px;
+  margin-left: -4px;
+  border-radius: 4px;
+  background: #333;
+  transform-origin: 4px 40px;
+  animation: spinner-fade 1s linear infinite;
+}
+
+// Cada blade tiene un tono diferente (de negro a gris claro)
+@for $i from 1 through 8 {
+  .spinner-blade:nth-child(#{$i}) {
+    opacity: calc(#{$i} / 8);
+  }
+}
+
+@keyframes spinner-fade {
+  0%   { opacity: 1; }
+  100% { opacity: 0.1; }
+}
+
+// ── Ícono de estado (aprobada/denegada) ───────────────────────
+.status-icon-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+}
+
+.status-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #1a1a1a;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+
+  ion-icon { font-size: 44px; color: #ffffff; }
+
+  &.success { background: #8fbc8f; }
+  &.danger  { background: #e8857a; }
+}
+
+// ── Botón Chat ────────────────────────────────────────────────
+.btn-chat {
+  width: 100%;
+  height: 54px;
+  background: #4a5e7a;
+  color: #ffffff;
+  border: 2px solid #1a1a1a;
+  border-radius: 24px;
+  font-family: 'Lilita One', cursive;
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.25);
+  transition: opacity 0.15s;
+
+  &:active { opacity: 0.85; }
+}
+
+.chat-icon-box {
+  width: 36px;
+  height: 36px;
+  background: #ffffff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  .chat-icon {
+    font-size: 22px;
+    color: #4a5e7a;
+  }
 }
