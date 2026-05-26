@@ -149,6 +149,18 @@ ion-content.notif-content {
     font-size: 12px;
     line-height: 1.3;
   }
+
+  .notif-time {
+    color: #999;
+    font-size: 11px;
+    margin-top: 2px;
+  }
+}
+
+// Colores por tipo
+.notif-row {
+  &.approved { border-color: #8fbc8f; }
+  &.denied   { border-color: #e8857a; }
 }
 
 // Estado vacío

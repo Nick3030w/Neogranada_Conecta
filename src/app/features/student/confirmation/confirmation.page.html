@@ -24,51 +24,91 @@
     <div class="conf-bottom">
       <div class="conf-panel">
 
-        <!-- Pill de estado superior -->
-        <div class="status-pill top-pill">
-          <span *ngIf="status === 'pendiente'">Procesando solicitud</span>
-          <span *ngIf="status === 'aprobada'">Solicitud aprobada</span>
-          <span *ngIf="status === 'denegada'">Solicitud denegada</span>
-        </div>
+        <!-- Cargando por primera vez -->
+        <ng-container *ngIf="loadingBooking">
+          <div class="spinner-area">
+            <ion-spinner name="crescent" color="medium"></ion-spinner>
+          </div>
+        </ng-container>
 
-        <!-- Spinner animado (pendiente) -->
-        <div class="spinner-area" *ngIf="status === 'pendiente'">
-          <div class="custom-spinner">
-            <div class="spinner-blade" *ngFor="let b of blades; let i = index"
-                 [style.transform]="'rotate(' + (i * 45) + 'deg)'"
-                 [style.animation-delay]="'-' + ((8 - i) * 0.125) + 's'">
+        <ng-container *ngIf="!loadingBooking">
+
+          <!-- Pill de estado superior -->
+          <div class="status-pill top-pill">
+            <span *ngIf="status === 'pendiente'">Procesando solicitud</span>
+            <span *ngIf="status === 'aprobada'">Solicitud aprobada</span>
+            <span *ngIf="status === 'denegada'">Solicitud denegada</span>
+            <span *ngIf="status === 'cancelada'">Solicitud cancelada</span>
+          </div>
+
+          <!-- Detalle del booking -->
+          <div class="booking-detail" *ngIf="booking">
+            <div class="detail-row">
+              <span class="detail-label">Recurso</span>
+              <span class="detail-value">{{ booking.resourceName }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Fecha</span>
+              <span class="detail-value">{{ booking.date }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Hora</span>
+              <span class="detail-value">{{ booking.time }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Servicio</span>
+              <span class="detail-value">{{ booking.service }}</span>
             </div>
           </div>
-        </div>
 
-        <!-- Ícono aprobada -->
-        <div class="status-icon-area" *ngIf="status === 'aprobada'">
-          <div class="status-circle success">
-            <ion-icon name="checkmark-outline"></ion-icon>
+          <!-- Spinner animado (pendiente) -->
+          <div class="spinner-area" *ngIf="status === 'pendiente'">
+            <div class="custom-spinner">
+              <div class="spinner-blade" *ngFor="let b of blades; let i = index"
+                   [style.transform]="'rotate(' + (i * 45) + 'deg)'"
+                   [style.animation-delay]="'-' + ((8 - i) * 0.125) + 's'">
+              </div>
+            </div>
           </div>
-        </div>
 
-        <!-- Ícono denegada -->
-        <div class="status-icon-area" *ngIf="status === 'denegada'">
-          <div class="status-circle danger">
-            <ion-icon name="close-outline"></ion-icon>
+          <!-- Ícono aprobada -->
+          <div class="status-icon-area" *ngIf="status === 'aprobada'">
+            <div class="status-circle success">
+              <ion-icon name="checkmark-outline"></ion-icon>
+            </div>
           </div>
-        </div>
 
-        <!-- Pill "Solicitud confirmada / denegada" -->
-        <div class="status-pill confirmed-pill" [class.denied-pill]="status === 'denegada'">
-          <span *ngIf="status === 'pendiente'">Solicitud confirmada</span>
-          <span *ngIf="status === 'aprobada'">Solicitud confirmada</span>
-          <span *ngIf="status === 'denegada'">Solicitud denegada</span>
-        </div>
-
-        <!-- Botón Chat con la dependencia -->
-        <button class="btn-chat" (click)="goToChat()">
-          <div class="chat-icon-box">
-            <ion-icon name="chatbubble-outline" class="chat-icon"></ion-icon>
+          <!-- Ícono denegada / cancelada -->
+          <div class="status-icon-area" *ngIf="status === 'denegada' || status === 'cancelada'">
+            <div class="status-circle danger">
+              <ion-icon name="close-outline"></ion-icon>
+            </div>
           </div>
-          <span>Chat con la dependencia</span>
-        </button>
+
+          <!-- Motivo de denegación -->
+          <div class="denial-reason" *ngIf="status === 'denegada' && booking?.denialReason">
+            <span class="denial-label">Motivo:</span>
+            <span class="denial-text">{{ booking!.denialReason }}</span>
+          </div>
+
+          <!-- Pill inferior -->
+          <div class="status-pill confirmed-pill"
+               [class.denied-pill]="status === 'denegada' || status === 'cancelada'">
+            <span *ngIf="status === 'pendiente'">Solicitud en revisión</span>
+            <span *ngIf="status === 'aprobada'">Solicitud confirmada</span>
+            <span *ngIf="status === 'denegada'">Solicitud denegada</span>
+            <span *ngIf="status === 'cancelada'">Solicitud cancelada</span>
+          </div>
+
+          <!-- Botón Chat con la dependencia -->
+          <button class="btn-chat" (click)="goToChat()">
+            <div class="chat-icon-box">
+              <ion-icon name="chatbubble-outline" class="chat-icon"></ion-icon>
+            </div>
+            <span>Chat con la dependencia</span>
+          </button>
+
+        </ng-container>
 
       </div>
     </div>

@@ -23,17 +23,29 @@
     <!-- ── Zona dorada ── -->
     <div class="conf-bottom">
 
-      <!-- Tarjeta por cada solicitud -->
+      <!-- Cargando -->
+      <div *ngIf="loading" class="conf-panel empty-panel">
+        <ion-spinner name="crescent" color="medium"></ion-spinner>
+        <p class="empty-text">Cargando solicitudes...</p>
+      </div>
+
+      <!-- Sin solicitudes pendientes -->
+      <div *ngIf="!loading && pendingBookings.length === 0" class="conf-panel empty-panel">
+        <ion-icon name="checkmark-circle-outline" class="empty-icon"></ion-icon>
+        <p class="empty-text">No hay solicitudes pendientes</p>
+      </div>
+
+      <!-- Tarjeta por cada solicitud pendiente -->
       <div *ngFor="let booking of pendingBookings" class="conf-panel">
 
-        <!-- Solicitud #XXXX -->
+        <!-- Solicitud ID (primeros 8 chars del ID de Firestore) -->
         <div class="request-id-pill">
-          <span>Solicitud #{{ booking.id.padStart(4,'0') }}</span>
+          <span>Solicitud #{{ booking.id.slice(0, 8).toUpperCase() }}</span>
         </div>
 
         <!-- Detalle de la solicitud -->
         <div class="booking-details">
-          <div class="detail-row" *ngIf="booking.studentName">
+          <div class="detail-row">
             <span class="detail-label">Estudiante:</span>
             <span class="detail-value">{{ booking.studentName }}</span>
           </div>
@@ -42,39 +54,77 @@
             <span class="detail-value">{{ booking.resourceName }}</span>
           </div>
           <div class="detail-row">
+            <span class="detail-label">Servicio:</span>
+            <span class="detail-value">{{ booking.service }}</span>
+          </div>
+          <div class="detail-row">
             <span class="detail-label">Fecha:</span>
             <span class="detail-value">{{ booking.date }} — {{ booking.time }}</span>
           </div>
+          <div class="detail-row" *ngIf="booking.observations">
+            <span class="detail-label">Notas:</span>
+            <span class="detail-value">{{ booking.observations }}</span>
+          </div>
         </div>
 
-        <!-- Botones DENEGAR / ACEPTAR (solo si pendiente) -->
-        <div class="action-btns" *ngIf="booking.status === 'pendiente'">
-          <button class="btn-deny" (click)="deny(booking)">DENEGAR</button>
-          <button class="btn-accept" (click)="approve(booking)">ACEPTAR</button>
+        <!-- Botones DENEGAR / ACEPTAR -->
+        <div class="action-btns">
+
+          <!-- Spinner mientras se procesa este booking -->
+          <ng-container *ngIf="processingId === booking.id">
+            <div class="processing-row">
+              <ion-spinner name="crescent" color="medium"></ion-spinner>
+              <span>Procesando...</span>
+            </div>
+          </ng-container>
+
+          <!-- Botones normales -->
+          <ng-container *ngIf="processingId !== booking.id">
+            <button class="btn-deny"   (click)="openDenyModal(booking)" [disabled]="!!processingId">DENEGAR</button>
+            <button class="btn-accept" (click)="approve(booking)"       [disabled]="!!processingId">ACEPTAR</button>
+          </ng-container>
+
         </div>
-
-        <!-- Badge estado -->
-        <div class="status-badge approved" *ngIf="booking.status === 'aprobada'">✓ Solicitud aprobada</div>
-        <div class="status-badge denied"   *ngIf="booking.status === 'denegada'">✗ Solicitud denegada</div>
-
-        <!-- Botón CONFIRMAR -->
-        <button class="btn-confirmar" (click)="goBack()">CONFIRMAR</button>
 
         <!-- Botón Chat -->
         <button class="btn-chat" (click)="openChat(booking.id)">
           <ion-icon name="chatbubble-outline" class="chat-icon"></ion-icon>
-          <span>Chat con la dependencia</span>
+          <span>Chat con el estudiante</span>
         </button>
 
-      </div>
-
-      <!-- Sin solicitudes -->
-      <div *ngIf="pendingBookings.length === 0" class="conf-panel empty-panel">
-        <ion-icon name="checkmark-circle-outline" class="empty-icon"></ion-icon>
-        <p class="empty-text">No hay solicitudes pendientes</p>
       </div>
 
     </div>
 
   </div>
+
+  <!-- ── Modal de denegación ── -->
+  <div class="modal-overlay" *ngIf="showDenyModal" (click)="closeDenyModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+
+      <h2 class="modal-title">Motivo de denegación</h2>
+
+      <p class="modal-subtitle" *ngIf="bookingToDeny">
+        Solicitud de <strong>{{ bookingToDeny.studentName }}</strong>
+        para <strong>{{ bookingToDeny.resourceName }}</strong>
+      </p>
+
+      <textarea
+        class="modal-textarea"
+        [(ngModel)]="denyReason"
+        placeholder="Escribe el motivo aquí..."
+        rows="4"
+        (input)="denyReasonError = ''">
+      </textarea>
+
+      <span class="modal-error" *ngIf="denyReasonError">{{ denyReasonError }}</span>
+
+      <div class="modal-btns">
+        <button class="modal-btn-cancel" (click)="closeDenyModal()">Cancelar</button>
+        <button class="modal-btn-deny"   (click)="confirmDeny()">Denegar</button>
+      </div>
+
+    </div>
+  </div>
+
 </ion-content>

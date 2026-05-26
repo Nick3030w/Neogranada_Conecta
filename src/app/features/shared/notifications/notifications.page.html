@@ -24,17 +24,26 @@
     <div class="notif-bottom">
       <div class="notif-panel">
 
+        <!-- Cargando -->
+        <div *ngIf="loading" class="empty-notif">
+          <ion-spinner name="crescent" color="medium"></ion-spinner>
+          <p>Cargando notificaciones...</p>
+        </div>
+
         <!-- Lista de notificaciones -->
-        <div class="notif-list">
+        <div class="notif-list" *ngIf="!loading">
           <div *ngFor="let notif of notifications"
                class="notif-row"
-               [class.unread]="!notif.read">
+               [class.unread]="!notif.read"
+               [class.approved]="notif.type === 'booking_approved'"
+               [class.denied]="notif.type === 'booking_denied'">
             <div class="notif-icon-box">
-              <ion-icon name="notifications" class="notif-bell"></ion-icon>
+              <ion-icon [name]="getIcon(notif.type)" class="notif-bell"></ion-icon>
             </div>
             <div class="notif-text">
               <span class="notif-title">{{ notif.title }}</span>
               <span class="notif-body">{{ notif.body }}</span>
+              <span class="notif-time">{{ notif.createdAt | date:'d MMM, h:mm a' }}</span>
             </div>
           </div>
 

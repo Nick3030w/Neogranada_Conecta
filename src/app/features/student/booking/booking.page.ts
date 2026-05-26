@@ -9,6 +9,9 @@ import {
   chevronBackOutline, chevronForwardOutline,
 } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
+import { BookingService } from '../../../core/services/booking.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { ResourceService } from '../../../core/services/resource.service';
 
 @Component({
   selector: 'app-booking',
@@ -22,10 +25,11 @@ export class BookingPage implements OnInit {
   loading      = false;
   errorMessage = '';
   resourceId   = '';
+  resourceName = '';   // nombre legible del recurso para notificaciones
 
   // ── Calendario ───────────────────────────────────────────────
   showCalendar = false;
-  calDate      = new Date();                          // mes visible
+  calDate      = new Date();
   selectedDay: number | null = null;
   selectedMonth: number | null = null;
   selectedYear: number | null = null;
@@ -35,12 +39,11 @@ export class BookingPage implements OnInit {
   // ── Picker de horas ───────────────────────────────────────────
   showTimePicker = false;
 
-  // Franjas horarias disponibles 6:00 – 20:00 cada 30 min
   readonly timeSlots: string[] = (() => {
     const slots: string[] = [];
     for (let h = 6; h <= 20; h++) {
-      slots.push(`${h.toString().padStart(2,'0')}:00`);
-      if (h < 20) slots.push(`${h.toString().padStart(2,'0')}:30`);
+      slots.push(`${h.toString().padStart(2, '0')}:00`);
+      if (h < 20) slots.push(`${h.toString().padStart(2, '0')}:30`);
     }
     return slots;
   })();
@@ -55,7 +58,10 @@ export class BookingPage implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private bookingService: BookingService,
+    private notificationService: NotificationService,
+    private resourceService: ResourceService,
   ) {
     addIcons({ logOutOutline, calendarOutline, timeOutline, caretDown, chevronBackOutline, chevronForwardOutline });
     this.resourceId = this.route.snapshot.paramMap.get('resourceId') ?? '';
@@ -68,16 +74,21 @@ export class BookingPage implements OnInit {
       service:      ['', Validators.required],
       observations: [''],
     });
+
+    // Carga el nombre del recurso para usarlo en la notificación
+    if (this.resourceId) {
+      this.resourceService.getById(this.resourceId).subscribe(resource => {
+        this.resourceName = resource?.name ?? this.resourceId;
+      });
+    }
   }
 
   get date()    { return this.form.get('date')!; }
   get time()    { return this.form.get('time')!; }
   get service() { return this.form.get('service')!; }
 
-  // ── Labels mostrados en las cajas ────────────────────────────
   get selectedDateLabel(): string {
-    if (!this.date.value) return 'Seleccionar';
-    return this.date.value;
+    return this.date.value || 'Seleccionar';
   }
 
   get selectedTimeLabel(): string {
@@ -97,9 +108,9 @@ export class BookingPage implements OnInit {
   get calYear(): number { return this.calDate.getFullYear(); }
 
   get calendarDays(): (number | null)[] {
-    const year      = this.calDate.getFullYear();
-    const month     = this.calDate.getMonth();
-    const firstDay  = new Date(year, month, 1).getDay();
+    const year        = this.calDate.getFullYear();
+    const month       = this.calDate.getMonth();
+    const firstDay    = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const days: (number | null)[] = Array(firstDay).fill(null);
     for (let i = 1; i <= daysInMonth; i++) days.push(i);
@@ -123,7 +134,7 @@ export class BookingPage implements OnInit {
 
   isPast(day: number | null): boolean {
     if (!day) return false;
-    const today = new Date(); today.setHours(0,0,0,0);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
     const d = new Date(this.calDate.getFullYear(), this.calDate.getMonth(), day);
     return d < today;
   }
@@ -133,8 +144,8 @@ export class BookingPage implements OnInit {
     this.selectedDay   = day;
     this.selectedMonth = this.calDate.getMonth();
     this.selectedYear  = this.calDate.getFullYear();
-    const mm = String(this.selectedMonth + 1).padStart(2,'0');
-    const dd = String(day).padStart(2,'0');
+    const mm = String(this.selectedMonth + 1).padStart(2, '0');
+    const dd = String(day).padStart(2, '0');
     this.form.get('date')!.setValue(`${this.selectedYear}-${mm}-${dd}`);
     this.showCalendar = false;
   }
@@ -158,7 +169,6 @@ export class BookingPage implements OnInit {
     this.showTimePicker = false;
   }
 
-  // Cierra dropdowns al tocar fuera
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
@@ -168,16 +178,45 @@ export class BookingPage implements OnInit {
     }
   }
 
-  // ── Submit ────────────────────────────────────────────────────
+  // ── Submit — guarda en Firestore ──────────────────────────────
   async onSubmit(): Promise<void> {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+
+    const user = this.authService.currentUser;
+    if (!user) { this.errorMessage = 'Sesión expirada. Inicia sesión de nuevo.'; return; }
+
     this.loading = true;
     this.errorMessage = '';
+
     try {
-      await new Promise(r => setTimeout(r, 800));
-      this.router.navigate(['/student/confirmation', 'new']);
-    } catch {
-      this.errorMessage = 'No se pudo procesar la solicitud. Intenta de nuevo.';
+      const { date, time, service, observations } = this.form.value;
+
+      // 1. Crea el booking en Firestore
+      const bookingId = await this.bookingService.create({
+        studentId:        user.uid,
+        studentName:      user.fullName,
+        resourceId:       this.resourceId,
+        resourceName:     this.resourceName || this.resourceId,
+        resourceCategory: this.resourceId,
+        date,
+        time,
+        service,
+        observations: observations ?? '',
+      });
+
+      // 2. Notifica al estudiante que su solicitud fue recibida
+      await this.notificationService.notifyBookingPending({
+        id:           bookingId,
+        studentId:    user.uid,
+        resourceName: this.resourceName || this.resourceId,
+      });
+
+      // 3. Navega a la pantalla de confirmación con el ID real
+      this.router.navigate(['/student/confirmation', bookingId]);
+
+    } catch (err) {
+      console.error('Error al crear booking:', err);
+      this.errorMessage = 'No se pudo enviar la solicitud. Verifica tu conexión e intenta de nuevo.';
     } finally {
       this.loading = false;
     }

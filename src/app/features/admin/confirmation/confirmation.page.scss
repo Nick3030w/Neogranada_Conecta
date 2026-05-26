@@ -226,6 +226,12 @@ ion-content.conf-content {
 .empty-panel {
   padding: 40px 20px;
 
+  ion-spinner {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 12px;
+  }
+
   .empty-icon {
     font-size: 56px;
     color: #8fbc8f;
@@ -240,3 +246,107 @@ ion-content.conf-content {
     text-align: center;
   }
 }
+
+// ── Fila de procesando ────────────────────────────────────────
+.processing-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 0;
+
+  ion-spinner { width: 24px; height: 24px; }
+
+  span {
+    font-family: 'Lilita One', cursive;
+    font-size: 15px;
+    color: #555;
+  }
+}
+
+// ── Modal overlay ─────────────────────────────────────────────
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.modal-box {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px 24px 24px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-title {
+  font-family: 'Lilita One', cursive;
+  font-size: 20px;
+  color: #1a2e5a;
+  margin: 0;
+  text-align: center;
+}
+
+.modal-subtitle {
+  font-size: 13px;
+  color: #555;
+  margin: 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.modal-textarea {
+  width: 100%;
+  border: 2px solid #1a1a1a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #1a1a1a;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  background: #f5f5f5;
+  box-sizing: border-box;
+
+  &:focus { border-color: #c9a000; }
+  &::placeholder { color: #999; }
+}
+
+.modal-error {
+  font-size: 12px;
+  color: #e74c3c;
+  margin-top: -6px;
+}
+
+.modal-btns {
+  display: flex;
+  gap: 12px;
+}
+
+.modal-btn-cancel,
+.modal-btn-deny {
+  flex: 1;
+  height: 48px;
+  border-radius: 12px;
+  border: 2px solid #1a1a1a;
+  font-family: 'Lilita One', cursive;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+  transition: opacity 0.15s;
+
+  &:active { opacity: 0.8; }
+}
+
+.modal-btn-cancel { background: #e0e0e0; color: #1a1a1a; }
+.modal-btn-deny   { background: #e8857a; color: #1a1a1a; }

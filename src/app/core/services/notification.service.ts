@@ -1,41 +1,32 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
-  Firestore,
   collection,
-  collectionData,
   doc,
-  updateDoc,
   addDoc,
+  updateDoc,
   query,
   where,
   orderBy,
+  onSnapshot,
   writeBatch,
   getDocs,
   serverTimestamp,
   Timestamp,
+  getFirestore,
 } from '@angular/fire/firestore';
-import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { AppNotification, NotificationType } from '../interfaces/notification.interface';
 import { Booking } from '../interfaces/booking.interface';
 
-/**
- * NotificationService
- * Gestiona la colección `notifications` en Firestore.
- *
- * Estructura Firestore:
- *   notifications/{notificationId}  →  AppNotification
- *
- * Uso principal:
- *   - El admin llama a notifyBookingApproved() / notifyBookingDenied() al gestionar una solicitud.
- *   - El estudiante escucha getByUser() para ver sus notificaciones en tiempo real.
- */
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-  private firestore = inject(Firestore);
   private readonly COL = 'notifications';
 
-  // ── Helpers ──────────────────────────────────────────────────
+  private get db() {
+    return getFirestore();
+  }
+
+  // ── Helper ────────────────────────────────────────────────────
 
   private toNotification(data: Record<string, unknown>, id: string): AppNotification {
     return {
@@ -45,40 +36,27 @@ export class NotificationService {
     };
   }
 
-  // ── Lectura ──────────────────────────────────────────────────
+  // ── Lectura en tiempo real ────────────────────────────────────
 
-  /**
-   * Notificaciones de un usuario en tiempo real, ordenadas de más reciente a más antigua.
-   * Usar en NotificationsPage para mostrar la lista.
-   */
+  /** Notificaciones del usuario en tiempo real */
   getByUser(userId: string): Observable<AppNotification[]> {
-    const ref = collection(this.firestore, this.COL);
-    const q   = query(
-      ref,
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc'),
-    );
-    return (collectionData(q, { idField: 'id' }) as Observable<Record<string, unknown>[]>).pipe(
-      map(docs => docs.map(d => this.toNotification(d, d['id'] as string))),
-      catchError(() => of([])),
-    );
+    return new Observable(observer => {
+      const q = query(
+        collection(this.db, this.COL),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc'),
+      );
+      const unsub = onSnapshot(
+        q,
+        snap => observer.next(snap.docs.map(d => this.toNotification(d.data() as Record<string, unknown>, d.id))),
+        err  => observer.error(err),
+      );
+      return () => unsub();
+    });
   }
 
-  /**
-   * Cuenta de notificaciones no leídas de un usuario.
-   * Útil para mostrar el badge en el ícono de notificaciones.
-   */
-  getUnreadCount(userId: string): Observable<number> {
-    return this.getByUser(userId).pipe(
-      map(notifications => notifications.filter(n => !n.read).length),
-    );
-  }
+  // ── Escritura ─────────────────────────────────────────────────
 
-  // ── Escritura ────────────────────────────────────────────────
-
-  /**
-   * Crea una notificación genérica para un usuario.
-   */
   async create(data: {
     userId: string;
     type: NotificationType;
@@ -86,22 +64,17 @@ export class NotificationService {
     body: string;
     relatedBookingId?: string;
   }): Promise<string> {
-    const ref = collection(this.firestore, this.COL);
-    const docRef = await addDoc(ref, {
+    const docRef = await addDoc(collection(this.db, this.COL), {
       ...data,
       relatedBookingId: data.relatedBookingId ?? '',
-      read: false,
-      createdAt: serverTimestamp(),
+      read:             false,
+      createdAt:        serverTimestamp(),
     });
     return docRef.id;
   }
 
-  // ── Notificaciones de booking ────────────────────────────────
+  // ── Notificaciones de booking ─────────────────────────────────
 
-  /**
-   * Notifica al estudiante que su solicitud fue recibida y está pendiente.
-   * Llamar desde BookingService.create() o desde BookingPage al enviar el formulario.
-   */
   async notifyBookingPending(booking: Pick<Booking, 'id' | 'studentId' | 'resourceName'>): Promise<void> {
     await this.create({
       userId:           booking.studentId,
@@ -112,10 +85,6 @@ export class NotificationService {
     });
   }
 
-  /**
-   * Notifica al estudiante que su solicitud fue aprobada.
-   * Llamar desde AdminConfirmationPage al aprobar.
-   */
   async notifyBookingApproved(booking: Pick<Booking, 'id' | 'studentId' | 'resourceName' | 'date' | 'time'>): Promise<void> {
     await this.create({
       userId:           booking.studentId,
@@ -126,10 +95,6 @@ export class NotificationService {
     });
   }
 
-  /**
-   * Notifica al estudiante que su solicitud fue denegada.
-   * Llamar desde AdminConfirmationPage al denegar.
-   */
   async notifyBookingDenied(booking: Pick<Booking, 'id' | 'studentId' | 'resourceName'>, reason: string): Promise<void> {
     await this.create({
       userId:           booking.studentId,
@@ -140,9 +105,6 @@ export class NotificationService {
     });
   }
 
-  /**
-   * Notifica al estudiante que recibió un mensaje en el chat de su solicitud.
-   */
   async notifyChatMessage(data: {
     userId: string;
     bookingId: string;
@@ -158,28 +120,22 @@ export class NotificationService {
     });
   }
 
-  // ── Marcar como leída ────────────────────────────────────────
+  // ── Marcar como leída ─────────────────────────────────────────
 
-  /**
-   * Marca una notificación individual como leída.
-   */
   async markAsRead(notificationId: string): Promise<void> {
-    const ref = doc(this.firestore, this.COL, notificationId);
-    await updateDoc(ref, { read: true });
+    await updateDoc(doc(this.db, this.COL, notificationId), { read: true });
   }
 
-  /**
-   * Marca todas las notificaciones no leídas de un usuario como leídas.
-   * Usar al abrir la pantalla de notificaciones.
-   */
   async markAllAsRead(userId: string): Promise<void> {
-    const ref  = collection(this.firestore, this.COL);
-    const q    = query(ref, where('userId', '==', userId), where('read', '==', false));
+    const q    = query(
+      collection(this.db, this.COL),
+      where('userId', '==', userId),
+      where('read', '==', false),
+    );
     const snap = await getDocs(q);
-
     if (snap.empty) return;
 
-    const batch = writeBatch(this.firestore);
+    const batch = writeBatch(this.db);
     snap.docs.forEach(d => batch.update(d.ref, { read: true }));
     await batch.commit();
   }
