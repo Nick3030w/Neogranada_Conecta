@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
+  Firestore,
   collection,
   doc,
   addDoc,
@@ -10,7 +11,6 @@ import {
   onSnapshot,
   serverTimestamp,
   Timestamp,
-  getFirestore,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Booking, BookingStatus } from '../interfaces/booking.interface';
@@ -18,10 +18,11 @@ import { Booking, BookingStatus } from '../interfaces/booking.interface';
 @Injectable({ providedIn: 'root' })
 export class BookingService {
   private readonly COL = 'bookings';
+  private readonly db: Firestore;
 
-  // Obtiene Firestore directamente desde la app ya inicializada
-  private get db() {
-    return getFirestore();
+  constructor() {
+    // inject() dentro del constructor garantiza el contexto de inyección
+    this.db = inject(Firestore);
   }
 
   // ── Helper ────────────────────────────────────────────────────
@@ -60,50 +61,58 @@ export class BookingService {
     return docRef.id;
   }
 
-  // ── Lectura en tiempo real (onSnapshot nativo) ────────────────
+  // ── Lectura en tiempo real ────────────────────────────────────
 
   /** Escucha un booking por ID — para la confirmación del estudiante */
   getById(id: string): Observable<Booking | null> {
     return new Observable(observer => {
-      const ref  = doc(this.db, this.COL, id);
+      const ref   = doc(this.db, this.COL, id);
       const unsub = onSnapshot(
         ref,
-        snap => observer.next(snap.exists() ? this.toBooking(snap.data() as Record<string, unknown>, snap.id) : null),
-        err  => observer.error(err),
+        snap => observer.next(
+          snap.exists()
+            ? this.toBooking(snap.data() as Record<string, unknown>, snap.id)
+            : null
+        ),
+        err => observer.error(err),
       );
       return () => unsub();
     });
   }
 
-  /** Todos los bookings de un estudiante */
+  /** Todos los bookings de un estudiante — sin índice compuesto */
   getByStudent(studentId: string): Observable<Booking[]> {
     return new Observable(observer => {
-      const q = query(
-        collection(this.db, this.COL),
-        where('studentId', '==', studentId),
-        orderBy('createdAt', 'desc'),
-      );
+      // Solo filtra por studentId; ordena en cliente para evitar índice compuesto
+      const q     = query(collection(this.db, this.COL), where('studentId', '==', studentId));
       const unsub = onSnapshot(
         q,
-        snap => observer.next(snap.docs.map(d => this.toBooking(d.data() as Record<string, unknown>, d.id))),
-        err  => observer.error(err),
+        snap => {
+          const bookings = snap.docs
+            .map(d => this.toBooking(d.data() as Record<string, unknown>, d.id))
+            .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+          observer.next(bookings);
+        },
+        err => observer.error(err),
       );
       return () => unsub();
     });
   }
 
-  /** Todos los bookings pendientes — para el admin */
+  /** Todos los bookings pendientes — para el admin, sin índice compuesto */
   getPending(): Observable<Booking[]> {
     return new Observable(observer => {
-      const q = query(
-        collection(this.db, this.COL),
-        where('status', '==', 'pendiente'),
-        orderBy('createdAt', 'asc'),
-      );
+      // Solo filtra por status; ordena en cliente (más antiguo primero)
+      const q     = query(collection(this.db, this.COL), where('status', '==', 'pendiente'));
       const unsub = onSnapshot(
         q,
-        snap => observer.next(snap.docs.map(d => this.toBooking(d.data() as Record<string, unknown>, d.id))),
-        err  => observer.error(err),
+        snap => {
+          const bookings = snap.docs
+            .map(d => this.toBooking(d.data() as Record<string, unknown>, d.id))
+            .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+          observer.next(bookings);
+        },
+        err => observer.error(err),
       );
       return () => unsub();
     });
@@ -112,14 +121,16 @@ export class BookingService {
   /** Todos los bookings — para el calendario */
   getAll(): Observable<Booking[]> {
     return new Observable(observer => {
-      const q = query(
-        collection(this.db, this.COL),
-        orderBy('createdAt', 'desc'),
-      );
+      const q     = collection(this.db, this.COL);
       const unsub = onSnapshot(
         q,
-        snap => observer.next(snap.docs.map(d => this.toBooking(d.data() as Record<string, unknown>, d.id))),
-        err  => observer.error(err),
+        snap => {
+          const bookings = snap.docs
+            .map(d => this.toBooking(d.data() as Record<string, unknown>, d.id))
+            .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+          observer.next(bookings);
+        },
+        err => observer.error(err),
       );
       return () => unsub();
     });

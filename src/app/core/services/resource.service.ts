@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
+  Firestore,
   collection,
   doc,
   addDoc,
@@ -9,9 +10,7 @@ import {
   onSnapshot,
   query,
   where,
-  orderBy,
   serverTimestamp,
-  getFirestore,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Resource, ResourceCategory, ResourceStatus } from '../interfaces/resource.interface';
@@ -19,63 +18,76 @@ import { Resource, ResourceCategory, ResourceStatus } from '../interfaces/resour
 @Injectable({ providedIn: 'root' })
 export class ResourceService {
   private readonly COL = 'resources';
+  private readonly db: Firestore;
 
-  private get db() {
-    return getFirestore();
+  constructor() {
+    this.db = inject(Firestore);
   }
 
   // ── Lectura ───────────────────────────────────────────────────
 
+  /** Todos los recursos, ordenados en cliente por nombre */
   getAll(): Observable<Resource[]> {
     return new Observable(observer => {
-      const q = query(collection(this.db, this.COL), orderBy('name'));
       const unsub = onSnapshot(
-        q,
-        snap => observer.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Resource))),
-        err  => observer.error(err),
+        collection(this.db, this.COL),
+        snap => {
+          const resources = snap.docs
+            .map(d => ({ id: d.id, ...d.data() } as Resource))
+            .sort((a, b) => a.name.localeCompare(b.name));
+          observer.next(resources);
+        },
+        err => observer.error(err),
       );
       return () => unsub();
     });
   }
 
+  /** Recursos por categoría, ordenados en cliente */
   getByCategory(category: ResourceCategory): Observable<Resource[]> {
     return new Observable(observer => {
-      const q = query(
-        collection(this.db, this.COL),
-        where('category', '==', category),
-        orderBy('name'),
-      );
+      const q     = query(collection(this.db, this.COL), where('category', '==', category));
       const unsub = onSnapshot(
         q,
-        snap => observer.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Resource))),
-        err  => observer.error(err),
+        snap => {
+          const resources = snap.docs
+            .map(d => ({ id: d.id, ...d.data() } as Resource))
+            .sort((a, b) => a.name.localeCompare(b.name));
+          observer.next(resources);
+        },
+        err => observer.error(err),
       );
       return () => unsub();
     });
   }
 
+  /** Recursos disponibles por categoría */
   getAvailableByCategory(category: ResourceCategory): Observable<Resource[]> {
     return new Observable(observer => {
-      const q = query(
+      const q     = query(
         collection(this.db, this.COL),
         where('category', '==', category),
         where('status', '==', 'disponible'),
-        orderBy('name'),
       );
       const unsub = onSnapshot(
         q,
-        snap => observer.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Resource))),
-        err  => observer.error(err),
+        snap => {
+          const resources = snap.docs
+            .map(d => ({ id: d.id, ...d.data() } as Resource))
+            .sort((a, b) => a.name.localeCompare(b.name));
+          observer.next(resources);
+        },
+        err => observer.error(err),
       );
       return () => unsub();
     });
   }
 
+  /** Un recurso por ID */
   getById(id: string): Observable<Resource | null> {
     return new Observable(observer => {
-      const ref   = doc(this.db, this.COL, id);
       const unsub = onSnapshot(
-        ref,
+        doc(this.db, this.COL, id),
         snap => observer.next(snap.exists() ? ({ id: snap.id, ...snap.data() } as Resource) : null),
         err  => observer.error(err),
       );
@@ -113,18 +125,18 @@ export class ResourceService {
     if (!snap.empty) return;
 
     const seeds: Omit<Resource, 'id' | 'createdAt' | 'updatedAt'>[] = [
-      { name: 'Laboratorio de Química',        description: 'Prácticas de química orgánica e inorgánica.',           category: 'laboratorio',            status: 'disponible' },
-      { name: 'Laboratorio de Física',         description: 'Instrumentos de medición y experimentos de física.',    category: 'laboratorio',            status: 'disponible' },
-      { name: 'Aula 101',                      description: 'Aula con capacidad para 40 estudiantes.',               category: 'aula',                   status: 'disponible' },
-      { name: 'Aula 202',                      description: 'Aula con videobeam y tablero inteligente.',             category: 'aula',                   status: 'disponible' },
-      { name: 'Sala de Biblioteca',            description: 'Sala de estudio con acceso a bases de datos.',          category: 'biblioteca',             status: 'disponible' },
-      { name: 'Cancha Múltiple',               description: 'Cancha para fútbol, baloncesto y voleibol.',            category: 'elementos_deportivos',   status: 'disponible' },
-      { name: 'Balones y Redes',               description: 'Kit de elementos deportivos para préstamo.',            category: 'elementos_deportivos',   status: 'disponible' },
-      { name: 'Base de Datos Oracle',          description: 'Acceso a instancia Oracle para prácticas académicas.',  category: 'base_datos',             status: 'disponible' },
-      { name: 'Piano Digital',                 description: 'Piano digital Yamaha para práctica musical.',           category: 'instrumentos_musicales', status: 'disponible' },
-      { name: 'Guitarra Acústica',             description: 'Guitarra acústica para préstamo estudiantil.',          category: 'instrumentos_musicales', status: 'disponible' },
-      { name: 'Kit de Juegos de Mesa',         description: 'Ajedrez, dominó y otros juegos de mesa.',              category: 'material_ludico',        status: 'disponible' },
-      { name: 'Botiquín de Primeros Auxilios', description: 'Botiquín completo para actividades académicas.',        category: 'botiquin',               status: 'disponible' },
+      { name: 'Laboratorio de Química',        description: 'Prácticas de química orgánica e inorgánica.',          category: 'laboratorio',            status: 'disponible' },
+      { name: 'Laboratorio de Física',         description: 'Instrumentos de medición y experimentos de física.',   category: 'laboratorio',            status: 'disponible' },
+      { name: 'Aula 101',                      description: 'Aula con capacidad para 40 estudiantes.',              category: 'aula',                   status: 'disponible' },
+      { name: 'Aula 202',                      description: 'Aula con videobeam y tablero inteligente.',            category: 'aula',                   status: 'disponible' },
+      { name: 'Sala de Biblioteca',            description: 'Sala de estudio con acceso a bases de datos.',         category: 'biblioteca',             status: 'disponible' },
+      { name: 'Cancha Múltiple',               description: 'Cancha para fútbol, baloncesto y voleibol.',           category: 'elementos_deportivos',   status: 'disponible' },
+      { name: 'Balones y Redes',               description: 'Kit de elementos deportivos para préstamo.',           category: 'elementos_deportivos',   status: 'disponible' },
+      { name: 'Base de Datos Oracle',          description: 'Acceso a instancia Oracle para prácticas académicas.', category: 'base_datos',             status: 'disponible' },
+      { name: 'Piano Digital',                 description: 'Piano digital Yamaha para práctica musical.',          category: 'instrumentos_musicales', status: 'disponible' },
+      { name: 'Guitarra Acústica',             description: 'Guitarra acústica para préstamo estudiantil.',         category: 'instrumentos_musicales', status: 'disponible' },
+      { name: 'Kit de Juegos de Mesa',         description: 'Ajedrez, dominó y otros juegos de mesa.',             category: 'material_ludico',        status: 'disponible' },
+      { name: 'Botiquín de Primeros Auxilios', description: 'Botiquín completo para actividades académicas.',       category: 'botiquin',               status: 'disponible' },
     ];
 
     for (const seed of seeds) {

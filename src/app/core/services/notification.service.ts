@@ -1,18 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
+  Firestore,
   collection,
   doc,
   addDoc,
   updateDoc,
   query,
   where,
-  orderBy,
   onSnapshot,
   writeBatch,
   getDocs,
   serverTimestamp,
   Timestamp,
-  getFirestore,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { AppNotification, NotificationType } from '../interfaces/notification.interface';
@@ -21,9 +20,10 @@ import { Booking } from '../interfaces/booking.interface';
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
   private readonly COL = 'notifications';
+  private readonly db: Firestore;
 
-  private get db() {
-    return getFirestore();
+  constructor() {
+    this.db = inject(Firestore);
   }
 
   // ── Helper ────────────────────────────────────────────────────
@@ -38,18 +38,19 @@ export class NotificationService {
 
   // ── Lectura en tiempo real ────────────────────────────────────
 
-  /** Notificaciones del usuario en tiempo real */
+  /** Notificaciones del usuario en tiempo real, ordenadas en cliente */
   getByUser(userId: string): Observable<AppNotification[]> {
     return new Observable(observer => {
-      const q = query(
-        collection(this.db, this.COL),
-        where('userId', '==', userId),
-        orderBy('createdAt', 'desc'),
-      );
+      const q     = query(collection(this.db, this.COL), where('userId', '==', userId));
       const unsub = onSnapshot(
         q,
-        snap => observer.next(snap.docs.map(d => this.toNotification(d.data() as Record<string, unknown>, d.id))),
-        err  => observer.error(err),
+        snap => {
+          const notifs = snap.docs
+            .map(d => this.toNotification(d.data() as Record<string, unknown>, d.id))
+            .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+          observer.next(notifs);
+        },
+        err => observer.error(err),
       );
       return () => unsub();
     });
