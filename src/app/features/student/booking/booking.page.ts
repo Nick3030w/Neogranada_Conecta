@@ -51,7 +51,7 @@ export class BookingPage implements OnInit {
   readonly services = [
     'Laboratorio', 'Aula', 'Biblioteca',
     'Elementos deportivos', 'Base de datos',
-    'Instrumentos musicales', 'Material lúdico', 'Botiquín',
+    'Instrumentos musicales', 'Material lúdico',
   ];
 
   constructor(
