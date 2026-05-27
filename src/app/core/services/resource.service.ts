@@ -26,70 +26,61 @@ export class ResourceService {
 
   // ── Lectura ───────────────────────────────────────────────────
 
-  /** Todos los recursos, ordenados en cliente por nombre */
   getAll(): Observable<Resource[]> {
     return new Observable(observer => {
       const unsub = onSnapshot(
         collection(this.db, this.COL),
-        snap => {
-          const resources = snap.docs
+        snap => observer.next(
+          snap.docs
             .map(d => ({ id: d.id, ...d.data() } as Resource))
-            .sort((a, b) => a.name.localeCompare(b.name));
-          observer.next(resources);
-        },
+            .sort((a, b) => a.name.localeCompare(b.name))
+        ),
         err => observer.error(err),
       );
       return () => unsub();
     });
   }
 
-  /** Recursos por categoría, ordenados en cliente */
   getByCategory(category: ResourceCategory): Observable<Resource[]> {
     return new Observable(observer => {
-      const q     = query(collection(this.db, this.COL), where('category', '==', category));
       const unsub = onSnapshot(
-        q,
-        snap => {
-          const resources = snap.docs
+        query(collection(this.db, this.COL), where('category', '==', category)),
+        snap => observer.next(
+          snap.docs
             .map(d => ({ id: d.id, ...d.data() } as Resource))
-            .sort((a, b) => a.name.localeCompare(b.name));
-          observer.next(resources);
-        },
+            .sort((a, b) => a.name.localeCompare(b.name))
+        ),
         err => observer.error(err),
       );
       return () => unsub();
     });
   }
 
-  /** Recursos disponibles por categoría */
   getAvailableByCategory(category: ResourceCategory): Observable<Resource[]> {
     return new Observable(observer => {
-      const q     = query(
-        collection(this.db, this.COL),
-        where('category', '==', category),
-        where('status', '==', 'disponible'),
-      );
       const unsub = onSnapshot(
-        q,
-        snap => {
-          const resources = snap.docs
+        query(
+          collection(this.db, this.COL),
+          where('category', '==', category),
+          where('status', '==', 'disponible'),
+        ),
+        snap => observer.next(
+          snap.docs
             .map(d => ({ id: d.id, ...d.data() } as Resource))
-            .sort((a, b) => a.name.localeCompare(b.name));
-          observer.next(resources);
-        },
+            .sort((a, b) => a.name.localeCompare(b.name))
+        ),
         err => observer.error(err),
       );
       return () => unsub();
     });
   }
 
-  /** Un recurso por ID */
   getById(id: string): Observable<Resource | null> {
     return new Observable(observer => {
       const unsub = onSnapshot(
         doc(this.db, this.COL, id),
         snap => observer.next(snap.exists() ? ({ id: snap.id, ...snap.data() } as Resource) : null),
-        err  => observer.error(err),
+        err => observer.error(err),
       );
       return () => unsub();
     });
@@ -117,8 +108,6 @@ export class ResourceService {
   async delete(id: string): Promise<void> {
     await deleteDoc(doc(this.db, this.COL, id));
   }
-
-  // ── Seed ──────────────────────────────────────────────────────
 
   async seedIfEmpty(): Promise<void> {
     const snap = await getDocs(collection(this.db, this.COL));

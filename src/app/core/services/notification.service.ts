@@ -38,18 +38,16 @@ export class NotificationService {
 
   // ── Lectura en tiempo real ────────────────────────────────────
 
-  /** Notificaciones del usuario en tiempo real, ordenadas en cliente */
   getByUser(userId: string): Observable<AppNotification[]> {
     return new Observable(observer => {
       const q     = query(collection(this.db, this.COL), where('userId', '==', userId));
       const unsub = onSnapshot(
         q,
-        snap => {
-          const notifs = snap.docs
+        snap => observer.next(
+          snap.docs
             .map(d => this.toNotification(d.data() as Record<string, unknown>, d.id))
-            .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-          observer.next(notifs);
-        },
+            .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        ),
         err => observer.error(err),
       );
       return () => unsub();
@@ -86,34 +84,30 @@ export class NotificationService {
     });
   }
 
-  /**
-   * Notifica a TODOS los administradores que llegó una nueva solicitud.
-   * Consulta la colección `users` filtrando por role == 'admin' y crea
-   * una notificación para cada uno.
-   */
-  async notifyAdminsNewBooking(booking: Pick<Booking, 'id' | 'studentId' | 'resourceName'> & { studentName: string }): Promise<void> {
-    // Obtiene todos los UIDs de administradores
+  async notifyAdminsNewBooking(
+    booking: Pick<Booking, 'id' | 'studentId' | 'resourceName'> & { studentName: string }
+  ): Promise<void> {
     const adminsSnap = await getDocs(
       query(collection(this.db, 'users'), where('role', '==', 'admin'))
     );
-
     if (adminsSnap.empty) return;
 
-    // Crea una notificación para cada admin en paralelo
-    const promises = adminsSnap.docs.map(adminDoc =>
-      this.create({
-        userId:           adminDoc.id,
-        type:             'booking_pending',
-        title:            'Nueva solicitud pendiente',
-        body:             `${booking.studentName} solicitó "${booking.resourceName}". Revisa y gestiona la solicitud.`,
-        relatedBookingId: booking.id,
-      })
+    await Promise.all(
+      adminsSnap.docs.map(adminDoc =>
+        this.create({
+          userId:           adminDoc.id,
+          type:             'booking_pending',
+          title:            'Nueva solicitud pendiente',
+          body:             `${booking.studentName} solicitó "${booking.resourceName}". Revisa y gestiona la solicitud.`,
+          relatedBookingId: booking.id,
+        })
+      )
     );
-
-    await Promise.all(promises);
   }
 
-  async notifyBookingApproved(booking: Pick<Booking, 'id' | 'studentId' | 'resourceName' | 'date' | 'time'>): Promise<void> {
+  async notifyBookingApproved(
+    booking: Pick<Booking, 'id' | 'studentId' | 'resourceName' | 'date' | 'time'>
+  ): Promise<void> {
     await this.create({
       userId:           booking.studentId,
       type:             'booking_approved',
@@ -123,7 +117,10 @@ export class NotificationService {
     });
   }
 
-  async notifyBookingDenied(booking: Pick<Booking, 'id' | 'studentId' | 'resourceName'>, reason: string): Promise<void> {
+  async notifyBookingDenied(
+    booking: Pick<Booking, 'id' | 'studentId' | 'resourceName'>,
+    reason: string
+  ): Promise<void> {
     await this.create({
       userId:           booking.studentId,
       type:             'booking_denied',
@@ -155,16 +152,17 @@ export class NotificationService {
   }
 
   async markAllAsRead(userId: string): Promise<void> {
-    const q    = query(
-      collection(this.db, this.COL),
-      where('userId', '==', userId),
-      where('read', '==', false),
+    const snap = await getDocs(
+      query(
+        collection(this.db, this.COL),
+        where('userId', '==', userId),
+        where('read', '==', false),
+      )
     );
-    const snap = await getDocs(q);
     if (snap.empty) return;
 
     const batch = writeBatch(this.db);
-    snap.docs.forEach(d => batch.update(d.ref, { read: true }));
+    snap.docs.forEach(d => batch.update(doc(this.db, this.COL, d.id), { read: true }));
     await batch.commit();
   }
 }
