@@ -86,6 +86,33 @@ export class NotificationService {
     });
   }
 
+  /**
+   * Notifica a TODOS los administradores que llegó una nueva solicitud.
+   * Consulta la colección `users` filtrando por role == 'admin' y crea
+   * una notificación para cada uno.
+   */
+  async notifyAdminsNewBooking(booking: Pick<Booking, 'id' | 'studentId' | 'resourceName'> & { studentName: string }): Promise<void> {
+    // Obtiene todos los UIDs de administradores
+    const adminsSnap = await getDocs(
+      query(collection(this.db, 'users'), where('role', '==', 'admin'))
+    );
+
+    if (adminsSnap.empty) return;
+
+    // Crea una notificación para cada admin en paralelo
+    const promises = adminsSnap.docs.map(adminDoc =>
+      this.create({
+        userId:           adminDoc.id,
+        type:             'booking_pending',
+        title:            'Nueva solicitud pendiente',
+        body:             `${booking.studentName} solicitó "${booking.resourceName}". Revisa y gestiona la solicitud.`,
+        relatedBookingId: booking.id,
+      })
+    );
+
+    await Promise.all(promises);
+  }
+
   async notifyBookingApproved(booking: Pick<Booking, 'id' | 'studentId' | 'resourceName' | 'date' | 'time'>): Promise<void> {
     await this.create({
       userId:           booking.studentId,

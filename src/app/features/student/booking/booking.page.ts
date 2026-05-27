@@ -211,7 +211,15 @@ export class BookingPage implements OnInit {
         resourceName: this.resourceName || this.resourceId,
       });
 
-      // 3. Navega a la pantalla de confirmación con el ID real
+      // 3. Notifica a todos los administradores que hay una nueva solicitud
+      await this.notificationService.notifyAdminsNewBooking({
+        id:           bookingId,
+        studentId:    user.uid,
+        studentName:  user.fullName,
+        resourceName: this.resourceName || this.resourceId,
+      });
+
+      // 4. Navega a la pantalla de confirmación con el ID real
       this.router.navigate(['/student/confirmation', bookingId]);
 
     } catch (err) {
