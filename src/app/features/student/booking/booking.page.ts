@@ -48,11 +48,7 @@ export class BookingPage implements OnInit {
     return slots;
   })();
 
-  readonly services = [
-    'Laboratorio', 'Aula', 'Biblioteca',
-    'Elementos deportivos', 'Base de datos',
-    'Instrumentos musicales', 'Material lúdico',
-  ];
+  readonly services: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -71,7 +67,6 @@ export class BookingPage implements OnInit {
     this.form = this.fb.group({
       date:         ['', Validators.required],
       time:         ['', Validators.required],
-      service:      ['', Validators.required],
       observations: [''],
     });
 
@@ -83,9 +78,8 @@ export class BookingPage implements OnInit {
     }
   }
 
-  get date()    { return this.form.get('date')!; }
-  get time()    { return this.form.get('time')!; }
-  get service() { return this.form.get('service')!; }
+  get date() { return this.form.get('date')!; }
+  get time() { return this.form.get('time')!; }
 
   get selectedDateLabel(): string {
     return this.date.value || 'Seleccionar';
@@ -189,7 +183,7 @@ export class BookingPage implements OnInit {
     this.errorMessage = '';
 
     try {
-      const { date, time, service, observations } = this.form.value;
+      const { date, time, observations } = this.form.value;
 
       // 1. Crea el booking en Firestore
       const bookingId = await this.bookingService.create({
@@ -198,9 +192,9 @@ export class BookingPage implements OnInit {
         resourceId:       this.resourceId,
         resourceName:     this.resourceName || this.resourceId,
         resourceCategory: this.resourceId,
+        resourceLocation: '',
         date,
         time,
-        service,
         observations: observations ?? '',
       });
 

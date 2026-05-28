@@ -90,19 +90,6 @@
 
           </div>
 
-          <!-- Servicio -->
-          <div class="field-block">
-            <label class="field-label">Servicio</label>
-            <div class="field-select-box gray-box" [class.has-error]="service.invalid && service.touched">
-              <select formControlName="service" class="native-select">
-                <option value="" disabled selected></option>
-                <option *ngFor="let s of services" [value]="s">{{ s }}</option>
-              </select>
-              <ion-icon name="caret-down" class="caret-icon"></ion-icon>
-            </div>
-            <span class="field-error" *ngIf="service.invalid && service.touched">Selecciona un servicio.</span>
-          </div>
-
           <!-- Observaciones -->
           <div class="field-block">
             <label class="field-label">Observaciones</label>
