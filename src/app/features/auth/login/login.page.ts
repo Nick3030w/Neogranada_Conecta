@@ -9,8 +9,7 @@ import {
 import { addIcons } from 'ionicons';
 import {
   mailOutline, lockClosedOutline, eyeOutline,
-  eyeOffOutline, alertCircleOutline,
-} from 'ionicons/icons';
+  eyeOffOutline, alertCircleOutline, peopleOutline, caretDown, shieldOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -31,11 +30,24 @@ export class LoginPage implements OnInit {
   loading = false;
   errorMessage = '';
 
+  // ── Selector de rol (solo visual) ────────────────────────────
+  selectedRole     = 'Estudiante';
+  showRoleDropdown = false;
+
+  toggleRoleDropdown(): void {
+    this.showRoleDropdown = !this.showRoleDropdown;
+  }
+
+  selectRole(role: string): void {
+    this.selectedRole     = role;
+    this.showRoleDropdown = false;
+  }
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService
   ) {
-    addIcons({ mailOutline, lockClosedOutline, alertCircleOutline, eyeOutline, eyeOffOutline });
+    addIcons({peopleOutline,caretDown,shieldOutline,mailOutline,lockClosedOutline,alertCircleOutline,eyeOutline,eyeOffOutline});
   }
 
   ngOnInit(): void {

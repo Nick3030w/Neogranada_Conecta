@@ -24,6 +24,27 @@
 
         <form [formGroup]="form" (ngSubmit)="onLogin()">
 
+          <!-- Selector de Rol (solo visual, sin funcionalidad) -->
+          <div class="field-block">
+            <label class="field-label">Seleccionar Rol</label>
+            <div class="role-select-box" (click)="toggleRoleDropdown()">
+              <ion-icon name="people-outline" class="role-icon"></ion-icon>
+              <span class="role-value">{{ selectedRole }}</span>
+              <ion-icon name="caret-down" class="caret-icon" [class.open]="showRoleDropdown"></ion-icon>
+            </div>
+            <!-- Dropdown de opciones -->
+            <div class="role-dropdown" *ngIf="showRoleDropdown">
+              <div class="role-option" (click)="selectRole('Estudiante')">
+                <ion-icon name="people-outline"></ion-icon>
+                <span>Estudiante</span>
+              </div>
+              <div class="role-option" (click)="selectRole('Administrador')">
+                <ion-icon name="shield-outline"></ion-icon>
+                <span>Administrador</span>
+              </div>
+            </div>
+          </div>
+
           <!-- Correo electrónico -->
           <div class="field-block">
             <label class="field-label">Correo electronico</label>
