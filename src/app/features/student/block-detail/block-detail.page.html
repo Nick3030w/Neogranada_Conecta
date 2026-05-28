@@ -1,0 +1,89 @@
+<ion-content class="block-content">
+  <div class="block-wrapper">
+
+    <!-- ── Zona azul ── -->
+    <div class="block-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="back-btn" (click)="logout()">
+          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
+        </button>
+      </div>
+
+      <ng-container *ngIf="block">
+        <h1 class="page-title">{{ block.name | uppercase }}</h1>
+      </ng-container>
+
+      <ng-container *ngIf="!block">
+        <h1 class="page-title">BLOQUE</h1>
+      </ng-container>
+    </div>
+
+    <!-- ── Curva SVG ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
+
+    <!-- ── Zona dorada ── -->
+    <div class="block-bottom">
+      <div class="block-panel">
+
+        <!-- Botón volver -->
+        <button class="btn-back" (click)="goBack()">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+          <span>Volver al mapa</span>
+        </button>
+
+        <!-- Sin datos -->
+        <div *ngIf="!block" class="empty-state">
+          <p>Bloque no encontrado.</p>
+        </div>
+
+        <!-- Sin espacios aún -->
+        <div *ngIf="block && block.spaces.length === 0" class="empty-state">
+          <ion-icon name="school-outline" class="empty-icon"></ion-icon>
+          <p>Información de espacios próximamente.</p>
+        </div>
+
+        <!-- Tabla de espacios -->
+        <div *ngIf="block && block.spaces.length > 0" class="spaces-table">
+
+          <!-- Encabezado -->
+          <div class="table-header">
+            <span class="col-space">Espacio</span>
+            <span class="col-type">Tipo</span>
+          </div>
+
+          <!-- Filas -->
+          <div *ngFor="let space of block!.spaces; let odd = odd"
+               class="table-row"
+               [class.row-odd]="odd">
+
+            <!-- Ícono + nombre -->
+            <div class="space-info">
+              <div class="space-icon-box">
+                <ion-icon [name]="getTypeIcon(space.type)" class="space-icon"></ion-icon>
+              </div>
+              <div class="space-text">
+                <span class="space-name">{{ space.name }}</span>
+                <span class="space-desc" *ngIf="space.description">{{ space.description }}</span>
+              </div>
+            </div>
+
+            <!-- Badge tipo -->
+            <span class="type-badge" [ngClass]="getTypeClass(space.type)">
+              {{ space.type }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</ion-content>

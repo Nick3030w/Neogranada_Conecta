@@ -104,6 +104,11 @@ export const routes: Routes = [
           import('./features/student/map/map.page').then((m) => m.MapPage),
       },
       {
+        path: 'block/:blockId',
+        loadComponent: () =>
+          import('./features/student/block-detail/block-detail.page').then((m) => m.BlockDetailPage),
+      },
+      {
         path: 'chat/:bookingId',
         loadComponent: () =>
           import('./features/shared/chat/chat.page').then((m) => m.ChatPage),

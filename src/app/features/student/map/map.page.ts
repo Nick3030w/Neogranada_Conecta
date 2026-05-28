@@ -40,8 +40,7 @@ export class MapPage {
   }
 
   selectBlock(block: CampusBlock): void {
-    // TODO: navegar al detalle del bloque o abrir mapa
-    console.log('Bloque seleccionado:', block.name);
+    this.router.navigate(['/student/block', block.id]);
   }
 
   goBack(): void { this.router.navigate(['/student/home']); }
