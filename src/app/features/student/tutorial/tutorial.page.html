@@ -5,7 +5,7 @@
     <div class="tutorial-header">
       <div class="header-top-row">
         <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
-        <button class="back-btn" (click)="goBack()">
+        <button class="back-btn" (click)="logout()">
           <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
         </button>
       </div>
@@ -24,36 +24,25 @@
     <div class="tutorial-bottom">
       <div class="tutorial-panel">
 
-        <!-- Reproductor de video -->
-        <div class="video-box" (click)="openVideo()">
-          <!-- Thumbnail: logo UMNG como placeholder -->
-          <img src="assets/images/logo-umng.png"
-               alt="Video tutorial"
-               class="video-thumbnail">
-          <!-- Overlay con ícono play -->
-          <div class="video-overlay">
-            <ion-icon name="play-circle" class="play-icon"></ion-icon>
-          </div>
-          <!-- Tiempo -->
-          <div class="video-time">{{ currentTime }} / {{ totalTime }}</div>
-        </div>
-
-        <!-- Barra de progreso roja -->
-        <div class="progress-track">
-          <div class="progress-fill" [style.width.%]="progressPercent"></div>
-          <div class="progress-thumb" [style.left.%]="progressPercent"></div>
+        <!-- Reproductor embebido de YouTube -->
+        <div class="video-container">
+          <iframe
+            [src]="videoUrl"
+            class="video-iframe"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
         </div>
 
         <!-- Botones like / dislike -->
         <div class="rating-row">
-          <!-- Dislike -->
           <button class="rate-btn dislike-btn"
                   [class.active]="liked === false"
                   (click)="rate(false)">
             <ion-icon name="thumbs-down" class="rate-icon"></ion-icon>
           </button>
 
-          <!-- Like -->
           <button class="rate-btn like-btn"
                   [class.active]="liked === true"
                   (click)="rate(true)">
