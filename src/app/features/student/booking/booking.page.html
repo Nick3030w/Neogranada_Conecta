@@ -5,7 +5,7 @@
     <div class="booking-header">
       <div class="header-top-row">
         <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
-        <button class="back-btn" (click)="goBack()">
+        <button class="back-btn" (click)="logout()">
           <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
         </button>
       </div>
@@ -23,17 +23,76 @@
     <!-- ── Zona dorada: panel blanco ── -->
     <div class="booking-bottom">
       <div class="booking-panel">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-          <!-- Fecha y Hora en fila -->
+        <!-- Spinner cargando recursos -->
+        <div class="loading-resources" *ngIf="loadingResources">
+          <ion-spinner name="crescent" class="res-spinner"></ion-spinner>
+          <span>Cargando recursos disponibles...</span>
+        </div>
+
+        <!-- Sin recursos disponibles -->
+        <div class="empty-resources" *ngIf="!loadingResources && resources.length === 0">
+          <ion-icon name="close-circle-outline" class="empty-icon"></ion-icon>
+          <p>No hay recursos disponibles en esta categoría por el momento.</p>
+          <button class="btn-back-link" (click)="goBack()">Volver a disponibilidad</button>
+        </div>
+
+        <!-- Formulario principal -->
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!loadingResources && resources.length > 0">
+
+          <!-- ── SELECTOR DE RECURSO ── -->
+          <div class="field-block">
+            <label class="field-label">Recurso</label>
+            <div class="field-select-box"
+                 (click)="toggleResourcePicker()"
+                 [class.has-error]="resource.invalid && resource.touched">
+              <ion-icon name="location-outline" class="field-icon"></ion-icon>
+              <span class="field-value" [class.placeholder]="!selectedResource">
+                {{ selectedResourceLabel }}
+              </span>
+              <ion-icon name="caret-down" class="caret-icon" [class.open]="showResourcePicker"></ion-icon>
+            </div>
+            <span class="field-error" *ngIf="resource.invalid && resource.touched">
+              Selecciona un recurso.
+            </span>
+
+            <!-- Dropdown de recursos -->
+            <div class="dropdown-panel resource-dropdown" *ngIf="showResourcePicker">
+              <div class="resource-list">
+                <button *ngFor="let res of resources"
+                        type="button"
+                        class="resource-item"
+                        [class.selected]="res.id === selectedResource?.id"
+                        (click)="selectResource(res)">
+                  <div class="resource-item-info">
+                    <span class="resource-item-name">{{ res.name }}</span>
+                    <span class="resource-item-location">
+                      <ion-icon name="location-outline"></ion-icon>
+                      {{ res.location }}
+                    </span>
+                  </div>
+                  <ion-icon name="checkmark-circle-outline"
+                            class="resource-check"
+                            *ngIf="res.id === selectedResource?.id">
+                  </ion-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── FECHA Y HORA EN FILA ── -->
           <div class="row-fields">
 
-            <!-- ── FECHA ── -->
+            <!-- FECHA -->
             <div class="field-block half">
               <label class="field-label">Fecha</label>
-              <div class="field-select-box" (click)="toggleCalendar()" [class.has-error]="date.invalid && date.touched">
+              <div class="field-select-box"
+                   (click)="toggleCalendar()"
+                   [class.has-error]="date.invalid && date.touched">
                 <ion-icon name="calendar-outline" class="field-icon"></ion-icon>
-                <span class="field-value">{{ selectedDateLabel }}</span>
+                <span class="field-value" [class.placeholder]="!date.value">
+                  {{ selectedDateLabel }}
+                </span>
                 <ion-icon name="caret-down" class="caret-icon" [class.open]="showCalendar"></ion-icon>
               </div>
               <span class="field-error" *ngIf="date.invalid && date.touched">Requerido.</span>
@@ -64,17 +123,21 @@
               </div>
             </div>
 
-            <!-- ── HORA ── -->
+            <!-- HORA -->
             <div class="field-block half">
               <label class="field-label">Hora</label>
-              <div class="field-select-box" (click)="toggleTimePicker()" [class.has-error]="time.invalid && time.touched">
+              <div class="field-select-box"
+                   (click)="toggleTimePicker()"
+                   [class.has-error]="time.invalid && time.touched">
                 <ion-icon name="time-outline" class="field-icon"></ion-icon>
-                <span class="field-value">{{ selectedTimeLabel }}</span>
+                <span class="field-value" [class.placeholder]="!time.value">
+                  {{ selectedTimeLabel }}
+                </span>
                 <ion-icon name="caret-down" class="caret-icon" [class.open]="showTimePicker"></ion-icon>
               </div>
               <span class="field-error" *ngIf="time.invalid && time.touched">Requerido.</span>
 
-              <!-- Picker de horas desplegable -->
+              <!-- Picker de horas -->
               <div class="dropdown-panel time-dropdown" *ngIf="showTimePicker">
                 <div class="time-list">
                   <button *ngFor="let slot of timeSlots"
@@ -90,13 +153,34 @@
 
           </div>
 
-          <!-- Observaciones -->
-          <div class="field-block">
-            <label class="field-label">Observaciones</label>
+          <!-- ── BOTÓN CONSULTAR DISPONIBILIDAD ── -->
+          <button type="button"
+                  class="btn-check"
+                  [disabled]="!canCheck || availabilityResult === 'checking'"
+                  (click)="checkAvailability()">
+            <ion-spinner *ngIf="availabilityResult === 'checking'" name="crescent" class="check-spinner"></ion-spinner>
+            <ion-icon *ngIf="availabilityResult !== 'checking'" name="search-outline"></ion-icon>
+            <span>{{ availabilityResult === 'checking' ? 'Consultando...' : 'Consultar disponibilidad' }}</span>
+          </button>
+
+          <!-- ── RESULTADO DE DISPONIBILIDAD ── -->
+          <div class="avail-result available" *ngIf="availabilityResult === 'available'">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            <span>¡Disponible! Puedes confirmar tu reserva.</span>
+          </div>
+
+          <div class="avail-result unavailable" *ngIf="availabilityResult === 'unavailable'">
+            <ion-icon name="close-circle-outline"></ion-icon>
+            <span>No disponible para esta fecha y hora. Selecciona otra opción.</span>
+          </div>
+
+          <!-- ── OBSERVACIONES ── -->
+          <div class="field-block" *ngIf="availabilityResult === 'available'">
+            <label class="field-label">Observaciones <span class="optional">(opcional)</span></label>
             <div class="field-textarea-box">
               <textarea formControlName="observations"
                         placeholder="Escribe tus observaciones aquí..."
-                        rows="4"
+                        rows="3"
                         class="native-textarea">
               </textarea>
             </div>
@@ -105,10 +189,12 @@
           <!-- Error general -->
           <div class="error-box" *ngIf="errorMessage">{{ errorMessage }}</div>
 
-          <!-- Botón CONTINUAR -->
-          <button type="submit" class="btn-continuar" [disabled]="loading">
+          <!-- ── BOTÓN CONFIRMAR RESERVA ── -->
+          <button type="submit"
+                  class="btn-continuar"
+                  [disabled]="loading || availabilityResult !== 'available'">
             <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
-            <span *ngIf="!loading">CONTINUAR</span>
+            <span *ngIf="!loading">CONFIRMAR RESERVA</span>
           </button>
 
         </form>

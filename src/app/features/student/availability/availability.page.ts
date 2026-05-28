@@ -37,7 +37,7 @@ const ICON_MAP: Record<string, string> = {
 
 // Texto informativo para categorías no reservables
 const INFO_TEXT: Partial<Record<string, string>> = {
-  biblioteca:  'La biblioteca está disponible para todos los estudiantes en horario de lunes a viernes de 7:00 a.m. a 9:00 p.m. y sábados de 8:00 a.m. a 5:00 p.m. No requiere reserva previa.',
+  biblioteca:  'La biblioteca está disponible para todos los estudiantes en horario de lunes a viernes de 8:00 a.m. a 5:00 p.m. Carrera 11 n.° 101-80 (Bogotá, Colombia) No requiere reserva previa.',
   base_datos:  'El acceso a las bases de datos académicas está habilitado para todos los estudiantes activos a través del portal institucional. Ingresa con tu correo @unimilitar.edu.co.',
 };
 
@@ -128,8 +128,18 @@ export class AvailabilityPage implements OnInit, OnDestroy {
   }
 
   goToBooking(): void {
+    if (this.categoryId === 'biblioteca') {
+      this.router.navigate(['/student/library']);
+      return;
+    }
     if (!this.hasAvailable) return;
     this.router.navigate(['/student/booking', this.categoryId]);
+  }
+
+  goToInfoPage(): void {
+    if (this.categoryId === 'biblioteca') {
+      this.router.navigate(['/student/library']);
+    }
   }
 
   goBack(): void { this.router.navigate(['/student/catalog']); }

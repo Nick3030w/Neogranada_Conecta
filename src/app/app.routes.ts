@@ -99,6 +99,11 @@ export const routes: Routes = [
           import('./features/student/tutorial/tutorial.page').then((m) => m.TutorialPage),
       },
       {
+        path: 'library',
+        loadComponent: () =>
+          import('./features/student/library/library.page').then((m) => m.LibraryPage),
+      },
+      {
         path: 'map',
         loadComponent: () =>
           import('./features/student/map/map.page').then((m) => m.MapPage),

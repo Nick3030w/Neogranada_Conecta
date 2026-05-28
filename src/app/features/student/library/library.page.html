@@ -1,0 +1,169 @@
+<ion-content class="library-content">
+  <div class="library-wrapper">
+
+    <!-- ══════════════════════════════════════════
+         HEADER AZUL — logo + logout
+    ══════════════════════════════════════════ -->
+    <div class="lib-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="logout-btn" (click)="logout()">
+          <ion-icon name="log-out-outline"></ion-icon>
+        </button>
+      </div>
+
+      <!-- Barra dorada "Inicio" -->
+      <div class="nav-inicio-bar">
+        <span>Inicio</span>
+      </div>
+
+      <!-- Links de navegación -->
+      <div class="nav-links">
+        <div class="nav-link highlight-link">
+          <ion-icon name="globe-outline" class="nav-icon"></ion-icon>
+          <span>Ingreso a Bases Virtuales y Libros Electrónicos</span>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-link">
+          <ion-icon name="search-outline" class="nav-icon"></ion-icon>
+          <span>Descubridor</span>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-link">
+          <ion-icon name="document-text-outline" class="nav-icon"></ion-icon>
+          <span>Repositorio UMNG</span>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-link">
+          <ion-icon name="card-outline" class="nav-icon"></ion-icon>
+          <span>Pago de multas</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         BANNER — imagen del campus con escudo
+    ══════════════════════════════════════════ -->
+    <div class="campus-banner">
+      <img src="assets/images/cat-biblioteca.jpg"
+           alt="Campus UMNG"
+           class="banner-bg"
+           (error)="$any($event.target).style.display='none'">
+      <div class="banner-overlay">
+        <div class="escudo-box">
+          <img src="assets/images/logo-umng.png" alt="Escudo UMNG" class="escudo-img">
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         BUSCADOR — fondo dorado
+    ══════════════════════════════════════════ -->
+    <div class="search-section">
+
+      <!-- Selector tipo catálogo -->
+      <div class="select-box">
+        <span class="select-text">{{ catalogType }}</span>
+        <ion-icon name="chevron-down-outline" class="select-caret"></ion-icon>
+      </div>
+
+      <!-- Selector biblioteca -->
+      <div class="select-box">
+        <span class="select-text">{{ libraryFilter }}</span>
+        <ion-icon name="chevron-down-outline" class="select-caret"></ion-icon>
+      </div>
+
+      <!-- Input de búsqueda -->
+      <div class="search-input-row">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search the catalog by keyword"
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="onSearch()">
+      </div>
+
+      <!-- Botón buscar -->
+      <button class="btn-search" (click)="onSearch()">
+        <ion-icon name="search-outline" class="search-btn-icon"></ion-icon>
+      </button>
+
+      <!-- Links secundarios -->
+      <div class="search-links">
+        <span class="search-link">Búsqueda avanzada</span>
+        <span class="search-sep">|</span>
+        <span class="search-link">Bibliotecas</span>
+        <span class="search-sep">|</span>
+        <span class="search-link">Listas</span>
+        <span class="search-sep">|</span>
+        <span class="search-link">Cerrar sesión</span>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         CONTENIDO — fondo blanco
+    ══════════════════════════════════════════ -->
+    <div class="lib-content-area">
+
+      <!-- Breadcrumb -->
+      <p class="breadcrumb">Inicio</p>
+
+      <!-- Frase del día -->
+      <div class="frase-section">
+        <h2 class="frase-title">Frase del día</h2>
+        <p class="frase-text">{{ fraseDelDia }}</p>
+      </div>
+
+      <!-- Divider -->
+      <div class="content-divider"></div>
+
+      <!-- Horarios -->
+      <div class="info-section">
+        <h3 class="info-title">Sede Bogotá</h3>
+        <div class="horario-row">
+          <span class="horario-dia">Ingenieria y Matematicás</span>
+          <span class="horario-hora">8:00 a.m. — 5:00 p.m.</span>
+        </div>
+        <div class="horario-row">
+          <span class="horario-dia">Ciencias de la salud</span>
+          <span class="horario-hora">8:00 a.m. — 5:00 p.m.</span>
+        </div>
+        <div class="horario-row">
+          <span class="horario-dia">Posgrados</span>
+          <span class="horario-hora">8:00 a.m. — 5:00 p.m.</span>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="content-divider"></div>
+
+      <!-- Servicios -->
+      <div class="info-section">
+        <h3 class="info-title">Servicios disponibles</h3>
+        <div class="service-chip">
+          <ion-icon name="book-outline"></ion-icon>
+          <span>Préstamo de libros físicos</span>
+        </div>
+        <div class="service-chip">
+          <ion-icon name="globe-outline"></ion-icon>
+          <span>Acceso a bases de datos virtuales</span>
+        </div>
+        <div class="service-chip">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <span>Repositorio institucional UMNG</span>
+        </div>
+        <div class="service-chip">
+          <ion-icon name="search-outline"></ion-icon>
+          <span>Descubridor de recursos académicos</span>
+        </div>
+      </div>
+
+      <!-- Botón volver -->
+      <button class="btn-volver" (click)="goBack()">
+        Volver a disponibilidad
+      </button>
+
+    </div>
+
+  </div>
+</ion-content>

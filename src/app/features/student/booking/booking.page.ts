@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,12 +6,18 @@ import { IonContent, IonIcon, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   logOutOutline, calendarOutline, timeOutline, caretDown,
-  chevronBackOutline, chevronForwardOutline,
+  chevronBackOutline, chevronForwardOutline, searchOutline,
+  checkmarkCircleOutline, closeCircleOutline, locationOutline,
 } from 'ionicons/icons';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { BookingService } from '../../../core/services/booking.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ResourceService } from '../../../core/services/resource.service';
+import { Resource, ResourceCategory } from '../../../core/interfaces/resource.interface';
+
+// Estado del resultado de la consulta de disponibilidad
+type AvailabilityResult = 'idle' | 'checking' | 'available' | 'unavailable';
 
 @Component({
   selector: 'app-booking',
@@ -20,21 +26,33 @@ import { ResourceService } from '../../../core/services/resource.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, IonContent, IonIcon, IonSpinner],
 })
-export class BookingPage implements OnInit {
+export class BookingPage implements OnInit, OnDestroy {
   form!: FormGroup;
   loading      = false;
   errorMessage = '';
-  resourceId   = '';
-  resourceName = '';   // nombre legible del recurso para notificaciones
+
+  // ── Categoría recibida por ruta ───────────────────────────────
+  categoryId = '';
+
+  // ── Recursos disponibles de la categoría ─────────────────────
+  resources: Resource[]  = [];
+  loadingResources       = true;
+  selectedResource: Resource | null = null;
+  showResourcePicker     = false;
+
+  // ── Estado de verificación de disponibilidad ──────────────────
+  availabilityResult: AvailabilityResult = 'idle';
+
+  private resourceSub?: Subscription;
 
   // ── Calendario ───────────────────────────────────────────────
-  showCalendar = false;
-  calDate      = new Date();
-  selectedDay: number | null = null;
+  showCalendar  = false;
+  calDate       = new Date();
+  selectedDay: number | null   = null;
   selectedMonth: number | null = null;
-  selectedYear: number | null = null;
+  selectedYear: number | null  = null;
 
-  readonly dayHeaders = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+  readonly dayHeaders = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'];
 
   // ── Picker de horas ───────────────────────────────────────────
   showTimePicker = false;
@@ -48,8 +66,6 @@ export class BookingPage implements OnInit {
     return slots;
   })();
 
-  readonly services: string[] = [];
-
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -59,46 +75,84 @@ export class BookingPage implements OnInit {
     private notificationService: NotificationService,
     private resourceService: ResourceService,
   ) {
-    addIcons({ logOutOutline, calendarOutline, timeOutline, caretDown, chevronBackOutline, chevronForwardOutline });
-    this.resourceId = this.route.snapshot.paramMap.get('resourceId') ?? '';
+    addIcons({
+      logOutOutline, calendarOutline, timeOutline, caretDown,
+      chevronBackOutline, chevronForwardOutline, searchOutline,
+      checkmarkCircleOutline, closeCircleOutline, locationOutline,
+    });
+    this.categoryId = this.route.snapshot.paramMap.get('resourceId') ?? '';
   }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       date:         ['', Validators.required],
       time:         ['', Validators.required],
+      resource:     ['', Validators.required],
       observations: [''],
     });
 
-    // Carga el nombre del recurso para usarlo en la notificación
-    if (this.resourceId) {
-      this.resourceService.getById(this.resourceId).subscribe(resource => {
-        this.resourceName = resource?.name ?? this.resourceId;
+    // Escucha en tiempo real los recursos disponibles de esta categoría
+    this.resourceSub = this.resourceService
+      .getAvailableByCategory(this.categoryId as ResourceCategory)
+      .subscribe({
+        next: resources => {
+          this.resources        = resources;
+          this.loadingResources = false;
+          // Si el recurso seleccionado ya no está disponible, lo limpiamos
+          if (this.selectedResource) {
+            const stillAvailable = resources.find(r => r.id === this.selectedResource!.id);
+            if (!stillAvailable) {
+              this.selectedResource = null;
+              this.form.get('resource')!.setValue('');
+              this.availabilityResult = 'idle';
+            }
+          }
+        },
+        error: () => { this.loadingResources = false; },
       });
-    }
   }
 
-  get date() { return this.form.get('date')!; }
-  get time() { return this.form.get('time')!; }
-
-  get selectedDateLabel(): string {
-    return this.date.value || 'Seleccionar';
+  ngOnDestroy(): void {
+    this.resourceSub?.unsubscribe();
   }
 
-  get selectedTimeLabel(): string {
-    return this.time.value || 'Seleccionar';
+  // ── Getters de formulario ─────────────────────────────────────
+  get date()     { return this.form.get('date')!; }
+  get time()     { return this.form.get('time')!; }
+  get resource() { return this.form.get('resource')!; }
+
+  get selectedDateLabel(): string { return this.date.value     || 'Seleccionar'; }
+  get selectedTimeLabel(): string { return this.time.value     || 'Seleccionar'; }
+  get selectedResourceLabel(): string {
+    if (!this.selectedResource) return 'Seleccionar';
+    return `${this.selectedResource.name} — ${this.selectedResource.location}`;
+  }
+
+  // ── Selector de recurso ───────────────────────────────────────
+  toggleResourcePicker(): void {
+    this.showResourcePicker = !this.showResourcePicker;
+    this.showCalendar       = false;
+    this.showTimePicker     = false;
+  }
+
+  selectResource(res: Resource): void {
+    this.selectedResource   = res;
+    this.form.get('resource')!.setValue(res.id);
+    this.showResourcePicker = false;
+    // Resetea el resultado de disponibilidad al cambiar de recurso
+    this.availabilityResult = 'idle';
   }
 
   // ── Calendario ───────────────────────────────────────────────
   toggleCalendar(): void {
-    this.showCalendar = !this.showCalendar;
-    this.showTimePicker = false;
+    this.showCalendar       = !this.showCalendar;
+    this.showTimePicker     = false;
+    this.showResourcePicker = false;
   }
 
   get calMonthName(): string {
     return this.calDate.toLocaleDateString('es-CO', { month: 'long' });
   }
-
   get calYear(): number { return this.calDate.getFullYear(); }
 
   get calendarDays(): (number | null)[] {
@@ -142,78 +196,118 @@ export class BookingPage implements OnInit {
     const dd = String(day).padStart(2, '0');
     this.form.get('date')!.setValue(`${this.selectedYear}-${mm}-${dd}`);
     this.showCalendar = false;
+    // Resetea disponibilidad al cambiar fecha
+    this.availabilityResult = 'idle';
   }
 
   calPrevMonth(): void {
     this.calDate = new Date(this.calDate.getFullYear(), this.calDate.getMonth() - 1, 1);
   }
-
   calNextMonth(): void {
     this.calDate = new Date(this.calDate.getFullYear(), this.calDate.getMonth() + 1, 1);
   }
 
   // ── Picker de horas ───────────────────────────────────────────
   toggleTimePicker(): void {
-    this.showTimePicker = !this.showTimePicker;
-    this.showCalendar   = false;
+    this.showTimePicker     = !this.showTimePicker;
+    this.showCalendar       = false;
+    this.showResourcePicker = false;
   }
 
   selectTime(slot: string): void {
     this.form.get('time')!.setValue(slot);
     this.showTimePicker = false;
+    // Resetea disponibilidad al cambiar hora
+    this.availabilityResult = 'idle';
   }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
     if (!target.closest('.field-block')) {
-      this.showCalendar   = false;
-      this.showTimePicker = false;
+      this.showCalendar       = false;
+      this.showTimePicker     = false;
+      this.showResourcePicker = false;
     }
   }
 
-  // ── Submit — guarda en Firestore ──────────────────────────────
+  // ── Verificación de disponibilidad ────────────────────────────
+  /**
+   * Consulta Firestore para saber si el recurso seleccionado
+   * está libre en la fecha y hora elegidas.
+   * Requiere que los 3 campos estén completos.
+   */
+  get canCheck(): boolean {
+    return !!this.selectedResource
+      && !!this.date.value
+      && !!this.time.value;
+  }
+
+  async checkAvailability(): Promise<void> {
+    if (!this.canCheck) return;
+    this.availabilityResult = 'checking';
+    this.errorMessage = '';
+    try {
+      const isAvailable = await this.bookingService.checkAvailability(
+        this.selectedResource!.id,
+        this.date.value,
+        this.time.value,
+      );
+      this.availabilityResult = isAvailable ? 'available' : 'unavailable';
+    } catch (err) {
+      console.error('Error en checkAvailability:', err);
+      this.availabilityResult = 'idle';
+      this.errorMessage = 'No se pudo verificar la disponibilidad. Intenta de nuevo.';
+    }
+  }
+
+  // ── Submit ────────────────────────────────────────────────────
   async onSubmit(): Promise<void> {
-    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+    if (this.form.invalid)              { this.form.markAllAsTouched(); return; }
+    if (this.availabilityResult !== 'available') {
+      this.errorMessage = 'Debes consultar la disponibilidad antes de confirmar.';
+      return;
+    }
 
     const user = this.authService.currentUser;
     if (!user) { this.errorMessage = 'Sesión expirada. Inicia sesión de nuevo.'; return; }
 
-    this.loading = true;
+    this.loading      = true;
     this.errorMessage = '';
 
     try {
       const { date, time, observations } = this.form.value;
+      const res = this.selectedResource!;
 
-      // 1. Crea el booking en Firestore
+      // 1. Crea el booking en Firestore con el ID real del recurso
       const bookingId = await this.bookingService.create({
         studentId:        user.uid,
         studentName:      user.fullName,
-        resourceId:       this.resourceId,
-        resourceName:     this.resourceName || this.resourceId,
-        resourceCategory: this.resourceId,
-        resourceLocation: '',
+        resourceId:       res.id,
+        resourceName:     res.name,
+        resourceCategory: res.category,
+        resourceLocation: res.location,
         date,
         time,
         observations: observations ?? '',
       });
 
-      // 2. Notifica al estudiante que su solicitud fue recibida
+      // 2. Notifica al estudiante
       await this.notificationService.notifyBookingPending({
         id:           bookingId,
         studentId:    user.uid,
-        resourceName: this.resourceName || this.resourceId,
+        resourceName: res.name,
       });
 
-      // 3. Notifica a todos los administradores que hay una nueva solicitud
+      // 3. Notifica a todos los admins
       await this.notificationService.notifyAdminsNewBooking({
         id:           bookingId,
         studentId:    user.uid,
         studentName:  user.fullName,
-        resourceName: this.resourceName || this.resourceId,
+        resourceName: res.name,
       });
 
-      // 4. Navega a la pantalla de confirmación con el ID real
+      // 4. Navega a confirmación
       this.router.navigate(['/student/confirmation', bookingId]);
 
     } catch (err) {
@@ -224,6 +318,6 @@ export class BookingPage implements OnInit {
     }
   }
 
-  goBack(): void { this.router.navigate(['/student/availability', this.resourceId]); }
+  goBack(): void { this.router.navigate(['/student/availability', this.categoryId]); }
   async logout(): Promise<void> { await this.authService.logout(); }
 }

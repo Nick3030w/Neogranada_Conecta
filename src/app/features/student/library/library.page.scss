@@ -1,0 +1,362 @@
+// ── Library Page ─────────────────────────────────────────────
+
+ion-content.library-content {
+  --background: #ffffff;
+}
+
+.library-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+
+// ══════════════════════════════════════════
+// HEADER AZUL
+// ══════════════════════════════════════════
+.lib-header {
+  background: #1a2e5a;
+  padding: 44px 0 0;
+}
+
+.header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 12px;
+
+  .logo-img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+  }
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  ion-icon {
+    font-size: 28px;
+    color: #f0c040;
+  }
+}
+
+// Barra dorada "Inicio"
+.nav-inicio-bar {
+  background: #c9a000;
+  padding: 12px 20px;
+  text-align: center;
+
+  span {
+    font-family: 'Lilita One', cursive;
+    font-size: 18px;
+    color: #ffffff;
+    letter-spacing: 1px;
+  }
+}
+
+// Links de navegación
+.nav-links {
+  padding: 8px 0 16px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover { background: rgba(255,255,255,0.06); }
+
+  span {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .nav-icon {
+    font-size: 18px;
+    color: #f0c040;
+    flex-shrink: 0;
+  }
+
+  &.highlight-link span {
+    color: #f0c040;
+    font-size: 14px;
+  }
+}
+
+.nav-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.12);
+  margin: 0 20px;
+}
+
+// ══════════════════════════════════════════
+// BANNER DEL CAMPUS
+// ══════════════════════════════════════════
+.campus-banner {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: #1a2e5a;
+}
+
+.banner-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.75);
+}
+
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.escudo-box {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+
+  .escudo-img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    display: block;
+  }
+}
+
+// ══════════════════════════════════════════
+// SECCIÓN BUSCADOR — fondo dorado
+// ══════════════════════════════════════════
+.search-section {
+  background: #c9a000;
+  padding: 16px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// Cajas de selector (catálogo / biblioteca)
+.select-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 12px 14px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+
+  .select-text {
+    font-size: 15px;
+    color: #1a1a1a;
+  }
+
+  .select-caret {
+    font-size: 18px;
+    color: #555;
+  }
+}
+
+// Input de búsqueda
+.search-input-row {
+  background: #ffffff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #333;
+  font-style: italic;
+  background: transparent;
+  box-sizing: border-box;
+
+  &::placeholder { color: #aaa; }
+}
+
+// Botón buscar — azul oscuro con lupa
+.btn-search {
+  width: 100%;
+  height: 48px;
+  background: #1a2e5a;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: opacity 0.15s;
+
+  &:active { opacity: 0.85; }
+
+  .search-btn-icon {
+    font-size: 22px;
+    color: #ffffff;
+  }
+}
+
+// Links secundarios debajo del buscador
+.search-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  padding: 2px 0;
+}
+
+.search-link {
+  font-size: 13px;
+  color: #1a2e5a;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+
+  &:hover { opacity: 0.75; }
+}
+
+.search-sep {
+  font-size: 13px;
+  color: #1a2e5a;
+  font-weight: 400;
+}
+
+// ══════════════════════════════════════════
+// ÁREA DE CONTENIDO — fondo blanco
+// ══════════════════════════════════════════
+.lib-content-area {
+  flex: 1;
+  background: #ffffff;
+  padding: 16px 20px 40px;
+}
+
+// Breadcrumb
+.breadcrumb {
+  font-size: 13px;
+  color: #888;
+  margin: 0 0 12px;
+}
+
+// Frase del día
+.frase-section {
+  margin-bottom: 20px;
+}
+
+.frase-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a2e5a;
+  margin: 0 0 10px;
+}
+
+.frase-text {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.7;
+  font-style: italic;
+  border-left: 4px solid #c9a000;
+  padding-left: 12px;
+  margin: 0;
+}
+
+// Divider
+.content-divider {
+  height: 1px;
+  background: #e8e8e8;
+  margin: 20px 0;
+}
+
+// Secciones de info
+.info-section {
+  margin-bottom: 8px;
+}
+
+.info-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a2e5a;
+  margin: 0 0 12px;
+}
+
+// Horarios
+.horario-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child { border-bottom: none; }
+}
+
+.horario-dia {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.horario-hora {
+  font-size: 14px;
+  color: #1a2e5a;
+  font-weight: 700;
+}
+
+// Chips de servicios
+.service-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #f5f7ff;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  border-left: 4px solid #1a2e5a;
+
+  ion-icon {
+    font-size: 20px;
+    color: #c9a000;
+    flex-shrink: 0;
+  }
+
+  span {
+    font-size: 14px;
+    color: #1a1a1a;
+    font-weight: 500;
+  }
+}
+
+// Botón volver
+.btn-volver {
+  width: 100%;
+  height: 48px;
+  background: #c9a000;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Lilita One', cursive;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-top: 24px;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+  transition: opacity 0.15s;
+
+  &:active { opacity: 0.85; }
+}

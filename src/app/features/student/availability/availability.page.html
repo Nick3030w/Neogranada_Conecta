@@ -76,6 +76,14 @@
             <ion-icon name="information-circle-outline" class="info-icon"></ion-icon>
             <p class="info-text">{{ infoText }}</p>
           </div>
+
+          <!-- Botón para ir a la página informativa (solo biblioteca) -->
+          <button class="availability-badge available"
+                  *ngIf="categoryId === 'biblioteca'"
+                  (click)="goToInfoPage()">
+            <ion-icon name="library-outline" class="badge-icon"></ion-icon>
+            <span>Ver página de biblioteca</span>
+          </button>
         </ng-container>
 
         <!-- Botón VOLVER A CATÁLOGO -->

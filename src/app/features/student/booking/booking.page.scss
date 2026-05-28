@@ -69,12 +69,50 @@ ion-content.booking-content { --background: #1a2e5a; }
   margin-top: -4px;
 }
 
+// ── Cargando recursos ─────────────────────────────────────────
+.loading-resources {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0;
+  color: #666;
+  font-size: 14px;
+
+  .res-spinner { width: 32px; height: 32px; color: #1a2e5a; }
+}
+
+// ── Sin recursos disponibles ──────────────────────────────────
+.empty-resources {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0;
+  text-align: center;
+
+  .empty-icon { font-size: 48px; color: #e74c3c; }
+
+  p { font-size: 14px; color: #555; margin: 0; line-height: 1.5; }
+}
+
+.btn-back-link {
+  background: transparent;
+  border: none;
+  color: #1a2e5a;
+  font-family: 'Lilita One', cursive;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
 // ── Fila fecha + hora ─────────────────────────────────────────
 .row-fields { display: flex; gap: 12px; }
 
 .field-block {
   margin-bottom: 18px;
-  position: relative; // para el dropdown absoluto
+  position: relative;
   &.half { flex: 1; min-width: 0; }
 }
 
@@ -84,9 +122,16 @@ ion-content.booking-content { --background: #1a2e5a; }
   font-size: 15px;
   color: #1a1a1a;
   margin-bottom: 6px;
+
+  .optional {
+    font-family: inherit;
+    font-size: 12px;
+    color: #888;
+    font-weight: 400;
+  }
 }
 
-// Caja de campo — fondo amarillo
+// ── Caja de campo ─────────────────────────────────────────────
 .field-select-box {
   display: flex;
   align-items: center;
@@ -101,18 +146,20 @@ ion-content.booking-content { --background: #1a2e5a; }
   transition: border-color 0.2s;
 
   &.has-error { border-color: #e74c3c; }
-  &.gray-box  { background: #b0bec5; }
 
-  .field-icon  { font-size: 20px; color: #1a1a1a; flex-shrink: 0; margin-right: 4px; }
-  .field-value { flex: 1; font-size: 13px; font-weight: 600; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .caret-icon  { font-size: 14px; color: #1a1a1a; flex-shrink: 0; transition: transform 0.2s; &.open { transform: rotate(180deg); } }
-}
+  .field-icon  { font-size: 20px; color: #1a1a1a; flex-shrink: 0; margin-right: 6px; }
+  .field-value {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
-// Select nativo (servicio)
-.native-select {
-  flex: 1; border: none; background: transparent;
-  font-size: 14px; font-weight: 600; color: #1a1a1a;
-  outline: none; appearance: none; cursor: pointer; width: 100%;
+    &.placeholder { color: #888; font-weight: 400; }
+  }
+  .caret-icon { font-size: 14px; color: #1a1a1a; flex-shrink: 0; transition: transform 0.2s; &.open { transform: rotate(180deg); } }
 }
 
 // ── Dropdown panel base ───────────────────────────────────────
@@ -127,6 +174,68 @@ ion-content.booking-content { --background: #1a2e5a; }
   box-shadow: 0 8px 24px rgba(0,0,0,0.25);
   z-index: 100;
   overflow: hidden;
+}
+
+// ── Dropdown de recursos ──────────────────────────────────────
+.resource-dropdown {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.resource-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.resource-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+  gap: 8px;
+
+  &:last-child { border-bottom: none; }
+  &:hover      { background: #f5f5f5; }
+  &.selected   { background: #eef4ff; }
+
+  .resource-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .resource-item-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .resource-item-location {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 12px;
+    color: #666;
+
+    ion-icon { font-size: 12px; color: #c9a000; }
+  }
+
+  .resource-check {
+    font-size: 20px;
+    color: #1a2e5a;
+    flex-shrink: 0;
+  }
 }
 
 // ── Calendario desplegable ────────────────────────────────────
@@ -153,6 +262,7 @@ ion-content.booking-content { --background: #1a2e5a; }
   font-family: 'Lilita One', cursive;
   font-size: 13px;
   color: #1a2e5a;
+  text-transform: capitalize;
 }
 
 .cal-grid {
@@ -179,10 +289,10 @@ ion-content.booking-content { --background: #1a2e5a; }
   cursor: pointer;
   transition: background 0.15s;
 
-  &.empty   { visibility: hidden; pointer-events: none; }
-  &.past    { color: #bbb; pointer-events: none; }
-  &.today   { background: #e8d080; font-weight: 700; }
-  &.selected { background: #1a2e5a; color: #f0c040; font-weight: 700; border-radius: 6px; }
+  &.empty    { visibility: hidden; pointer-events: none; }
+  &.past     { color: #bbb; pointer-events: none; }
+  &.today    { background: #e8d080; font-weight: 700; }
+  &.selected { background: #1a2e5a; color: #f0c040; font-weight: 700; }
   &:not(.empty):not(.past):not(.selected):hover { background: #f0f0f0; }
 }
 
@@ -213,6 +323,63 @@ ion-content.booking-content { --background: #1a2e5a; }
   &:not(.selected):hover { background: #d4b84a; }
 }
 
+// ── Botón CONSULTAR DISPONIBILIDAD ────────────────────────────
+.btn-check {
+  width: 100%;
+  height: 48px;
+  background: #1a2e5a;
+  color: #f0c040;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Lilita One', cursive;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.25);
+  margin-bottom: 14px;
+  transition: opacity 0.15s;
+
+  ion-icon { font-size: 18px; }
+  .check-spinner { width: 18px; height: 18px; color: #f0c040; }
+
+  &:disabled { opacity: 0.45; cursor: not-allowed; }
+  &:not(:disabled):active { opacity: 0.85; }
+}
+
+// ── Resultado de disponibilidad ───────────────────────────────
+.avail-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+
+  ion-icon { font-size: 22px; flex-shrink: 0; }
+
+  &.available {
+    background: #e8f5e9;
+    border: 2px solid #4caf50;
+    color: #1b5e20;
+    ion-icon { color: #4caf50; }
+  }
+
+  &.unavailable {
+    background: #fdecea;
+    border: 2px solid #e53935;
+    color: #7b0000;
+    ion-icon { color: #e53935; }
+  }
+}
+
 // ── Textarea ──────────────────────────────────────────────────
 .field-textarea-box {
   border: 2px solid #1a1a1a;
@@ -233,12 +400,16 @@ ion-content.booking-content { --background: #1a2e5a; }
 // ── Errores ───────────────────────────────────────────────────
 .field-error { display: block; color: #e74c3c; font-size: 11px; margin-top: 4px; }
 .error-box {
-  background: rgba(231,76,60,0.08); border: 1px solid #e74c3c;
-  border-radius: 8px; padding: 10px 14px; color: #e74c3c;
-  font-size: 13px; margin-bottom: 14px;
+  background: rgba(231,76,60,0.08);
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #e74c3c;
+  font-size: 13px;
+  margin-bottom: 14px;
 }
 
-// ── Botón CONTINUAR ───────────────────────────────────────────
+// ── Botón CONFIRMAR RESERVA ───────────────────────────────────
 .btn-continuar {
   width: 100%; height: 52px;
   background: #c9a000; color: #ffffff;
@@ -250,7 +421,7 @@ ion-content.booking-content { --background: #1a2e5a; }
   box-shadow: 3px 3px 0px rgba(0,0,0,0.25);
   margin-top: 8px; transition: opacity 0.15s;
 
-  &:disabled { opacity: 0.6; cursor: not-allowed; }
-  &:active   { opacity: 0.85; }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+  &:not(:disabled):active { opacity: 0.85; }
   ion-spinner { width: 20px; height: 20px; color: #ffffff; }
 }
