@@ -7,9 +7,10 @@ export interface Booking {
   resourceId: string;
   resourceName: string;
   resourceCategory: string;
+  /** Bloque del campus donde se encuentra el recurso, ej: "Bloque D" */
+  resourceLocation: string;
   date: string;        // ISO date string YYYY-MM-DD
   time: string;        // HH:mm
-  service: string;
   observations?: string;
   status: BookingStatus;
   denialReason?: string;

@@ -239,6 +239,18 @@ ion-content.block-content {
     border-color: #c9a000;
   }
 
+  &.badge-music {
+    background: rgba(156, 39, 176, 0.1);
+    color: #6a1b9a;
+    border-color: #9c27b0;
+  }
+
+  &.badge-sport {
+    background: rgba(76, 175, 80, 0.12);
+    color: #2e7d32;
+    border-color: #4caf50;
+  }
+
   &.badge-otro {
     background: rgba(100, 100, 100, 0.1);
     color: #555;

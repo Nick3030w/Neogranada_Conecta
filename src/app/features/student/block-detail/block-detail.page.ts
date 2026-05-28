@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { logOutOutline, chevronBackOutline, schoolOutline, flaskOutline, libraryOutline, desktopOutline } from 'ionicons/icons';
+import { logOutOutline, chevronBackOutline, schoolOutline, flaskOutline, libraryOutline, desktopOutline, musicalNotesOutline, barbellOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 
 export interface BlockSpace {
   name: string;
-  type: 'Aula' | 'Laboratorio' | 'Biblioteca' | 'Sala de cómputo' | 'Otro';
+  type: 'Aula' | 'Laboratorio' | 'Biblioteca' | 'Sala de cómputo' | 'Instrumento musical' | 'Elemento deportivo' | 'Otro';
   floor?: string;
   description?: string;
 }
@@ -27,8 +27,10 @@ const BLOCKS_DATA: Record<string, BlockInfo> = {
     name: 'Bloque A',
     faculty: 'Facultad de Ingeniería',
     spaces: [
-      { name: 'Aula 101', type: 'Aula', description: 'Aula de clases general' },
-      { name: 'Aula 102', type: 'Aula', description: 'Aula de clases general' },
+      { name: 'Aula 101',          type: 'Aula',                description: 'Aula de clases general' },
+      { name: 'Aula 102',          type: 'Aula',                description: 'Aula de clases general' },
+      { name: 'Piano Digital',     type: 'Instrumento musical', description: 'Piano digital Yamaha para préstamo' },
+      { name: 'Guitarra Acústica', type: 'Instrumento musical', description: 'Guitarra acústica para préstamo' },
     ],
   },
   B: {
@@ -65,13 +67,15 @@ const BLOCKS_DATA: Record<string, BlockInfo> = {
     name: 'Bloque D',
     faculty: 'Facultad de Medicina',
     spaces: [
-      { name: 'Aula especial IV-A',      type: 'Aula',        description: 'Aula especial piso IV'  },
-      { name: 'Aula especial IV-B',      type: 'Aula',        description: 'Aula especial piso IV'  },
-      { name: 'Aula especial IX-A',      type: 'Aula',        description: 'Aula especial piso IX'  },
-      { name: 'Aula especial IX-B',      type: 'Aula',        description: 'Aula especial piso IX'  },
-      { name: 'Aula especial X-A',       type: 'Aula',        description: 'Aula especial piso X'   },
-      { name: 'Aula especial X-B',       type: 'Aula',        description: 'Aula especial piso X'   },
-      { name: 'Laboratorio de Testeo I-II', type: 'Laboratorio', description: 'Laboratorio de testeo' },
+      { name: 'Aula especial IV-A',         type: 'Aula',               description: 'Aula especial piso IV'  },
+      { name: 'Aula especial IV-B',         type: 'Aula',               description: 'Aula especial piso IV'  },
+      { name: 'Aula especial IX-A',         type: 'Aula',               description: 'Aula especial piso IX'  },
+      { name: 'Aula especial IX-B',         type: 'Aula',               description: 'Aula especial piso IX'  },
+      { name: 'Aula especial X-A',          type: 'Aula',               description: 'Aula especial piso X'   },
+      { name: 'Aula especial X-B',          type: 'Aula',               description: 'Aula especial piso X'   },
+      { name: 'Laboratorio de Testeo I-II', type: 'Laboratorio',        description: 'Laboratorio de testeo'  },
+      { name: 'Balones de fútbol',          type: 'Elemento deportivo', description: 'Kit de balones para préstamo' },
+      { name: 'Redes y mallas',             type: 'Elemento deportivo', description: 'Redes deportivas para préstamo' },
     ],
   },
   E: {
@@ -79,8 +83,10 @@ const BLOCKS_DATA: Record<string, BlockInfo> = {
     name: 'Bloque E',
     faculty: 'Facultad de Ciencias Básicas',
     spaces: [
-      { name: 'AE-XI',  type: 'Aula', description: 'Aula especial XI'  },
-      { name: 'AE-XII', type: 'Aula', description: 'Aula especial XII' },
+      { name: 'AE-XI',              type: 'Aula',               description: 'Aula especial XI'  },
+      { name: 'AE-XII',             type: 'Aula',               description: 'Aula especial XII' },
+      { name: 'Violín',             type: 'Instrumento musical', description: 'Violín para préstamo estudiantil' },
+      { name: 'Balones de baloncesto', type: 'Elemento deportivo', description: 'Balones para préstamo' },
     ],
   },
   F: {
@@ -123,7 +129,7 @@ export class BlockDetailPage implements OnInit {
     private router: Router,
     private authService: AuthService,
   ) {
-    addIcons({ logOutOutline, chevronBackOutline, schoolOutline, flaskOutline, libraryOutline, desktopOutline });
+    addIcons({ logOutOutline, chevronBackOutline, schoolOutline, flaskOutline, libraryOutline, desktopOutline, musicalNotesOutline, barbellOutline });
   }
 
   ngOnInit(): void {
@@ -133,22 +139,26 @@ export class BlockDetailPage implements OnInit {
 
   getTypeIcon(type: BlockSpace['type']): string {
     const map: Record<BlockSpace['type'], string> = {
-      'Aula':           'school-outline',
-      'Laboratorio':    'flask-outline',
-      'Biblioteca':     'library-outline',
-      'Sala de cómputo':'desktop-outline',
-      'Otro':           'school-outline',
+      'Aula':                'school-outline',
+      'Laboratorio':         'flask-outline',
+      'Biblioteca':          'library-outline',
+      'Sala de cómputo':     'desktop-outline',
+      'Instrumento musical': 'musical-notes-outline',
+      'Elemento deportivo':  'barbell-outline',
+      'Otro':                'school-outline',
     };
     return map[type];
   }
 
   getTypeClass(type: BlockSpace['type']): string {
     const map: Record<BlockSpace['type'], string> = {
-      'Aula':           'badge-aula',
-      'Laboratorio':    'badge-lab',
-      'Biblioteca':     'badge-bib',
-      'Sala de cómputo':'badge-comp',
-      'Otro':           'badge-otro',
+      'Aula':                'badge-aula',
+      'Laboratorio':         'badge-lab',
+      'Biblioteca':          'badge-bib',
+      'Sala de cómputo':     'badge-comp',
+      'Instrumento musical': 'badge-music',
+      'Elemento deportivo':  'badge-sport',
+      'Otro':                'badge-otro',
     };
     return map[type];
   }

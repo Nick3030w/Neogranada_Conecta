@@ -5,7 +5,7 @@
     <div class="avail-header">
       <div class="header-top-row">
         <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
-        <button class="back-btn" (click)="goBack()">
+        <button class="back-btn" (click)="logout()">
           <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
         </button>
       </div>
@@ -24,34 +24,62 @@
     <div class="avail-bottom">
       <div class="avail-panel">
 
-        <!-- Pill "Artículo seleccionado" -->
+        <!-- Pill "Categoría seleccionada" -->
         <div class="selected-pill">
-          <span>Articulo seleccionado</span>
+          <span>Artículo seleccionado</span>
         </div>
 
-        <!-- Imagen / ícono del artículo -->
+        <!-- Imagen / ícono de la categoría -->
         <div class="item-img-box">
           <img [src]="categoryImageUrl"
-               [alt]="resourceId"
+               [alt]="categoryId"
                class="item-img"
                (error)="onImgError($event)">
-          <!-- Fallback con ícono si no hay imagen -->
           <div class="item-img-fallback" [style.display]="showFallback ? 'flex' : 'none'">
             <ion-icon [name]="categoryIcon" class="fallback-icon"></ion-icon>
           </div>
         </div>
 
-        <!-- Badge de disponibilidad — clickeable si está disponible -->
-        <button class="availability-badge"
-                [class.available]="isAvailable"
-                [class.unavailable]="!isAvailable"
-                [disabled]="!isAvailable"
-                (click)="goToBooking()">
-          <span>{{ isAvailable ? 'Articulo disponible' : 'Artículo no disponible' }}</span>
-        </button>
+        <!-- ── Spinner mientras carga ── -->
+        <div class="loading-area" *ngIf="loading">
+          <ion-spinner name="crescent" class="load-spinner"></ion-spinner>
+          <span class="load-text">Consultando disponibilidad...</span>
+        </div>
+
+        <!-- ── CATEGORÍA RESERVABLE ── -->
+        <ng-container *ngIf="!loading && isBookable">
+
+          <!-- Badge: hay recursos disponibles → botón activo -->
+          <button class="availability-badge available"
+                  *ngIf="hasAvailable"
+                  (click)="goToBooking()">
+            <ion-icon name="calendar-outline" class="badge-icon"></ion-icon>
+            <span>Consultar disponibilidad</span>
+          </button>
+
+          <!-- Badge: sin recursos disponibles → deshabilitado -->
+          <div class="availability-badge unavailable" *ngIf="!hasAvailable">
+            <ion-icon name="close-circle-outline" class="badge-icon"></ion-icon>
+            <span>Sin disponibilidad por ahora</span>
+          </div>
+
+          <!-- Contador de recursos disponibles -->
+          <p class="avail-count" *ngIf="hasAvailable">
+            {{ availableCount }} {{ availableCount === 1 ? 'recurso disponible' : 'recursos disponibles' }}
+          </p>
+
+        </ng-container>
+
+        <!-- ── CATEGORÍA INFORMATIVA (biblioteca / base_datos) ── -->
+        <ng-container *ngIf="!loading && !isBookable">
+          <div class="info-box">
+            <ion-icon name="information-circle-outline" class="info-icon"></ion-icon>
+            <p class="info-text">{{ infoText }}</p>
+          </div>
+        </ng-container>
 
         <!-- Botón VOLVER A CATÁLOGO -->
-        <button class="btn-back" (click)="goBack()">VOLVER A CATALOGO</button>
+        <button class="btn-back" (click)="goBack()">VOLVER AL CATÁLOGO</button>
 
       </div>
     </div>

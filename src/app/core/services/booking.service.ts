@@ -8,6 +8,7 @@ import {
   query,
   where,
   onSnapshot,
+  getDocs,
   serverTimestamp,
   Timestamp,
 } from '@angular/fire/firestore';
@@ -42,9 +43,9 @@ export class BookingService {
     resourceId: string;
     resourceName: string;
     resourceCategory: string;
+    resourceLocation: string;
     date: string;
     time: string;
-    service: string;
     observations?: string;
   }): Promise<string> {
     const docRef = await addDoc(collection(this.db, this.COL), {
@@ -56,6 +57,28 @@ export class BookingService {
       updatedAt:    serverTimestamp(),
     });
     return docRef.id;
+  }
+
+  // ── Verificación de conflictos de horario ─────────────────────
+  /**
+   * Retorna true si el recurso está libre en la fecha y hora indicadas.
+   * Considera ocupado si existe algún booking con status 'pendiente' o 'aprobada'
+   * para ese recurso en ese slot exacto.
+   *
+   * NOTA: Requiere índice compuesto en Firestore:
+   *   Colección: bookings
+   *   Campos: resourceId (ASC), date (ASC), time (ASC), status (ASC)
+   */
+  async checkAvailability(resourceId: string, date: string, time: string): Promise<boolean> {
+    const q = query(
+      collection(this.db, this.COL),
+      where('resourceId', '==', resourceId),
+      where('date',       '==', date),
+      where('time',       '==', time),
+      where('status',     'in', ['pendiente', 'aprobada']),
+    );
+    const snap = await getDocs(q);
+    return snap.empty; // true = disponible, false = ocupado
   }
 
   // ── Lectura en tiempo real ────────────────────────────────────

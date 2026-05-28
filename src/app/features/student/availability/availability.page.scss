@@ -153,16 +153,26 @@ ion-content.avail-content {
   border: none;
   cursor: pointer;
   transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 
   span {
     font-family: 'Lilita One', cursive;
     font-size: 16px;
   }
 
+  .badge-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
   &.available {
     background: #a8d5a2;
     border: 2px solid #5a9e52;
     span { color: #1a4a18; }
+    .badge-icon { color: #1a4a18; }
     &:active { opacity: 0.85; }
   }
 
@@ -170,8 +180,65 @@ ion-content.avail-content {
     background: #f5a0a0;
     border: 2px solid #c0392b;
     cursor: not-allowed;
-    opacity: 0.7;
+    opacity: 0.8;
     span { color: #7b0000; }
+    .badge-icon { color: #7b0000; }
+  }
+}
+
+// ── Contador de recursos disponibles ─────────────────────────
+.avail-count {
+  font-size: 13px;
+  color: #2e7d32;
+  font-weight: 600;
+  margin: -8px 0 0;
+  text-align: center;
+}
+
+// ── Spinner de carga ──────────────────────────────────────────
+.loading-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+
+  .load-spinner {
+    width: 32px;
+    height: 32px;
+    color: #1a2e5a;
+  }
+
+  .load-text {
+    font-size: 13px;
+    color: #666;
+  }
+}
+
+// ── Caja informativa (biblioteca / base_datos) ────────────────
+.info-box {
+  width: 100%;
+  background: #eef4ff;
+  border: 2px solid #1a2e5a;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+
+  .info-icon {
+    font-size: 36px;
+    color: #1a2e5a;
+    flex-shrink: 0;
+  }
+
+  .info-text {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
   }
 }
 
