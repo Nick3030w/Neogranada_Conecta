@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { logOutOutline, chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
+import { BookingService } from '../../../core/services/booking.service';
+import { Booking } from '../../../core/interfaces/booking.interface';
 
 @Component({
   selector: 'app-student-calendar',
@@ -13,10 +16,14 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, IonContent, IonIcon],
 })
-export class StudentCalendarPage {
+export class StudentCalendarPage implements OnInit, OnDestroy {
   currentDate = new Date();
-  activeBookingsCount = 0;  // préstamos vigentes del estudiante
+  activeBookingsCount = 0;
   bookedDays: number[] = [];
+
+  /** Todos los préstamos vigentes (pendiente | aprobada) del estudiante */
+  private allActiveBookings: Booking[] = [];
+  private bookingSub?: Subscription;
 
   readonly dayHeaders = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
@@ -30,8 +37,43 @@ export class StudentCalendarPage {
     return Array.from({ length: 5 }, (_, i) => current - 1 + i);
   }
 
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private bookingService: BookingService,
+  ) {
     addIcons({ logOutOutline, chevronBackOutline, chevronForwardOutline });
+  }
+
+  ngOnInit(): void {
+    const uid = this.authService.currentUser?.uid;
+    if (!uid) return;
+
+    this.bookingSub = this.bookingService.getByStudent(uid).subscribe(bookings => {
+      // Préstamos vigentes = pendiente o aprobada
+      this.allActiveBookings = bookings.filter(
+        b => b.status === 'pendiente' || b.status === 'aprobada'
+      );
+      this.activeBookingsCount = this.allActiveBookings.length;
+      this.refreshBookedDays();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.bookingSub?.unsubscribe();
+  }
+
+  /** Recalcula qué días del mes visible tienen préstamos vigentes */
+  private refreshBookedDays(): void {
+    const year  = this.currentDate.getFullYear();
+    const month = this.currentDate.getMonth(); // 0-indexed
+
+    this.bookedDays = this.allActiveBookings
+      .filter(b => {
+        const d = new Date(b.date + 'T00:00:00');
+        return d.getFullYear() === year && d.getMonth() === month;
+      })
+      .map(b => new Date(b.date + 'T00:00:00').getDate());
   }
 
   get calendarDays(): (number | null)[] {

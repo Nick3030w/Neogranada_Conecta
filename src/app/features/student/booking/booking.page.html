@@ -24,6 +24,12 @@
     <div class="booking-bottom">
       <div class="booking-panel">
 
+        <!-- ── BOTÓN POLÍTICAS ── -->
+        <button type="button" class="btn-policies" (click)="openPolicies()">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <span>Políticas de uso y préstamo</span>
+        </button>
+
         <!-- Spinner cargando recursos -->
         <div class="loading-resources" *ngIf="loadingResources">
           <ion-spinner name="crescent" class="res-spinner"></ion-spinner>
@@ -203,3 +209,82 @@
 
   </div>
 </ion-content>
+
+<!-- ══════════════════════════════════════════
+     MODAL DE POLÍTICAS
+══════════════════════════════════════════ -->
+<div class="policies-overlay" *ngIf="showPolicies" (click)="closePolicies()">
+  <div class="policies-modal" (click)="$event.stopPropagation()">
+
+    <!-- Encabezado del modal -->
+    <div class="policies-header">
+      <ion-icon name="document-text-outline" class="policies-header-icon"></ion-icon>
+      <h2 class="policies-title">Políticas de uso y préstamo</h2>
+      <button class="policies-close" (click)="closePolicies()">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+    </div>
+
+    <!-- Contenido scrolleable -->
+    <div class="policies-body">
+
+      <div class="policy-section">
+        <h3 class="policy-section-title">Condiciones generales</h3>
+        <ul class="policy-list">
+          <li>El préstamo de recursos está disponible exclusivamente para estudiantes activos de la Universidad Militar Nueva Granada.</li>
+          <li>Cada solicitud debe realizarse con al menos 24 horas de anticipación.</li>
+          <li>El estudiante es responsable del recurso desde el momento del préstamo hasta su devolución.</li>
+          <li>No se permite ceder el préstamo a terceros.</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h3 class="policy-section-title">Laboratorios y aulas</h3>
+        <ul class="policy-list">
+          <li>El espacio debe dejarse en las mismas condiciones en que fue recibido.</li>
+          <li>Está prohibido consumir alimentos o bebidas dentro de los laboratorios.</li>
+          <li>Cualquier daño al equipo o mobiliario será responsabilidad del estudiante solicitante.</li>
+          <li>El tiempo de uso no puede exceder el horario aprobado en la solicitud.</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h3 class="policy-section-title">Elementos deportivos</h3>
+        <ul class="policy-list">
+          <li>Los elementos deben devolverse limpios y en perfecto estado al finalizar su uso.</li>
+          <li>El deterioro por mal uso será cobrado al estudiante responsable.</li>
+          <li>El préstamo tiene una duración máxima de 4 horas continuas.</li>
+          <li>No se permite sacar los elementos fuera del campus universitario.</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h3 class="policy-section-title">Instrumentos musicales</h3>
+        <ul class="policy-list">
+          <li>Los instrumentos deben manipularse con cuidado y devolverse en el mismo estado.</li>
+          <li>Está prohibido prestar o transferir el instrumento a otra persona.</li>
+          <li>Cualquier daño debe reportarse de inmediato a la dependencia correspondiente.</li>
+          <li>El uso está restringido a las instalaciones autorizadas por la universidad.</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h3 class="policy-section-title">Incumplimiento</h3>
+        <ul class="policy-list">
+          <li>El incumplimiento de estas políticas puede resultar en la suspensión del servicio de préstamos.</li>
+          <li>Los daños causados serán reportados a la Dirección Académica.</li>
+          <li>La reincidencia puede generar sanciones disciplinarias según el reglamento estudiantil.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Botón aceptar -->
+    <div class="policies-footer">
+      <button class="btn-accept-policies" (click)="closePolicies()">
+        Entendido
+      </button>
+    </div>
+
+  </div>
+</div>

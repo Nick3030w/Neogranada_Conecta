@@ -69,6 +69,156 @@ ion-content.booking-content { --background: #1a2e5a; }
   margin-top: -4px;
 }
 
+// ── Botón POLÍTICAS ──────────────────────────────────────────
+.btn-policies {
+  width: 100%;
+  height: 40px;
+  background: transparent;
+  border: 2px solid #1a2e5a;
+  border-radius: 10px;
+  font-family: 'Lilita One', cursive;
+  font-size: 13px;
+  color: #1a2e5a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-bottom: 18px;
+  transition: background 0.15s, color 0.15s;
+
+  ion-icon { font-size: 17px; }
+
+  &:active {
+    background: #1a2e5a;
+    color: #f0c040;
+  }
+}
+
+// ── Modal de políticas ────────────────────────────────────────
+.policies-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+.policies-modal {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 24px 24px 0 0;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+// Encabezado del modal
+.policies-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 20px 14px;
+  background: #1a2e5a;
+  flex-shrink: 0;
+
+  .policies-header-icon {
+    font-size: 22px;
+    color: #f0c040;
+    flex-shrink: 0;
+  }
+
+  .policies-title {
+    flex: 1;
+    font-family: 'Lilita One', cursive;
+    font-size: 16px;
+    color: #ffffff;
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .policies-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-icon {
+      font-size: 24px;
+      color: #f0c040;
+    }
+  }
+}
+
+// Cuerpo scrolleable
+.policies-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+
+.policy-section {
+  margin-bottom: 20px;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.policy-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a2e5a;
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #e8d080;
+}
+
+.policy-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  li {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.5;
+  }
+}
+
+// Footer con botón aceptar
+.policies-footer {
+  padding: 14px 20px 20px;
+  flex-shrink: 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.btn-accept-policies {
+  width: 100%;
+  height: 48px;
+  background: #c9a000;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Lilita One', cursive;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+  transition: opacity 0.15s;
+
+  &:active { opacity: 0.85; }
+}
+
 // ── Cargando recursos ─────────────────────────────────────────
 .loading-resources {
   display: flex;

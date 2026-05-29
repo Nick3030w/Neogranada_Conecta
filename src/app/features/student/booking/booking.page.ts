@@ -8,6 +8,7 @@ import {
   logOutOutline, calendarOutline, timeOutline, caretDown,
   chevronBackOutline, chevronForwardOutline, searchOutline,
   checkmarkCircleOutline, closeCircleOutline, locationOutline,
+  documentTextOutline, closeOutline,
 } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
@@ -79,6 +80,7 @@ export class BookingPage implements OnInit, OnDestroy {
       logOutOutline, calendarOutline, timeOutline, caretDown,
       chevronBackOutline, chevronForwardOutline, searchOutline,
       checkmarkCircleOutline, closeCircleOutline, locationOutline,
+      documentTextOutline, closeOutline,
     });
     this.categoryId = this.route.snapshot.paramMap.get('resourceId') ?? '';
   }
@@ -317,6 +319,11 @@ export class BookingPage implements OnInit, OnDestroy {
       this.loading = false;
     }
   }
+
+  // ── Modal de políticas ───────────────────────────────────────
+  showPolicies = false;
+  openPolicies(): void  { this.showPolicies = true; }
+  closePolicies(): void { this.showPolicies = false; }
 
   goBack(): void { this.router.navigate(['/student/availability', this.categoryId]); }
   goHome(): void { this.router.navigate(['/student/home']); }
