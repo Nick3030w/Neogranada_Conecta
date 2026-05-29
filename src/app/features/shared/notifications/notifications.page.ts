@@ -5,7 +5,7 @@ import { IonContent, IonIcon, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   logOutOutline, notifications, notificationsOffOutline,
-  checkmarkDoneOutline,
+  checkmarkDoneOutline, closeOutline, timeOutline, chatbubbleOutline,
 } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
@@ -30,7 +30,7 @@ export class NotificationsPage implements OnInit, OnDestroy {
     private authService: AuthService,
     private notificationService: NotificationService,
   ) {
-    addIcons({ logOutOutline, notifications, notificationsOffOutline, checkmarkDoneOutline });
+    addIcons({ logOutOutline, notifications, notificationsOffOutline, checkmarkDoneOutline, closeOutline, timeOutline, chatbubbleOutline });
   }
 
   ngOnInit(): void {
