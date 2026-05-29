@@ -84,6 +84,14 @@
             <ion-icon name="library-outline" class="badge-icon"></ion-icon>
             <span>Ver página de biblioteca</span>
           </button>
+
+          <!-- Botón para ir a bases de datos -->
+          <button class="availability-badge available"
+                  *ngIf="categoryId === 'base_datos'"
+                  (click)="goToInfoPage()">
+            <ion-icon name="server-outline" class="badge-icon"></ion-icon>
+            <span>Ver bases de datos</span>
+          </button>
         </ng-container>
 
         <!-- Botón VOLVER A CATÁLOGO -->

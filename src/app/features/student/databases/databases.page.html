@@ -1,0 +1,69 @@
+<ion-content class="db-content">
+  <div class="db-wrapper">
+
+    <!-- ── Zona azul: logo + logout + título ── -->
+    <div class="db-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="logout-btn" (click)="logout()">
+          <ion-icon name="log-out-outline" class="logout-icon"></ion-icon>
+        </button>
+      </div>
+      <h1 class="page-title">BASES DE<br>DATOS</h1>
+    </div>
+
+    <!-- ── Curva SVG ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
+
+    <!-- ── Zona dorada ── -->
+    <div class="db-bottom">
+
+      <!-- Contador -->
+      <p class="db-count">{{ databases.length }} bases de datos disponibles</p>
+
+      <!-- Grid 3 columnas -->
+      <div class="db-grid">
+
+        <div *ngFor="let db of databases" class="db-card">
+
+          <!-- Área del logo -->
+          <div class="card-logo-area">
+            <img [src]="db.logoUrl"
+                 [alt]="db.name"
+                 class="card-logo"
+                 (error)="onImgError($event, db)">
+            <!-- Fallback si no carga la imagen -->
+            <div class="card-logo-fallback" *ngIf="db.showFallback">
+              <ion-icon name="server-outline" class="fallback-icon"></ion-icon>
+            </div>
+          </div>
+
+          <!-- Pie de tarjeta: nombre + botón chevron -->
+          <div class="card-footer" (click)="toggleExpand(db)">
+            <span class="card-name">{{ db.name }}</span>
+            <button class="chevron-btn" [class.open]="db.expanded">
+              <ion-icon name="chevron-down-outline"></ion-icon>
+            </button>
+          </div>
+
+          <!-- Descripción expandible -->
+          <div class="card-description" *ngIf="db.expanded">
+            <p>{{ db.description }}</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Botón volver -->
+      <button class="btn-volver" (click)="goBack()">VOLVER</button>
+
+    </div>
+
+  </div>
+</ion-content>

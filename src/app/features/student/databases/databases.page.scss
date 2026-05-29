@@ -1,0 +1,203 @@
+// ── Databases Page ────────────────────────────────────────────
+
+ion-content.db-content {
+  --background: #1a2e5a;
+}
+
+.db-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1a2e5a;
+}
+
+// ── Zona azul ────────────────────────────────────────────────
+.db-header {
+  display: flex;
+  flex-direction: column;
+  padding: 44px 20px 0;
+  background: #1a2e5a;
+}
+
+.header-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  .logo-img { width: 80px; height: 80px; object-fit: contain; }
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+
+  .logout-icon { font-size: 32px; color: #f0c040; }
+}
+
+.page-title {
+  font-family: 'Lilita One', cursive;
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  margin: 0 0 12px;
+  width: 100%;
+}
+
+// ── Curva SVG ─────────────────────────────────────────────────
+.curve-divider {
+  width: 100%; line-height: 0; background: #1a2e5a;
+  svg { display: block; width: 100%; height: 56px; }
+}
+
+// ── Zona dorada ───────────────────────────────────────────────
+.db-bottom {
+  flex: 1;
+  background: #8a6a00;
+  padding: 12px 10px 32px;
+}
+
+// Contador
+.db-count {
+  font-family: 'Lilita One', cursive;
+  font-size: 13px;
+  color: #fff8e1;
+  text-align: center;
+  margin: 0 0 12px;
+  letter-spacing: 0.3px;
+}
+
+// ── Grid 3 columnas ───────────────────────────────────────────
+.db-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+// ── Tarjeta ───────────────────────────────────────────────────
+.db-card {
+  background: #e8e8e8;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+// Área del logo
+.card-logo-area {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.card-logo-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  .fallback-icon {
+    font-size: 36px;
+    color: #1a2e5a;
+    opacity: 0.5;
+  }
+}
+
+// Pie de tarjeta
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px 6px 8px;
+  background: #e8e8e8;
+  cursor: pointer;
+  gap: 4px;
+  min-height: 40px;
+}
+
+.card-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.chevron-btn {
+  background: #c9a000;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+
+  ion-icon {
+    font-size: 14px;
+    color: #ffffff;
+    transition: transform 0.2s;
+  }
+
+  &.open ion-icon {
+    transform: rotate(180deg);
+  }
+}
+
+// Descripción expandible
+.card-description {
+  background: #ffffff;
+  padding: 8px 10px;
+  border-top: 1px solid #d0d0d0;
+
+  p {
+    font-size: 11px;
+    color: #333;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+// ── Botón volver ──────────────────────────────────────────────
+.btn-volver {
+  width: 100%;
+  height: 48px;
+  background: #c9a000;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Lilita One', cursive;
+  font-size: 16px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.25);
+  transition: opacity 0.15s;
+
+  &:active { opacity: 0.85; }
+}

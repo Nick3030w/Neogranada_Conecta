@@ -104,6 +104,11 @@ export const routes: Routes = [
           import('./features/student/library/library.page').then((m) => m.LibraryPage),
       },
       {
+        path: 'databases',
+        loadComponent: () =>
+          import('./features/student/databases/databases.page').then((m) => m.DatabasesPage),
+      },
+      {
         path: 'map',
         loadComponent: () =>
           import('./features/student/map/map.page').then((m) => m.MapPage),

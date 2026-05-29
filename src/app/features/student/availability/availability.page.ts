@@ -139,6 +139,8 @@ export class AvailabilityPage implements OnInit, OnDestroy {
   goToInfoPage(): void {
     if (this.categoryId === 'biblioteca') {
       this.router.navigate(['/student/library']);
+    } else if (this.categoryId === 'base_datos') {
+      this.router.navigate(['/student/databases']);
     }
   }
 
