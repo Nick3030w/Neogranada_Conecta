@@ -37,11 +37,10 @@
           <div class="field-block">
             <div class="field-box" [class.has-error]="form.get('fullName')!.invalid && form.get('fullName')!.touched">
               <span class="field-label">Nombre:</span>
-              <ion-input
-                formControlName="fullName"
-                type="text"
-                [placeholder]="user?.fullName ?? 'Tu nombre completo'">
-              </ion-input>
+              <input class="field-input"
+                     formControlName="fullName"
+                     type="text"
+                     [placeholder]="user?.fullName ?? 'Tu nombre completo'">
             </div>
           </div>
 
@@ -49,11 +48,21 @@
           <div class="field-block">
             <div class="field-box disabled-field">
               <span class="field-label">Correo:</span>
-              <ion-input
-                [value]="user?.email ?? ''"
-                type="email"
-                readonly>
-              </ion-input>
+              <input class="field-input"
+                     [value]="user?.email ?? ''"
+                     type="email"
+                     readonly>
+            </div>
+          </div>
+
+          <!-- Código de estudiante (solo lectura, solo para estudiantes) -->
+          <div class="field-block" *ngIf="!isAdmin">
+            <div class="field-box disabled-field">
+              <span class="field-label">Código:</span>
+              <input class="field-input"
+                     [value]="user?.studentCode ?? ''"
+                     type="text"
+                     readonly>
             </div>
           </div>
 
@@ -61,11 +70,10 @@
           <div class="field-block">
             <div class="field-box" [class.has-error]="form.get('academicProgram')!.invalid && form.get('academicProgram')!.touched">
               <span class="field-label">{{ isAdmin ? 'Cargo:' : 'Programa:' }}</span>
-              <ion-input
-                formControlName="academicProgram"
-                type="text"
-                [placeholder]="isAdmin ? 'Tu cargo' : 'Tu programa académico'">
-              </ion-input>
+              <input class="field-input"
+                     formControlName="academicProgram"
+                     type="text"
+                     [placeholder]="isAdmin ? 'Tu cargo' : 'Tu programa académico'">
             </div>
           </div>
 

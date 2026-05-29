@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonContent, IonIcon, IonInput, IonSpinner } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { logOutOutline, personOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
@@ -13,7 +13,7 @@ import { UserProfile } from '../../../core/interfaces/user.interface';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IonContent, IonIcon, IonInput, IonSpinner],
+  imports: [CommonModule, ReactiveFormsModule, IonContent, IonIcon, IonSpinner],
 })
 export class ProfilePage implements OnInit {
   form!: FormGroup;

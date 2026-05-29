@@ -105,12 +105,12 @@ ion-content.profile-content {
   max-width: 400px;
   background: #ffffff;
   border-radius: 24px;
-  padding: 28px 20px 32px;
+  padding: 24px 20px 28px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
   margin-top: -4px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 28px;
 }
 
 // ── Campos ────────────────────────────────────────────────────
@@ -118,11 +118,10 @@ ion-content.profile-content {
   width: 100%;
 }
 
-// Caja del campo: label arriba, input abajo, borde negro redondeado
 .field-box {
   border: 2px solid #1a1a1a;
-  border-radius: 12px;
-  padding: 10px 14px 8px;
+  border-radius: 10px;
+  padding: 7px 12px 8px;
   background: #ffffff;
   box-shadow: 3px 3px 0px rgba(0,0,0,0.18);
   transition: border-color 0.2s;
@@ -135,18 +134,24 @@ ion-content.profile-content {
 .field-label {
   display: block;
   font-family: 'Lilita One', cursive;
-  font-size: 14px;
+  font-size: 12px;
   color: #1a1a1a;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 
-ion-input {
-  --background: transparent;
-  --color: #555;
-  --placeholder-color: #bbb;
-  --padding-start: 0;
-  --padding-end: 0;
+.field-input {
+  display: block;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
   font-size: 14px;
+  color: #333;
+  padding: 0;
+  line-height: 1.4;
+
+  &::placeholder { color: #bbb; }
+  &[readonly]     { color: #666; cursor: default; }
 }
 
 // ── Mensajes ──────────────────────────────────────────────────
