@@ -61,6 +61,7 @@
                  [class.has-booking]="hasBooking(day)"
                  [class.other-month]="isOtherMonth(day)">
               <span *ngIf="day !== null">{{ displayDay(day) }}</span>
+              <span *ngIf="hasBooking(day)" class="booking-dot"></span>
             </div>
           </div>
 

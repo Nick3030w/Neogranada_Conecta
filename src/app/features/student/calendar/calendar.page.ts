@@ -127,6 +127,7 @@ export class StudentCalendarPage implements OnInit, OnDestroy {
       this.currentDate.getFullYear(),
       this.currentDate.getMonth() - 1, 1
     );
+    this.refreshBookedDays();
   }
 
   nextMonth(): void {
@@ -134,16 +135,19 @@ export class StudentCalendarPage implements OnInit, OnDestroy {
       this.currentDate.getFullYear(),
       this.currentDate.getMonth() + 1, 1
     );
+    this.refreshBookedDays();
   }
 
   onMonthChange(event: Event): void {
     const month = parseInt((event.target as HTMLSelectElement).value, 10);
     this.currentDate = new Date(this.currentDate.getFullYear(), month, 1);
+    this.refreshBookedDays();
   }
 
   onYearChange(event: Event): void {
     const year = parseInt((event.target as HTMLSelectElement).value, 10);
     this.currentDate = new Date(year, this.currentDate.getMonth(), 1);
+    this.refreshBookedDays();
   }
 
   goBack(): void { this.router.navigate(['/student/home']); }
