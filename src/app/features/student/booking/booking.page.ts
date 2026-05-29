@@ -319,5 +319,6 @@ export class BookingPage implements OnInit, OnDestroy {
   }
 
   goBack(): void { this.router.navigate(['/student/availability', this.categoryId]); }
+  goHome(): void { this.router.navigate(['/student/home']); }
   async logout(): Promise<void> { await this.authService.logout(); }
 }

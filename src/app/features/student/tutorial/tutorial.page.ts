@@ -50,5 +50,6 @@ export class TutorialPage {
   }
 
   goBack(): void { this.router.navigate(['/student/home']); }
+  goHome(): void { this.router.navigate(['/student/home']); }
   async logout(): Promise<void> { await this.authService.logout(); }
 }

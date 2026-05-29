@@ -164,5 +164,6 @@ export class BlockDetailPage implements OnInit {
   }
 
   goBack(): void    { this.router.navigate(['/student/map']); }
+  goHome(): void    { this.router.navigate(['/student/home']); }
   async logout(): Promise<void> { await this.authService.logout(); }
 }

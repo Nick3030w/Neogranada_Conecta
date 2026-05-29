@@ -145,6 +145,6 @@ export class AvailabilityPage implements OnInit, OnDestroy {
   }
 
   goBack(): void { this.router.navigate(['/student/catalog']); }
-
+  goHome(): void { this.router.navigate(['/student/home']); }
   async logout(): Promise<void> { await this.authService.logout(); }
 }

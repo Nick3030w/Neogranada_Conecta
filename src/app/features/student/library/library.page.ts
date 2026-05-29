@@ -61,5 +61,6 @@ export class LibraryPage {
   onSearch(): void { /* solo visual */ }
 
   goBack(): void { this.router.navigate(['/student/availability', 'biblioteca']); }
+  goHome(): void { this.router.navigate(['/student/home']); }
   async logout(): Promise<void> { await this.authService.logout(); }
 }
