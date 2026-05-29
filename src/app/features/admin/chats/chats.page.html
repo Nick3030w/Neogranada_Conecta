@@ -1,0 +1,72 @@
+<ion-content class="chats-content">
+  <div class="chats-wrapper">
+
+    <!-- ── Zona azul ── -->
+    <div class="chats-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="back-btn" (click)="goBack()">
+          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
+        </button>
+      </div>
+      <h1 class="page-title">CHATS</h1>
+    </div>
+
+    <!-- ── Curva SVG ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
+
+    <!-- ── Zona dorada ── -->
+    <div class="chats-bottom">
+      <div class="chats-panel">
+
+        <!-- Cargando -->
+        <div *ngIf="loading" class="empty-area">
+          <ion-spinner name="crescent" color="medium"></ion-spinner>
+        </div>
+
+        <!-- Sin chats -->
+        <div *ngIf="!loading && chatSummaries.length === 0" class="empty-area">
+          <ion-icon name="chatbubbles-outline" class="empty-icon"></ion-icon>
+          <p class="empty-text">No hay solicitudes activas con chat disponible.</p>
+        </div>
+
+        <!-- Lista de chats -->
+        <div *ngFor="let item of chatSummaries"
+             class="chat-item"
+             (click)="openChat(item.booking.id)">
+
+          <!-- Ícono izquierdo -->
+          <div class="chat-avatar">
+            <ion-icon name="person-outline" class="avatar-icon"></ion-icon>
+          </div>
+
+          <!-- Info central -->
+          <div class="chat-info">
+            <div class="chat-top-row">
+              <span class="chat-student">{{ item.booking.studentName }}</span>
+              <span class="chat-status" [class]="statusClass(item.booking.status)">
+                {{ statusLabel(item.booking.status) }}
+              </span>
+            </div>
+            <span class="chat-resource">{{ item.booking.resourceName }} — {{ item.booking.date }}</span>
+            <span class="chat-last-msg" *ngIf="item.lastMessage">{{ item.lastMessage }}</span>
+            <span class="chat-last-msg no-msg" *ngIf="!item.lastMessage">Sin mensajes aún</span>
+          </div>
+
+          <!-- Badge no leídos -->
+          <div class="unread-badge" *ngIf="item.unreadCount > 0">
+            {{ item.unreadCount }}
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</ion-content>

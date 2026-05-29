@@ -3,31 +3,30 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonContent, IonIcon, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { logOutOutline, chatbubbleOutline, chatbubblesOutline } from 'ionicons/icons';
+import { logOutOutline, chatbubbleOutline, chatbubblesOutline, personOutline } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { BookingService } from '../../../core/services/booking.service';
 import { ChatService } from '../../../core/services/chat.service';
 import { Booking } from '../../../core/interfaces/booking.interface';
 
-export interface ChatSummary {
+export interface AdminChatSummary {
   booking: Booking;
   unreadCount: number;
   lastMessage: string;
 }
 
 @Component({
-  selector: 'app-student-chats',
+  selector: 'app-admin-chats',
   templateUrl: './chats.page.html',
   styleUrls: ['./chats.page.scss'],
   standalone: true,
   imports: [CommonModule, IonContent, IonIcon, IonSpinner],
 })
-export class StudentChatsPage implements OnInit, OnDestroy {
-  chatSummaries: ChatSummary[] = [];
+export class AdminChatsPage implements OnInit, OnDestroy {
+  chatSummaries: AdminChatSummary[] = [];
   loading = true;
 
-  // Todas las suscripciones activas
   private subs: Subscription[] = [];
 
   constructor(
@@ -36,16 +35,16 @@ export class StudentChatsPage implements OnInit, OnDestroy {
     private bookingService: BookingService,
     private chatService:    ChatService,
   ) {
-    addIcons({ logOutOutline, chatbubbleOutline, chatbubblesOutline });
+    addIcons({ logOutOutline, chatbubbleOutline, chatbubblesOutline, personOutline });
   }
 
   ngOnInit(): void {
-    const uid = this.authService.currentUser?.uid;
-    if (!uid) { this.loading = false; return; }
+    const adminUid = this.authService.currentUser?.uid;
+    if (!adminUid) { this.loading = false; return; }
 
-    const bookingSub = this.bookingService.getByStudent(uid).subscribe({
+    // El admin ve todos los bookings vigentes (pendiente | aprobada)
+    const bookingSub = this.bookingService.getAll().subscribe({
       next: bookings => {
-        // Cancela suscripciones de mensajes anteriores antes de crear nuevas
         this.cancelMsgSubs();
 
         const active = bookings.filter(
@@ -64,8 +63,9 @@ export class StudentChatsPage implements OnInit, OnDestroy {
           const msgSub = this.chatService.getMessages(booking.id).subscribe({
             next: msgs => {
               if (msgs.length > 0) {
-                const last   = msgs[msgs.length - 1];
-                const unread = msgs.filter(m => m.senderId !== uid).length;
+                const last = msgs[msgs.length - 1];
+                // No leídos = mensajes del estudiante (no del admin)
+                const unread = msgs.filter(m => m.senderId !== adminUid).length;
                 this.chatSummaries[i] = {
                   ...this.chatSummaries[i],
                   lastMessage: last.content,
@@ -73,7 +73,7 @@ export class StudentChatsPage implements OnInit, OnDestroy {
                 };
               }
             },
-            error: () => { /* sesión cerrada — ignorar silenciosamente */ },
+            error: () => { /* sesión cerrada — ignorar */ },
           });
           this.subs.push(msgSub);
         });
@@ -81,7 +81,6 @@ export class StudentChatsPage implements OnInit, OnDestroy {
       error: () => { this.loading = false; },
     });
 
-    // La suscripción de bookings va al inicio del array
     this.subs.unshift(bookingSub);
   }
 
@@ -90,17 +89,16 @@ export class StudentChatsPage implements OnInit, OnDestroy {
     this.subs = [];
   }
 
-  /** Cancela solo las suscripciones de mensajes (índice 1 en adelante) */
   private cancelMsgSubs(): void {
     this.subs.slice(1).forEach(s => s.unsubscribe());
     this.subs = this.subs.slice(0, 1);
   }
 
   openChat(bookingId: string): void {
-    this.router.navigate(['/student/chat', bookingId]);
+    this.router.navigate(['/admin/chat', bookingId]);
   }
 
-  goBack(): void    { this.router.navigate(['/student/home']); }
+  goBack(): void    { this.router.navigate(['/admin/home']); }
   async logout(): Promise<void> { await this.authService.logout(); }
 
   statusLabel(status: string): string {

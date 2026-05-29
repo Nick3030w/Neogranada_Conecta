@@ -7,7 +7,7 @@ import {
   newspaper, film, calendar, construct,
   map, personCircle, notifications, logOutOutline, chatbubblesOutline,
 } from 'ionicons/icons';
-import { Subscription, switchMap, of } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { BookingService } from '../../../core/services/booking.service';
 import { ChatService } from '../../../core/services/chat.service';
@@ -24,7 +24,8 @@ export class StudentHomePage implements OnInit, OnDestroy {
   user: UserProfile | null = null;
   hasUnreadChats = false;
 
-  private chatSub?: Subscription;
+  // Todas las suscripciones activas — se cancelan juntas en ngOnDestroy
+  private subs: Subscription[] = [];
 
   constructor(
     private authService:    AuthService,
@@ -43,41 +44,56 @@ export class StudentHomePage implements OnInit, OnDestroy {
     const uid = this.user?.uid;
     if (!uid) return;
 
-    // Escucha los bookings activos y verifica si hay mensajes del admin no leídos
-    this.chatSub = this.bookingService.getByStudent(uid).subscribe(bookings => {
+    const bookingSub = this.bookingService.getByStudent(uid).subscribe(bookings => {
+      // Cancela suscripciones de chat anteriores antes de crear nuevas
+      this.cancelChatSubs();
+
       const active = bookings.filter(
         b => b.status === 'pendiente' || b.status === 'aprobada'
       );
-
-      let unreadFound = false;
-      let checked = 0;
 
       if (active.length === 0) {
         this.hasUnreadChats = false;
         return;
       }
 
+      let unreadFound = false;
+      let checked = 0;
+
       active.forEach(booking => {
-        this.chatService.getMessages(booking.id).subscribe(msgs => {
-          // Hay mensajes no leídos si alguno no es del propio estudiante
-          if (msgs.some(m => m.senderId !== uid)) {
-            unreadFound = true;
-          }
-          checked++;
-          if (checked === active.length) {
-            this.hasUnreadChats = unreadFound;
-          }
+        const msgSub = this.chatService.getMessages(booking.id).subscribe({
+          next: msgs => {
+            if (msgs.some(m => m.senderId !== uid)) {
+              unreadFound = true;
+            }
+            checked++;
+            if (checked === active.length) {
+              this.hasUnreadChats = unreadFound;
+            }
+          },
+          error: () => { /* sesión cerrada — ignorar silenciosamente */ },
         });
+        this.subs.push(msgSub);
       });
     });
+
+    this.subs.push(bookingSub);
   }
 
   ngOnDestroy(): void {
-    this.chatSub?.unsubscribe();
+    this.subs.forEach(s => s.unsubscribe());
+    this.subs = [];
   }
 
-  navigate(route: string): void    { this.router.navigate([route]); }
-  goToNotifications(): void        { this.router.navigate(['/student/notifications']); }
-  goToChats(): void                { this.router.navigate(['/student/chats']); }
-  async logout(): Promise<void>    { await this.authService.logout(); }
+  /** Cancela solo las suscripciones de mensajes (no la de bookings) */
+  private cancelChatSubs(): void {
+    // La primera suscripción es la de bookings, las demás son de mensajes
+    this.subs.slice(1).forEach(s => s.unsubscribe());
+    this.subs = this.subs.slice(0, 1);
+  }
+
+  navigate(route: string): void { this.router.navigate([route]); }
+  goToNotifications(): void     { this.router.navigate(['/student/notifications']); }
+  goToChats(): void             { this.router.navigate(['/student/chats']); }
+  async logout(): Promise<void> { await this.authService.logout(); }
 }

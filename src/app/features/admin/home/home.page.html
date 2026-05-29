@@ -10,6 +10,10 @@
             <ion-icon name="notifications" class="notif-icon"></ion-icon>
             <span class="notif-dot"></span>
           </button>
+          <button class="notif-btn" (click)="goToChats()">
+            <ion-icon name="chatbubbles-outline" class="notif-icon"></ion-icon>
+            <span class="notif-dot" *ngIf="hasUnreadChats"></span>
+          </button>
           <button class="logout-btn" (click)="logout()">
             <ion-icon name="log-out-outline" class="logout-icon"></ion-icon>
           </button>

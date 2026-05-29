@@ -176,6 +176,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/shared/chat/chat.page').then((m) => m.ChatPage),
       },
+      {
+        path: 'chats',
+        loadComponent: () =>
+          import('./features/admin/chats/chats.page').then((m) => m.AdminChatsPage),
+      },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },

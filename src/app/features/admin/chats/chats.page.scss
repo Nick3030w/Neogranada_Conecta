@@ -1,0 +1,174 @@
+// ── Admin Chats Page ─────────────────────────────────────────
+
+ion-content.chats-content { --background: #1a2e5a; }
+
+.chats-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1a2e5a;
+}
+
+.chats-header {
+  display: flex;
+  flex-direction: column;
+  padding: 44px 20px 0;
+  background: #1a2e5a;
+}
+
+.header-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  .logo-img { width: 80px; height: 80px; object-fit: contain; }
+}
+
+.back-btn {
+  background: transparent; border: none; cursor: pointer; padding: 4px;
+  .back-icon { font-size: 32px; color: #f0c040; }
+}
+
+.page-title {
+  font-family: 'Lilita One', cursive;
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  margin: 0 0 4px;
+  width: 100%;
+}
+
+.curve-divider {
+  width: 100%; line-height: 0; background: #1a2e5a;
+  svg { display: block; width: 100%; height: 56px; }
+}
+
+.chats-bottom {
+  flex: 1;
+  background: #8a6a00;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px 32px;
+}
+
+.chats-panel {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 20px 16px 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+  margin-top: -4px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empty-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 12px;
+  ion-spinner { width: 36px; height: 36px; }
+  .empty-icon { font-size: 56px; color: #b0bec5; }
+  .empty-text { font-size: 14px; color: #777; text-align: center; line-height: 1.4; }
+}
+
+.chat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f4f6fa;
+  border-radius: 14px;
+  padding: 12px 14px;
+  border: 1.5px solid #e0e4ed;
+  cursor: pointer;
+  transition: transform 0.15s;
+  &:active { transform: scale(0.98); }
+}
+
+.chat-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #1a2e5a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  .avatar-icon { font-size: 24px; color: #f0c040; }
+}
+
+.chat-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.chat-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.chat-student {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-status {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+
+  &.status-pending  { background: #fff3cd; color: #856404; }
+  &.status-approved { background: #d4edda; color: #155724; }
+  &.status-denied   { background: #f8d7da; color: #721c24; }
+  &.status-cancelled{ background: #e2e3e5; color: #383d41; }
+}
+
+.chat-resource {
+  font-size: 11px;
+  color: #888;
+}
+
+.chat-last-msg {
+  font-size: 12px;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &.no-msg { color: #aaa; font-style: italic; }
+}
+
+.unread-badge {
+  min-width: 22px;
+  height: 22px;
+  background: #e74c3c;
+  color: #ffffff;
+  border-radius: 11px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  flex-shrink: 0;
+}
