@@ -23,9 +23,31 @@
     <!-- ── Zona dorada: panel blanco ── -->
     <div class="catalog-bottom">
       <div class="catalog-panel">
+
+        <!-- Panel más demandados (desplegable) -->
+        <div class="ranking-panel">
+          <button class="ranking-header" (click)="toggleRanking()">
+            <ion-icon name="trending-up-outline" class="ranking-icon"></ion-icon>
+            <span class="ranking-title">Más demandados</span>
+            <ion-icon
+              [name]="rankingOpen ? 'chevron-up-outline' : 'chevron-down-outline'"
+              class="ranking-chevron">
+            </ion-icon>
+          </button>
+          <div class="ranking-list" [class.ranking-list--open]="rankingOpen">
+            <div *ngFor="let cat of categories; let i = index" class="ranking-item">
+              <span class="rank-number" [class.rank-gold]="i === 0" [class.rank-silver]="i === 1" [class.rank-bronze]="i === 2">
+                {{ i + 1 }}
+              </span>
+              <ion-icon [name]="cat.icon" class="rank-cat-icon"></ion-icon>
+              <span class="rank-label">{{ cat.label }}</span>
+            </div>
+          </div>
+        </div>
+
         <div class="catalog-grid">
 
-          <button *ngFor="let cat of categories"
+          <button *ngFor="let cat of categories; let i = index"
                   class="catalog-card"
                   (click)="selectCategory(cat.id)">
             <div class="card-img-box">

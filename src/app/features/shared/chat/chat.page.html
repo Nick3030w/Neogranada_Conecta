@@ -2,7 +2,7 @@
   <ion-toolbar>
     <div class="nc-toolbar">
       <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
-      <span class="chat-title">Chat — Solicitud #{{ bookingId }}</span>
+      <span class="chat-title">Chat — Solicitud #{{ bookingId.slice(0, 8).toUpperCase() }}</span>
       <button class="nc-icon-btn" (click)="goBack()">
         <ion-icon name="log-out-outline"></ion-icon>
       </button>
@@ -12,6 +12,11 @@
 
 <ion-content>
   <div class="messages-container">
+
+    <div *ngIf="messages.length === 0" class="empty-chat">
+      <p>Inicia la conversación con la dependencia.</p>
+    </div>
+
     <div *ngFor="let msg of messages"
          class="message-bubble"
          [class.own]="isOwn(msg)"
@@ -21,9 +26,9 @@
       <span class="msg-time">{{ msg.createdAt | date:'shortTime' }}</span>
     </div>
 
-    <div *ngIf="messages.length === 0" class="empty-chat">
-      <p>Inicia la conversación con la dependencia.</p>
-    </div>
+    <!-- Ancla para auto-scroll al último mensaje -->
+    <div #scrollAnchor></div>
+
   </div>
 </ion-content>
 
@@ -35,7 +40,9 @@
       class="chat-input"
       (keyup.enter)="sendMessage()">
     </ion-input>
-    <button class="send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+    <button class="send-btn"
+            (click)="sendMessage()"
+            [disabled]="!newMessage.trim() || sending">
       <ion-icon name="send-outline"></ion-icon>
     </button>
   </div>
