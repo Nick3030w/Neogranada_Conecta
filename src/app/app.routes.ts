@@ -123,6 +123,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/shared/chat/chat.page').then((m) => m.ChatPage),
       },
+      {
+        path: 'chats',
+        loadComponent: () =>
+          import('./features/student/chats/chats.page').then((m) => m.StudentChatsPage),
+      },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },
