@@ -25,7 +25,7 @@ export class TutorialPage {
    * También puedes poner la URL completa de embed directamente:
    * https://www.youtube.com/embed/XXXXXXXXXXX
    */
-  private readonly youtubeId = '_ANeO-ppEKo';
+  private readonly youtubeId = 'oYL4AarPgWE';
 
   /** URL segura para el iframe — Angular requiere sanitizarla */
   readonly videoUrl: SafeResourceUrl;
@@ -49,7 +49,16 @@ export class TutorialPage {
     this.liked = this.liked === value ? null : value;
   }
 
-  goBack(): void { this.router.navigate(['/student/home']); }
-  goHome(): void { this.router.navigate(['/student/home']); }
+  /** Marca el tutorial como visto y navega al home */
+  private markSeenAndGoHome(): void {
+    const uid = this.authService.currentUser?.uid;
+    if (uid) {
+      localStorage.setItem(`tutorial_seen_${uid}`, 'true');
+    }
+    this.router.navigate(['/student/home'], { replaceUrl: true });
+  }
+
+  goBack(): void  { this.markSeenAndGoHome(); }
+  goHome(): void  { this.markSeenAndGoHome(); }
   async logout(): Promise<void> { await this.authService.logout(); }
 }

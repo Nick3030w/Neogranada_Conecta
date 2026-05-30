@@ -82,7 +82,10 @@ export class AuthService {
     });
 
     this.currentUserSubject.next(profile);
-    await this.router.navigate(['/student/home'], { replaceUrl: true });
+
+    // Marca que es primer ingreso para mostrar el tutorial
+    localStorage.setItem(`tutorial_seen_${credential.user.uid}`, 'false');
+    await this.router.navigate(['/student/tutorial'], { replaceUrl: true });
   }
 
   /** Inicia sesión y redirige según el rol almacenado en Firestore */
