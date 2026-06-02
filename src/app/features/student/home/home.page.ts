@@ -23,6 +23,7 @@ import { UserProfile } from '../../../core/interfaces/user.interface';
 export class StudentHomePage implements OnInit, OnDestroy {
   user: UserProfile | null = null;
   hasUnreadChats = false;
+  notificationsMuted = false;
 
   // Todas las suscripciones activas — se cancelan juntas en ngOnDestroy
   private subs: Subscription[] = [];
@@ -40,8 +41,14 @@ export class StudentHomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.user = this.authService.currentUser;
-    const uid = this.user?.uid;
+    // Suscripción reactiva al perfil del usuario para detectar cambios en tiempo real
+    const userSub = this.authService.currentUser$.subscribe(user => {
+      this.user = user;
+      this.notificationsMuted = user?.notificationsMuted ?? false;
+    });
+    this.subs.push(userSub);
+
+    const uid = this.authService.currentUser?.uid;
     if (!uid) return;
 
     const bookingSub = this.bookingService.getByStudent(uid).subscribe(bookings => {
