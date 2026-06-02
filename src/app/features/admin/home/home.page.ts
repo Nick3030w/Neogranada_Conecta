@@ -24,6 +24,7 @@ import { UserProfile } from '../../../core/interfaces/user.interface';
 export class AdminHomePage implements OnInit, OnDestroy {
   user: UserProfile | null = null;
   hasUnreadChats = false;
+  notificationsMuted = false;
 
   private subs: Subscription[] = [];
 
@@ -41,8 +42,14 @@ export class AdminHomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.user = this.authService.currentUser;
-    const adminUid = this.user?.uid;
+    // Suscripción reactiva al perfil del usuario para detectar cambios en tiempo real
+    const userSub = this.authService.currentUser$.subscribe(user => {
+      this.user = user;
+      this.notificationsMuted = user?.notificationsMuted ?? false;
+    });
+    this.subs.push(userSub);
+
+    const adminUid = this.authService.currentUser?.uid;
 
     this.resourceService.seedIfEmpty().catch(err =>
       console.error('Error al inicializar recursos:', err)
