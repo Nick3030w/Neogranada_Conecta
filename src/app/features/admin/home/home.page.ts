@@ -24,6 +24,7 @@ import { UserProfile } from '../../../core/interfaces/user.interface';
 export class AdminHomePage implements OnInit, OnDestroy {
   user: UserProfile | null = null;
   hasUnreadChats = false;
+  notificationsMuted = false;
 
   private subs: Subscription[] = [];
 
@@ -42,6 +43,7 @@ export class AdminHomePage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = this.authService.currentUser;
+    this.notificationsMuted = this.user?.notificationsMuted ?? false;
     const adminUid = this.user?.uid;
 
     this.resourceService.seedIfEmpty().catch(err =>
@@ -98,7 +100,10 @@ export class AdminHomePage implements OnInit, OnDestroy {
   }
 
   navigate(route: string): void    { this.router.navigate([route]); }
-  goToNotifications(): void        { this.router.navigate(['/admin/notifications']); }
+  goToNotifications(): void {
+    if (this.notificationsMuted) return;
+    this.router.navigate(['/admin/notifications']);
+  }
   goToChats(): void                { this.router.navigate(['/admin/chats']); }
   async logout(): Promise<void>    { await this.authService.logout(); }
 }

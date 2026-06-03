@@ -23,6 +23,7 @@ import { UserProfile } from '../../../core/interfaces/user.interface';
 export class StudentHomePage implements OnInit, OnDestroy {
   user: UserProfile | null = null;
   hasUnreadChats = false;
+  notificationsMuted = false;
 
   // Todas las suscripciones activas — se cancelan juntas en ngOnDestroy
   private subs: Subscription[] = [];
@@ -41,6 +42,7 @@ export class StudentHomePage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = this.authService.currentUser;
+    this.notificationsMuted = this.user?.notificationsMuted ?? false;
     const uid = this.user?.uid;
     if (!uid) return;
 
@@ -93,7 +95,10 @@ export class StudentHomePage implements OnInit, OnDestroy {
   }
 
   navigate(route: string): void { this.router.navigate([route]); }
-  goToNotifications(): void     { this.router.navigate(['/student/notifications']); }
+  goToNotifications(): void {
+    if (this.notificationsMuted) return;
+    this.router.navigate(['/student/notifications']);
+  }
   goToChats(): void             { this.router.navigate(['/student/chats']); }
   async logout(): Promise<void> { await this.authService.logout(); }
 }

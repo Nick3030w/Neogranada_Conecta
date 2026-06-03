@@ -21,7 +21,12 @@ export class AdminCalendarPage implements OnInit, OnDestroy {
   totalBookings = 0;
   bookedDays: number[] = [];
 
-  /** Todos los préstamos vigentes (pendiente | aprobada) de todos los estudiantes */
+  /** Día seleccionado (null = ninguno) */
+  selectedDay: number | null = null;
+  /** Reservas del día seleccionado */
+  selectedDayBookings: Booking[] = [];
+
+  /** Todos los préstamos aprobados de todos los estudiantes */
   private allActiveBookings: Booking[] = [];
   private bookingSub?: Subscription;
 
@@ -130,11 +135,37 @@ export class AdminCalendarPage implements OnInit, OnDestroy {
     return !!day && day > 0 && this.bookedDays.includes(day);
   }
 
+  isSelected(day: number | null): boolean {
+    return !!day && day > 0 && day === this.selectedDay;
+  }
+
+  selectDay(day: number | null): void {
+    if (!day || day <= 0) return;
+
+    if (this.selectedDay === day) {
+      this.selectedDay = null;
+      this.selectedDayBookings = [];
+      return;
+    }
+
+    this.selectedDay = day;
+
+    const year  = this.currentDate.getFullYear();
+    const month = this.currentDate.getMonth();
+
+    this.selectedDayBookings = this.allActiveBookings.filter(b => {
+      const d = new Date(b.date + 'T00:00:00');
+      return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
+    });
+  }
+
   prevMonth(): void {
     this.currentDate = new Date(
       this.currentDate.getFullYear(),
       this.currentDate.getMonth() - 1, 1
     );
+    this.selectedDay = null;
+    this.selectedDayBookings = [];
     this.refreshBookedDays();
   }
 
@@ -143,18 +174,24 @@ export class AdminCalendarPage implements OnInit, OnDestroy {
       this.currentDate.getFullYear(),
       this.currentDate.getMonth() + 1, 1
     );
+    this.selectedDay = null;
+    this.selectedDayBookings = [];
     this.refreshBookedDays();
   }
 
   onMonthChange(event: Event): void {
     const month = parseInt((event.target as HTMLSelectElement).value, 10);
     this.currentDate = new Date(this.currentDate.getFullYear(), month, 1);
+    this.selectedDay = null;
+    this.selectedDayBookings = [];
     this.refreshBookedDays();
   }
 
   onYearChange(event: Event): void {
     const year = parseInt((event.target as HTMLSelectElement).value, 10);
     this.currentDate = new Date(year, this.currentDate.getMonth(), 1);
+    this.selectedDay = null;
+    this.selectedDayBookings = [];
     this.refreshBookedDays();
   }
 

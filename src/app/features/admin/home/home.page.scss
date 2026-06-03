@@ -62,6 +62,10 @@ ion-content.home-content {
     border-radius: 50%;
     border: 2px solid #1a2e5a;
   }
+
+  &.muted .notif-icon {
+    opacity: 0.4;
+  }
 }
 
 // Botón salir

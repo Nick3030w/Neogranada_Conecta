@@ -59,7 +59,9 @@
                  [class.empty]="day === null"
                  [class.today]="isToday(day)"
                  [class.has-booking]="hasBooking(day)"
-                 [class.other-month]="isOtherMonth(day)">
+                 [class.selected]="isSelected(day)"
+                 [class.other-month]="isOtherMonth(day)"
+                 (click)="selectDay(day)">
               <span *ngIf="day !== null">{{ displayDay(day) }}</span>
               <span *ngIf="hasBooking(day)" class="booking-dot"></span>
             </div>
@@ -67,6 +69,37 @@
 
         </div>
         <!-- fin calendar-box -->
+
+        <!-- Detalle de reservas del día seleccionado -->
+        <div class="day-bookings" *ngIf="selectedDayBookings.length > 0">
+          <h3 class="day-bookings-title">Reservas del día {{ selectedDay }}</h3>
+          <div class="booking-card" *ngFor="let b of selectedDayBookings">
+            <div class="booking-card-row">
+              <span class="booking-card-label">Estudiante:</span>
+              <span class="booking-card-value">{{ b.studentName }}</span>
+            </div>
+            <div class="booking-card-row">
+              <span class="booking-card-label">Recurso:</span>
+              <span class="booking-card-value">{{ b.resourceName }}</span>
+            </div>
+            <div class="booking-card-row">
+              <span class="booking-card-label">Ubicación:</span>
+              <span class="booking-card-value">{{ b.resourceLocation }}</span>
+            </div>
+            <div class="booking-card-row">
+              <span class="booking-card-label">Hora:</span>
+              <span class="booking-card-value">{{ b.time }}</span>
+            </div>
+            <div class="booking-card-row">
+              <span class="booking-card-label">Estado:</span>
+              <span class="booking-card-status status-approved">Aprobada</span>
+            </div>
+            <div class="booking-card-row" *ngIf="b.observations">
+              <span class="booking-card-label">Notas:</span>
+              <span class="booking-card-value">{{ b.observations }}</span>
+            </div>
+          </div>
+        </div>
 
         <!-- Barra préstamos totales -->
         <div class="bookings-bar">
