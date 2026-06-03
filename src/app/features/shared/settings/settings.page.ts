@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { IonContent, IonIcon, IonToggle } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, IonToggle, ViewWillEnter } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { logOutOutline, construct } from 'ionicons/icons';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -13,19 +14,34 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, IonContent, IonIcon, IonToggle],
 })
-export class SettingsPage implements OnInit {
+export class SettingsPage implements OnInit, OnDestroy, ViewWillEnter {
   notificationsMuted = false;
   darkMode = false;
   loading = false;
+
+  private userSub?: Subscription;
 
   constructor(private router: Router, private authService: AuthService) {
     addIcons({ logOutOutline, construct });
   }
 
   ngOnInit(): void {
+    // Suscripción reactiva para recibir cambios en tiempo real
+    this.userSub = this.authService.currentUser$.subscribe(user => {
+      this.notificationsMuted = user?.notificationsMuted ?? false;
+      this.darkMode = user?.darkMode ?? false;
+    });
+  }
+
+  ionViewWillEnter(): void {
+    // Refresh al volver de caché (ion-router-outlet)
     const user = this.authService.currentUser;
     this.notificationsMuted = user?.notificationsMuted ?? false;
     this.darkMode = user?.darkMode ?? false;
+  }
+
+  ngOnDestroy(): void {
+    this.userSub?.unsubscribe();
   }
 
   async toggleNotifications(event: CustomEvent): Promise<void> {

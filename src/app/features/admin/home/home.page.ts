@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { IonContent, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, ViewWillEnter } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   calendar, construct, checkmarkCircle,
@@ -21,7 +21,7 @@ import { UserProfile } from '../../../core/interfaces/user.interface';
   standalone: true,
   imports: [CommonModule, IonContent, IonIcon],
 })
-export class AdminHomePage implements OnInit, OnDestroy {
+export class AdminHomePage implements OnInit, OnDestroy, ViewWillEnter {
   user: UserProfile | null = null;
   hasUnreadChats = false;
   notificationsMuted = false;
@@ -92,6 +92,13 @@ export class AdminHomePage implements OnInit, OnDestroy {
     });
 
     this.subs.unshift(bookingSub);
+  }
+
+  ionViewWillEnter(): void {
+    // Refresca el estado al volver de caché (ion-router-outlet)
+    const user = this.authService.currentUser;
+    this.user = user;
+    this.notificationsMuted = user?.notificationsMuted ?? false;
   }
 
   ngOnDestroy(): void {
