@@ -42,9 +42,14 @@ export class AdminHomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.user = this.authService.currentUser;
-    this.notificationsMuted = this.user?.notificationsMuted ?? false;
-    const adminUid = this.user?.uid;
+    // Suscripción reactiva al perfil del usuario para detectar cambios en tiempo real
+    const userSub = this.authService.currentUser$.subscribe(user => {
+      this.user = user;
+      this.notificationsMuted = user?.notificationsMuted ?? false;
+    });
+    this.subs.push(userSub);
+
+    const adminUid = this.authService.currentUser?.uid;
 
     this.resourceService.seedIfEmpty().catch(err =>
       console.error('Error al inicializar recursos:', err)

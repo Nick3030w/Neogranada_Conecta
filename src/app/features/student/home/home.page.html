@@ -6,9 +6,9 @@
       <div class="header-top-row">
         <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
         <div class="header-top-actions">
-          <button class="notif-btn" (click)="goToNotifications()" [class.muted]="notificationsMuted">
+          <button class="notif-btn" (click)="goToNotifications()" *ngIf="!notificationsMuted">
             <ion-icon name="notifications" class="notif-icon"></ion-icon>
-            <span class="notif-dot" *ngIf="!notificationsMuted"></span>
+            <span class="notif-dot"></span>
           </button>
           <button class="notif-btn" (click)="goToChats()">
             <ion-icon name="chatbubbles-outline" class="notif-icon"></ion-icon>
