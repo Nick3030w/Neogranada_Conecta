@@ -497,11 +497,26 @@ body.theme-dark {
     color: #eef2f8 !important;
   }
 
-  // Íconos que eran azul oscuro sobre superficie clara
+  // Íconos sobre tiles/tarjetas CLARAS (se conservan claras por identidad):
+  // deben ser OSCUROS para contrastar, no dorados.
   .tile-icon,
   .block-icon,
-  .fallback-icon {
-    color: var(--nc-gold) !important;
+  .fallback-icon,
+  .card-img-fallback .fallback-icon {
+    color: #0d1626 !important;
+  }
+
+  // Los tiles claros conservan un fondo claro pero ligeramente atenuado
+  // para que combinen con el tema oscuro sin perder legibilidad del ícono.
+  .tile-yellow { background: #e6c766 !important; }
+  .tile-gray   { background: #aab6c4 !important; }
+  .card-img-box,
+  .card-img-fallback { background: #aab6c4 !important; }
+
+  // Etiquetas de tiles/tarjetas: sobre el panel oscuro deben ser claras
+  .tile-label,
+  .card-label {
+    color: #eef2f8 !important;
   }
 
   // Curvas SVG: rellenos fijos → tonos del tema oscuro
