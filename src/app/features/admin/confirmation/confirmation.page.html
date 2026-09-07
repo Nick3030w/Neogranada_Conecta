@@ -59,7 +59,7 @@
           </div>
           <div class="detail-row">
             <span class="detail-label">Fecha:</span>
-            <span class="detail-value">{{ booking.date }} — {{ booking.time }}</span>
+            <span class="detail-value">{{ booking.date }} — {{ booking.startTime }} a {{ booking.endTime }}</span>
           </div>
           <div class="detail-row" *ngIf="booking.observations">
             <span class="detail-label">Notas:</span>

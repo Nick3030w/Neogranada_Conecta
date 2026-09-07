@@ -297,6 +297,12 @@ ion-content.booking-content { --background: #1a2e5a; }
 
   &.has-error { border-color: #e74c3c; }
 
+  // Hora fin deshabilitada hasta elegir hora inicio
+  &.disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
   .field-icon  { font-size: 20px; color: #1a1a1a; flex-shrink: 0; margin-right: 6px; }
   .field-value {
     flex: 1;
@@ -310,6 +316,23 @@ ion-content.booking-content { --background: #1a2e5a; }
     &.placeholder { color: #888; font-weight: 400; }
   }
   .caret-icon { font-size: 14px; color: #1a1a1a; flex-shrink: 0; transition: transform 0.2s; &.open { transform: rotate(180deg); } }
+}
+
+// ── Resumen de franja horaria seleccionada ─────────────────────
+.time-range-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(26, 46, 90, 0.08);
+  border: 1.5px solid #1a2e5a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 4px 0 18px;
+  font-size: 13px;
+  color: #1a2e5a;
+
+  ion-icon { font-size: 16px; color: #c9a000; flex-shrink: 0; }
+  strong { font-weight: 700; }
 }
 
 // ── Dropdown panel base ───────────────────────────────────────
@@ -622,6 +645,15 @@ ion-content.booking-content { --background: #1a2e5a; }
     .policies-title       { color: #eef2f8 !important; }
     .policy-section-title { color: var(--nc-gold) !important; }
     .policy-list li       { color: #c3cee0 !important; }
+  }
+
+  // Resumen de franja horaria: fondo claro tenue → texto oscuro legible
+  .time-range-summary {
+    background: rgba(240, 192, 64, 0.12) !important;
+    border-color: var(--nc-gold) !important;
+    color: #eef2f8 !important;
+
+    strong { color: var(--nc-gold) !important; }
   }
 
   // Caja de notas (textarea): fondo claro → texto oscuro legible

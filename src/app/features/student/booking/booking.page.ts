@@ -55,8 +55,9 @@ export class BookingPage implements OnInit, OnDestroy {
 
   readonly dayHeaders = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'];
 
-  // ── Picker de horas ───────────────────────────────────────────
-  showTimePicker = false;
+  // ── Pickers de hora (inicio / fin) ─────────────────────────────
+  showStartTimePicker = false;
+  showEndTimePicker   = false;
 
   readonly timeSlots: string[] = (() => {
     const slots: string[] = [];
@@ -88,7 +89,8 @@ export class BookingPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = this.fb.group({
       date:         ['', Validators.required],
-      time:         ['', Validators.required],
+      startTime:    ['', Validators.required],
+      endTime:      ['', Validators.required],
       resource:     ['', Validators.required],
       observations: [''],
     });
@@ -119,22 +121,31 @@ export class BookingPage implements OnInit, OnDestroy {
   }
 
   // ── Getters de formulario ─────────────────────────────────────
-  get date()     { return this.form.get('date')!; }
-  get time()     { return this.form.get('time')!; }
-  get resource() { return this.form.get('resource')!; }
+  get date()      { return this.form.get('date')!; }
+  get startTime() { return this.form.get('startTime')!; }
+  get endTime()   { return this.form.get('endTime')!; }
+  get resource()  { return this.form.get('resource')!; }
 
-  get selectedDateLabel(): string { return this.date.value     || 'Seleccionar'; }
-  get selectedTimeLabel(): string { return this.time.value     || 'Seleccionar'; }
+  get selectedDateLabel(): string { return this.date.value      || 'Seleccionar'; }
+  get selectedStartTimeLabel(): string { return this.startTime.value || 'Seleccionar'; }
+  get selectedEndTimeLabel(): string   { return this.endTime.value   || 'Seleccionar'; }
   get selectedResourceLabel(): string {
     if (!this.selectedResource) return 'Seleccionar';
     return `${this.selectedResource.name} — ${this.selectedResource.location}`;
   }
 
+  /** Slots de hora de fin válidos: solo los posteriores a la hora de inicio elegida. */
+  get endTimeSlots(): string[] {
+    if (!this.startTime.value) return this.timeSlots;
+    return this.timeSlots.filter(slot => slot > this.startTime.value);
+  }
+
   // ── Selector de recurso ───────────────────────────────────────
   toggleResourcePicker(): void {
-    this.showResourcePicker = !this.showResourcePicker;
-    this.showCalendar       = false;
-    this.showTimePicker     = false;
+    this.showResourcePicker  = !this.showResourcePicker;
+    this.showCalendar        = false;
+    this.showStartTimePicker = false;
+    this.showEndTimePicker   = false;
   }
 
   selectResource(res: Resource): void {
@@ -147,9 +158,10 @@ export class BookingPage implements OnInit, OnDestroy {
 
   // ── Calendario ───────────────────────────────────────────────
   toggleCalendar(): void {
-    this.showCalendar       = !this.showCalendar;
-    this.showTimePicker     = false;
-    this.showResourcePicker = false;
+    this.showCalendar        = !this.showCalendar;
+    this.showStartTimePicker = false;
+    this.showEndTimePicker   = false;
+    this.showResourcePicker  = false;
   }
 
   get calMonthName(): string {
@@ -209,16 +221,37 @@ export class BookingPage implements OnInit, OnDestroy {
     this.calDate = new Date(this.calDate.getFullYear(), this.calDate.getMonth() + 1, 1);
   }
 
-  // ── Picker de horas ───────────────────────────────────────────
-  toggleTimePicker(): void {
-    this.showTimePicker     = !this.showTimePicker;
-    this.showCalendar       = false;
-    this.showResourcePicker = false;
+  // ── Picker de hora de inicio ───────────────────────────────────
+  toggleStartTimePicker(): void {
+    this.showStartTimePicker = !this.showStartTimePicker;
+    this.showEndTimePicker   = false;
+    this.showCalendar        = false;
+    this.showResourcePicker  = false;
   }
 
-  selectTime(slot: string): void {
-    this.form.get('time')!.setValue(slot);
-    this.showTimePicker = false;
+  selectStartTime(slot: string): void {
+    this.form.get('startTime')!.setValue(slot);
+    this.showStartTimePicker = false;
+    // Si la hora de fin ya elegida quedó antes o igual a la nueva de inicio, se limpia
+    if (this.endTime.value && this.endTime.value <= slot) {
+      this.endTime.setValue('');
+    }
+    // Resetea disponibilidad al cambiar hora
+    this.availabilityResult = 'idle';
+  }
+
+  // ── Picker de hora de fin ───────────────────────────────────────
+  toggleEndTimePicker(): void {
+    if (!this.startTime.value) return; // primero debe elegirse la hora de inicio
+    this.showEndTimePicker   = !this.showEndTimePicker;
+    this.showStartTimePicker = false;
+    this.showCalendar        = false;
+    this.showResourcePicker  = false;
+  }
+
+  selectEndTime(slot: string): void {
+    this.form.get('endTime')!.setValue(slot);
+    this.showEndTimePicker = false;
     // Resetea disponibilidad al cambiar hora
     this.availabilityResult = 'idle';
   }
@@ -227,22 +260,24 @@ export class BookingPage implements OnInit, OnDestroy {
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
     if (!target.closest('.field-block')) {
-      this.showCalendar       = false;
-      this.showTimePicker     = false;
-      this.showResourcePicker = false;
+      this.showCalendar        = false;
+      this.showStartTimePicker = false;
+      this.showEndTimePicker   = false;
+      this.showResourcePicker  = false;
     }
   }
 
   // ── Verificación de disponibilidad ────────────────────────────
   /**
    * Consulta Firestore para saber si el recurso seleccionado
-   * está libre en la fecha y hora elegidas.
-   * Requiere que los 3 campos estén completos.
+   * está libre durante toda la franja horaria elegida.
+   * Requiere que recurso, fecha, hora inicio y hora fin estén completos.
    */
   get canCheck(): boolean {
     return !!this.selectedResource
       && !!this.date.value
-      && !!this.time.value;
+      && !!this.startTime.value
+      && !!this.endTime.value;
   }
 
   async checkAvailability(): Promise<void> {
@@ -253,7 +288,8 @@ export class BookingPage implements OnInit, OnDestroy {
       const isAvailable = await this.bookingService.checkAvailability(
         this.selectedResource!.id,
         this.date.value,
-        this.time.value,
+        this.startTime.value,
+        this.endTime.value,
       );
       this.availabilityResult = isAvailable ? 'available' : 'unavailable';
     } catch (err) {
@@ -278,7 +314,7 @@ export class BookingPage implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     try {
-      const { date, time, observations } = this.form.value;
+      const { date, startTime, endTime, observations } = this.form.value;
       const res = this.selectedResource!;
 
       // 1. Crea el booking en Firestore con el ID real del recurso
@@ -290,7 +326,8 @@ export class BookingPage implements OnInit, OnDestroy {
         resourceCategory: res.category,
         resourceLocation: res.location,
         date,
-        time,
+        startTime,
+        endTime,
         observations: observations ?? '',
       });
 

@@ -26,13 +26,40 @@ export class BookingService {
 
   // ── Helper ────────────────────────────────────────────────────
 
+  /** Suma minutos a una hora "HH:mm" y devuelve el resultado en el mismo formato. */
+  private static addMinutes(hhmm: string, minutes: number): string {
+    const [h, m] = hhmm.split(':').map(Number);
+    const total = h * 60 + m + minutes;
+    const hh = Math.floor(total / 60) % 24;
+    const mm = total % 60;
+    return `${hh.toString().padStart(2, '0')}:${mm.toString().padStart(2, '0')}`;
+  }
+
+  /**
+   * Normaliza un booking a startTime/endTime, sin importar si el
+   * documento en Firestore viene con el esquema nuevo o con el
+   * campo legacy `time` (reservas creadas antes de soportar franja
+   * horaria). Las reservas legacy se asumen de 30 minutos de duración.
+   */
   private toBooking(data: Record<string, unknown>, id: string): Booking {
+    const legacyTime = data['time'] as string | undefined;
+    const startTime  = (data['startTime'] as string | undefined) ?? legacyTime ?? '';
+    const endTime     = (data['endTime'] as string | undefined)
+      ?? (legacyTime ? BookingService.addMinutes(legacyTime, 30) : '');
+
     return {
-      ...(data as Omit<Booking, 'id' | 'createdAt' | 'updatedAt'>),
+      ...(data as Omit<Booking, 'id' | 'createdAt' | 'updatedAt' | 'startTime' | 'endTime'>),
       id,
+      startTime,
+      endTime,
       createdAt: (data['createdAt'] as Timestamp)?.toDate?.() ?? new Date(),
       updatedAt: (data['updatedAt'] as Timestamp)?.toDate?.() ?? new Date(),
     };
+  }
+
+  /** true si las franjas [aStart,aEnd) y [bStart,bEnd) se solapan. */
+  private static rangesOverlap(aStart: string, aEnd: string, bStart: string, bEnd: string): boolean {
+    return aStart < bEnd && aEnd > bStart;
   }
 
   // ── Creación ──────────────────────────────────────────────────
@@ -45,7 +72,8 @@ export class BookingService {
     resourceCategory: string;
     resourceLocation: string;
     date: string;
-    time: string;
+    startTime: string;
+    endTime: string;
     observations?: string;
   }): Promise<string> {
     const docRef = await addDoc(collection(this.db, this.COL), {
@@ -61,24 +89,38 @@ export class BookingService {
 
   // ── Verificación de conflictos de horario ─────────────────────
   /**
-   * Retorna true si el recurso está libre en la fecha y hora indicadas.
-   * Considera ocupado si existe algún booking con status 'pendiente' o 'aprobada'
-   * para ese recurso en ese slot exacto.
+   * Retorna true si el recurso está libre durante toda la franja
+   * [startTime, endTime) en la fecha indicada. Considera ocupado si
+   * existe algún booking con status 'pendiente' o 'aprobada' para ese
+   * recurso cuya franja se solape (parcial o totalmente) con la solicitada.
    *
-   * NOTA: Requiere índice compuesto en Firestore:
+   * La comparación de solapamiento se hace en el cliente porque Firestore
+   * no permite combinar múltiples condiciones de rango en una sola query;
+   * primero se filtra por igualdad (resourceId + date + status), que sí
+   * es eficiente con un índice compuesto:
    *   Colección: bookings
-   *   Campos: resourceId (ASC), date (ASC), time (ASC), status (ASC)
+   *   Campos: resourceId (ASC), date (ASC), status (ASC)
    */
-  async checkAvailability(resourceId: string, date: string, time: string): Promise<boolean> {
+  async checkAvailability(
+    resourceId: string,
+    date: string,
+    startTime: string,
+    endTime: string,
+  ): Promise<boolean> {
     const q = query(
       collection(this.db, this.COL),
       where('resourceId', '==', resourceId),
       where('date',       '==', date),
-      where('time',       '==', time),
       where('status',     'in', ['pendiente', 'aprobada']),
     );
     const snap = await getDocs(q);
-    return snap.empty; // true = disponible, false = ocupado
+
+    const hasConflict = snap.docs.some(d => {
+      const booking = this.toBooking(d.data() as Record<string, unknown>, d.id);
+      return BookingService.rangesOverlap(startTime, endTime, booking.startTime, booking.endTime);
+    });
+
+    return !hasConflict; // true = disponible, false = ocupado
   }
 
   // ── Lectura en tiempo real ────────────────────────────────────

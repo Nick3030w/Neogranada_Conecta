@@ -106,13 +106,13 @@ export class NotificationService {
   }
 
   async notifyBookingApproved(
-    booking: Pick<Booking, 'id' | 'studentId' | 'resourceName' | 'date' | 'time'>
+    booking: Pick<Booking, 'id' | 'studentId' | 'resourceName' | 'date' | 'startTime' | 'endTime'>
   ): Promise<void> {
     await this.create({
       userId:           booking.studentId,
       type:             'booking_approved',
       title:            '¡Solicitud aprobada!',
-      body:             `Tu solicitud para "${booking.resourceName}" el ${booking.date} a las ${booking.time} fue aprobada.`,
+      body:             `Tu solicitud para "${booking.resourceName}" el ${booking.date} de ${booking.startTime} a ${booking.endTime} fue aprobada.`,
       relatedBookingId: booking.id,
     });
   }

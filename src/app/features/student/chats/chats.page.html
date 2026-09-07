@@ -53,7 +53,7 @@
                 {{ statusLabel(item.booking.status) }}
               </span>
             </div>
-            <span class="chat-date">{{ item.booking.date }} — {{ item.booking.time }}</span>
+            <span class="chat-date">{{ item.booking.date }} — {{ item.booking.startTime }} a {{ item.booking.endTime }}</span>
             <span class="chat-last-msg" *ngIf="item.lastMessage">
               {{ item.lastMessage }}
             </span>

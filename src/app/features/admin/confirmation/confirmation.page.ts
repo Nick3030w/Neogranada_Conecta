@@ -80,7 +80,8 @@ export class AdminConfirmationPage implements OnInit, OnDestroy {
         studentId:    booking.studentId,
         resourceName: booking.resourceName,
         date:         booking.date,
-        time:         booking.time,
+        startTime:    booking.startTime,
+        endTime:      booking.endTime,
       });
 
       // La lista se actualiza sola por el listener en tiempo real

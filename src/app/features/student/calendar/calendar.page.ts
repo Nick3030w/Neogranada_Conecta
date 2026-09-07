@@ -146,11 +146,13 @@ export class StudentCalendarPage implements OnInit, OnDestroy {
     const year  = this.currentDate.getFullYear();
     const month = this.currentDate.getMonth();
 
-    // Filtra los bookings que coincidan con ese día
-    this.selectedDayBookings = this.allActiveBookings.filter(b => {
-      const d = new Date(b.date + 'T00:00:00');
-      return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
-    });
+    // Filtra los bookings que coincidan con ese día y los ordena por hora de inicio
+    this.selectedDayBookings = this.allActiveBookings
+      .filter(b => {
+        const d = new Date(b.date + 'T00:00:00');
+        return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
+      })
+      .sort((a, b) => a.startTime.localeCompare(b.startTime));
   }
 
   prevMonth(): void {

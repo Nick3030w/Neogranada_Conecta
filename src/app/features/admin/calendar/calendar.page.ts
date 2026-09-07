@@ -153,10 +153,12 @@ export class AdminCalendarPage implements OnInit, OnDestroy {
     const year  = this.currentDate.getFullYear();
     const month = this.currentDate.getMonth();
 
-    this.selectedDayBookings = this.allActiveBookings.filter(b => {
-      const d = new Date(b.date + 'T00:00:00');
-      return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
-    });
+    this.selectedDayBookings = this.allActiveBookings
+      .filter(b => {
+        const d = new Date(b.date + 'T00:00:00');
+        return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
+      })
+      .sort((a, b) => a.startTime.localeCompare(b.startTime));
   }
 
   prevMonth(): void {

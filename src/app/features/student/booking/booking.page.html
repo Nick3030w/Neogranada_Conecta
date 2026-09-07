@@ -86,77 +86,112 @@
             </div>
           </div>
 
-          <!-- ── FECHA Y HORA EN FILA ── -->
-          <div class="row-fields">
+          <!-- ── FECHA ── -->
+          <div class="field-block">
+            <label class="field-label">Fecha</label>
+            <div class="field-select-box"
+                 (click)="toggleCalendar()"
+                 [class.has-error]="date.invalid && date.touched">
+              <ion-icon name="calendar-outline" class="field-icon"></ion-icon>
+              <span class="field-value" [class.placeholder]="!date.value">
+                {{ selectedDateLabel }}
+              </span>
+              <ion-icon name="caret-down" class="caret-icon" [class.open]="showCalendar"></ion-icon>
+            </div>
+            <span class="field-error" *ngIf="date.invalid && date.touched">Requerido.</span>
 
-            <!-- FECHA -->
-            <div class="field-block half">
-              <label class="field-label">Fecha</label>
-              <div class="field-select-box"
-                   (click)="toggleCalendar()"
-                   [class.has-error]="date.invalid && date.touched">
-                <ion-icon name="calendar-outline" class="field-icon"></ion-icon>
-                <span class="field-value" [class.placeholder]="!date.value">
-                  {{ selectedDateLabel }}
-                </span>
-                <ion-icon name="caret-down" class="caret-icon" [class.open]="showCalendar"></ion-icon>
+            <!-- Calendario desplegable -->
+            <div class="dropdown-panel cal-dropdown" *ngIf="showCalendar">
+              <div class="cal-nav">
+                <button type="button" class="cal-nav-btn" (click)="calPrevMonth()">
+                  <ion-icon name="chevron-back-outline"></ion-icon>
+                </button>
+                <span class="cal-month-label">{{ calMonthName }} {{ calYear }}</span>
+                <button type="button" class="cal-nav-btn" (click)="calNextMonth()">
+                  <ion-icon name="chevron-forward-outline"></ion-icon>
+                </button>
               </div>
-              <span class="field-error" *ngIf="date.invalid && date.touched">Requerido.</span>
-
-              <!-- Calendario desplegable -->
-              <div class="dropdown-panel cal-dropdown" *ngIf="showCalendar">
-                <div class="cal-nav">
-                  <button type="button" class="cal-nav-btn" (click)="calPrevMonth()">
-                    <ion-icon name="chevron-back-outline"></ion-icon>
-                  </button>
-                  <span class="cal-month-label">{{ calMonthName }} {{ calYear }}</span>
-                  <button type="button" class="cal-nav-btn" (click)="calNextMonth()">
-                    <ion-icon name="chevron-forward-outline"></ion-icon>
-                  </button>
-                </div>
-                <div class="cal-grid">
-                  <div class="cal-head" *ngFor="let d of dayHeaders">{{ d }}</div>
-                  <div *ngFor="let day of calendarDays"
-                       class="cal-cell"
-                       [class.empty]="!day"
-                       [class.today]="isToday(day)"
-                       [class.selected]="isSelected(day)"
-                       [class.past]="isPast(day)"
-                       (click)="selectDate(day)">
-                    <span *ngIf="day">{{ day }}</span>
-                  </div>
+              <div class="cal-grid">
+                <div class="cal-head" *ngFor="let d of dayHeaders">{{ d }}</div>
+                <div *ngFor="let day of calendarDays"
+                     class="cal-cell"
+                     [class.empty]="!day"
+                     [class.today]="isToday(day)"
+                     [class.selected]="isSelected(day)"
+                     [class.past]="isPast(day)"
+                     (click)="selectDate(day)">
+                  <span *ngIf="day">{{ day }}</span>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- HORA -->
+          <!-- ── HORA DE INICIO Y HORA DE FIN EN FILA ── -->
+          <div class="row-fields">
+
+            <!-- HORA DE INICIO -->
             <div class="field-block half">
-              <label class="field-label">Hora</label>
+              <label class="field-label">Hora inicio</label>
               <div class="field-select-box"
-                   (click)="toggleTimePicker()"
-                   [class.has-error]="time.invalid && time.touched">
+                   (click)="toggleStartTimePicker()"
+                   [class.has-error]="startTime.invalid && startTime.touched">
                 <ion-icon name="time-outline" class="field-icon"></ion-icon>
-                <span class="field-value" [class.placeholder]="!time.value">
-                  {{ selectedTimeLabel }}
+                <span class="field-value" [class.placeholder]="!startTime.value">
+                  {{ selectedStartTimeLabel }}
                 </span>
-                <ion-icon name="caret-down" class="caret-icon" [class.open]="showTimePicker"></ion-icon>
+                <ion-icon name="caret-down" class="caret-icon" [class.open]="showStartTimePicker"></ion-icon>
               </div>
-              <span class="field-error" *ngIf="time.invalid && time.touched">Requerido.</span>
+              <span class="field-error" *ngIf="startTime.invalid && startTime.touched">Requerido.</span>
 
-              <!-- Picker de horas -->
-              <div class="dropdown-panel time-dropdown" *ngIf="showTimePicker">
+              <!-- Picker de hora de inicio -->
+              <div class="dropdown-panel time-dropdown" *ngIf="showStartTimePicker">
                 <div class="time-list">
                   <button *ngFor="let slot of timeSlots"
                           type="button"
                           class="time-slot"
-                          [class.selected]="slot === form.get('time')!.value"
-                          (click)="selectTime(slot)">
+                          [class.selected]="slot === startTime.value"
+                          (click)="selectStartTime(slot)">
                     {{ slot }}
                   </button>
                 </div>
               </div>
             </div>
 
+            <!-- HORA DE FIN -->
+            <div class="field-block half">
+              <label class="field-label">Hora fin</label>
+              <div class="field-select-box"
+                   [class.disabled]="!startTime.value"
+                   (click)="toggleEndTimePicker()"
+                   [class.has-error]="endTime.invalid && endTime.touched">
+                <ion-icon name="time-outline" class="field-icon"></ion-icon>
+                <span class="field-value" [class.placeholder]="!endTime.value">
+                  {{ selectedEndTimeLabel }}
+                </span>
+                <ion-icon name="caret-down" class="caret-icon" [class.open]="showEndTimePicker"></ion-icon>
+              </div>
+              <span class="field-error" *ngIf="endTime.invalid && endTime.touched">Requerido.</span>
+
+              <!-- Picker de hora de fin: solo horas posteriores a la de inicio -->
+              <div class="dropdown-panel time-dropdown" *ngIf="showEndTimePicker">
+                <div class="time-list">
+                  <button *ngFor="let slot of endTimeSlots"
+                          type="button"
+                          class="time-slot"
+                          [class.selected]="slot === endTime.value"
+                          (click)="selectEndTime(slot)">
+                    {{ slot }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Resumen de franja seleccionada -->
+          <div class="time-range-summary" *ngIf="startTime.value && endTime.value">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>Reservarás de <strong>{{ selectedStartTimeLabel }}</strong> a <strong>{{ selectedEndTimeLabel }}</strong></span>
           </div>
 
           <!-- ── BOTÓN CONSULTAR DISPONIBILIDAD ── -->
