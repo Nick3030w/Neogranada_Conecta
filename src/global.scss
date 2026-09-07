@@ -474,15 +474,36 @@ body.theme-dark {
 
   // ── Textos ──
   // Títulos claros sobre azul se mantienen claros (ya son #fff)
-  // Texto oscuro sobre paneles claros → ahora claro
+  // Texto sobre paneles oscuros → claro por defecto.
+  // Incluye paneles con clase única (*-panel) y multi-clase (".x-panel y").
+  // NOTA: los recuadros que se mantienen BLANCOS (inputs, campos, menús
+  // desplegables blancos) se exceptúan aquí y fijan su texto oscuro en el
+  // SCSS de cada página; por eso no forzamos color sobre sus contenedores.
+  [class$="-panel"],
+  [class*="-panel "],
   [class$="-panel"] *,
+  [class*="-panel "] *,
   .nc-panel *,
   .nc-card *,
   .booking-detail *,
-  .booking-card *,
+  .booking-card * {
+    color: #eef2f8;
+  }
+
+  // Recuadros blancos dentro de paneles: NO deben heredar texto claro.
+  // (inputs de auth, campos de perfil, dropdown de rol, textarea de notas)
+  .field-input-row, .field-input-row *,
+  .field-row, .field-row *,
+  .field-box, .field-box *,
+  .role-dropdown, .role-dropdown *,
+  .field-textarea-box, .field-textarea-box * {
+    color: inherit;
+  }
+
+  // La biblioteca tiene su propio esquema claro; texto claro sobre su área
   .lib-content-area,
   .lib-content-area * {
-    color: inherit;
+    color: #eef2f8;
   }
 
   // Reglas específicas para textos que usaban azul/negro fijo

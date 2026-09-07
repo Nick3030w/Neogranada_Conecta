@@ -268,24 +268,49 @@ ion-content.login-content {
 // texto que escribe el usuario debe permanecer oscuro para contrastar,
 // sin importar el tema activo.
 :host-context(body.theme-dark) {
-  .field-input-row {
-    background: #ffffff;
 
-    .field-icon { color: #1a1a1a; }
+  // Etiquetas sobre el panel oscuro → claras
+  .field-label { color: #eef2f8; }
+
+  // Caja del selector de rol (celeste): conserva su color e íconos oscuros
+  .role-select-box {
+    background: #b8e4f0;
+    .role-icon,
+    .role-value,
+    .caret-icon { color: #1a2a4a; }
+  }
+
+  // Menú desplegable de rol: recuadro blanco → texto de opciones OSCURO
+  .role-dropdown {
+    background: #ffffff !important;
+    border-color: #1a1a1a !important;
+
+    .role-option {
+      color: #1a2a4a !important;
+      ion-icon { color: #1a2e5a !important; }
+      &:hover { background: #b8e4f0 !important; }
+      &:not(:last-child) { border-bottom-color: #e0e0e0 !important; }
+    }
+  }
+
+  .field-input-row {
+    background: #ffffff !important;
+
+    .field-icon { color: #1a1a1a !important; }
 
     // Input nativo
     input,
     input.field-input {
-      color: #1a2a4a;
-      -webkit-text-fill-color: #1a2a4a; // fuerza en WebKit/autofill
-      &::placeholder { color: #9aa5b4; }
+      color: #1a2a4a !important;
+      -webkit-text-fill-color: #1a2a4a !important; // fuerza en WebKit/autofill
+      &::placeholder { color: #9aa5b4 !important; -webkit-text-fill-color: #9aa5b4 !important; }
     }
 
     // ion-input (usa CSS vars, incluyendo su parte interna)
     ion-input {
-      --color: #1a2a4a;
-      --placeholder-color: #9aa5b4;
-      color: #1a2a4a;
+      --color: #1a2a4a !important;
+      --placeholder-color: #9aa5b4 !important;
+      color: #1a2a4a !important;
     }
   }
 }

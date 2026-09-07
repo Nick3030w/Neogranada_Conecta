@@ -255,32 +255,32 @@ ion-content.register-content {
 // usuario debe permanecer oscuro para contrastar en cualquier tema.
 :host-context(body.theme-dark) {
   .field-row {
-    background: #ffffff;
+    background: #ffffff !important;
 
-    .field-icon { color: #555; }
+    .field-icon { color: #555 !important; }
 
     // Input nativo (correo, código, etc.)
     input,
     input.field-input {
-      color: #1a2a4a;
-      -webkit-text-fill-color: #1a2a4a;
-      &::placeholder { color: #bbb; }
+      color: #1a2a4a !important;
+      -webkit-text-fill-color: #1a2a4a !important;
+      &::placeholder { color: #bbb !important; -webkit-text-fill-color: #bbb !important; }
     }
 
     // ion-input de contraseña
     ion-input,
     .field-ion-input {
-      --color: #1a2a4a;
-      --placeholder-color: #bbb;
-      color: #1a2a4a;
+      --color: #1a2a4a !important;
+      --placeholder-color: #bbb !important;
+      color: #1a2a4a !important;
     }
 
     // Select de programa académico
     ion-select,
     .field-select {
-      --color: #1a2a4a;
-      --placeholder-color: #bbb;
-      color: #1a2a4a;
+      --color: #1a2a4a !important;
+      --placeholder-color: #bbb !important;
+      color: #1a2a4a !important;
     }
   }
 }
