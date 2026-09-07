@@ -78,17 +78,92 @@
   --ion-item-background:           transparent;
 }
 
-// --- Modo oscuro (respeta preferencia del sistema) ---
-@media (prefers-color-scheme: dark) {
-  :root {
-    --nc-white-soft: #1e2d4a;
-    --nc-gray-light: #2a3a5a;
-  }
+// ============================================================
+// TEMAS — Sistema de apariencia
+// ============================================================
+// El tema se activa con la clase `.theme-<id>` en el <body>
+// (gestionada por ThemeService). El tema claro es el diseño
+// institucional original y no requiere overrides.
+//
+// Para agregar un tema nuevo:
+//   1. Añade la clave en AppTheme (theme.service.ts) y THEME_META
+//   2. Crea un bloque `body.theme-<clave> { ... }` aquí
+// ------------------------------------------------------------
+
+// --- Tema CLARO (explícito, coincide con :root) ---
+// Se declara para poder alternar limpiamente desde cualquier otro tema.
+body.theme-light {
+  --nc-white:            #ffffff;
+  --nc-white-soft:       #f8f9fa;
+  --nc-gray-light:       #e8ecf0;
+  --nc-gray-medium:      #9aa5b4;
+  --nc-gray-dark:        #4a5568;
+
+  --nc-surface:          #ffffff;   // paneles/tarjetas
+  --nc-surface-alt:      #f8f9fa;   // superficies secundarias
+  --nc-on-surface:       #1a2a4a;   // texto sobre paneles
+  --nc-on-surface-muted: #4a5568;   // texto secundario sobre paneles
+  --nc-border:           #e8ecf0;
+
+  --ion-background-color: var(--nc-blue-dark);
+  --ion-text-color:       var(--nc-white);
 }
 
-// --- Clase para modo oscuro manual ---
-.dark-theme {
-  --nc-white-soft: #1e2d4a;
-  --nc-gray-light: #2a3a5a;
-  --ion-background-color: #0f1a2e;
+// ============================================================
+// Tema OSCURO — mantiene dorado y azul institucional UMNG
+// ============================================================
+// Estrategia: remapear los tokens que la app usa para paneles y
+// texto (--nc-white, --nc-blue-dark como fondo/superficie) hacia
+// superficies oscuras, de modo que TODO el UI existente responda
+// sin tocar cada componente.
+body.theme-dark {
+  // Azules base más profundos para el chrome
+  --nc-blue-dark:        #0d1626;   // Fondo principal (más oscuro)
+  --nc-blue-medium:      #142338;
+  --nc-blue-light:       #1d3352;
+
+  // El dorado se mantiene como acento institucional (identidad UMNG)
+  --nc-gold:             #f0c040;
+  --nc-gold-dark:        #d4a820;
+  --nc-gold-light:       #f5d060;
+
+  // Superficies: lo que antes era blanco ahora es azul-gris oscuro
+  --nc-white:            #1c2b45;   // paneles/tarjetas/inputs
+  --nc-white-soft:       #223354;   // superficies secundarias
+  --nc-surface:          #1c2b45;
+  --nc-surface-alt:      #223354;
+
+  // Textos: sobre superficies oscuras el texto es claro
+  --nc-on-surface:       #eef2f8;
+  --nc-on-surface-muted: #a9b6cc;
+  --nc-blue-dark-text:   #eef2f8;   // alias legible
+
+  // Bordes y grises adaptados a fondo oscuro
+  --nc-gray-light:       #2c3d5c;   // bordes sobre paneles oscuros
+  --nc-gray-medium:      #8493ad;
+  --nc-gray-dark:        #c3cee0;
+
+  // Sombras más marcadas para separar superficies en fondo oscuro
+  --nc-shadow-sm:    0 2px 8px rgba(0, 0, 0, 0.45);
+  --nc-shadow-md:    0 4px 16px rgba(0, 0, 0, 0.55);
+  --nc-shadow-lg:    0 8px 32px rgba(0, 0, 0, 0.6);
+
+  // Estados semánticos ligeramente más brillantes para contraste
+  --nc-success:          #34d17f;
+  --nc-danger:           #ff5a48;
+  --nc-warning:          #f5a623;
+
+  // Overrides globales de Ionic
+  --ion-background-color:      #0d1626;
+  --ion-text-color:            #eef2f8;
+  --ion-toolbar-background:    #0d1626;
+  --ion-toolbar-color:         #eef2f8;
+  --ion-tab-bar-background:    #0d1626;
+  --ion-item-background:       transparent;
+  --ion-card-background:       var(--nc-surface);
+
+  // El texto por defecto de Ionic sobre fondo oscuro
+  --ion-color-step-50:   #16233a;
+  --ion-color-step-100:  #1c2b45;
+  --ion-color-step-150:  #223354;
 }

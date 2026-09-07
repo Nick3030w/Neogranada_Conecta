@@ -373,3 +373,148 @@ ion-action-sheet {
   padding: 6px;
   border-radius: 50%;
 }
+
+// ============================================================
+// Tema oscuro — ajustes de componentes con color fijo
+// ============================================================
+body.theme-dark {
+  // Action sheet: superficie y texto adaptados a fondo oscuro
+  ion-action-sheet {
+    .action-sheet-wrapper .action-sheet-container,
+    .action-sheet-group {
+      background: #1c2b45 !important;
+    }
+
+    .action-sheet-button {
+      color: #eef2f8 !important;
+      background: #1c2b45 !important;
+
+      &:hover,
+      &:active {
+        background: #223354 !important;
+      }
+
+      .action-sheet-button-inner {
+        color: #eef2f8 !important;
+      }
+    }
+
+    .action-sheet-cancel .action-sheet-button-inner {
+      color: var(--nc-gold) !important;
+    }
+
+    .action-sheet-title {
+      color: #eef2f8 !important;
+      background: #16233a !important;
+    }
+  }
+
+  .select-action-sheet .action-sheet-button {
+    color: #eef2f8 !important;
+  }
+}
+
+// ============================================================
+// TEMA OSCURO — aplicación global a todas las páginas
+// ============================================================
+// Las páginas comparten una convención de nombres por sufijo
+// (*-wrapper, *-header, *-bottom, *-panel) y clases compartidas
+// (.curve-divider, .page-title, .booking-card, etc.) con colores
+// fijos. Aquí los remapeamos una sola vez para que TODA la app
+// responda al modo oscuro sin editar cada archivo. Cualquier
+// página nueva que respete la convención hereda el tema.
+// ------------------------------------------------------------
+body.theme-dark {
+
+  // ── Superficie base de todas las páginas ──
+  ion-content {
+    --background: #0d1626 !important;
+  }
+
+  // Zona azul: wrapper, header y curvas
+  [class$="-wrapper"],
+  [class$="-header"],
+  .curve-divider,
+  .lib-header,
+  .lib-content-area,
+  [class$="-content-area"] {
+    background: #0d1626 !important;
+  }
+
+  // Zona dorada inferior: se atenúa para no deslumbrar
+  [class$="-bottom"] {
+    background: #1a1400 !important;
+  }
+
+  // ── Paneles / tarjetas blancas → superficie oscura ──
+  [class$="-panel"],
+  [class*="-panel "],
+  [class$="-card"],
+  .nc-panel,
+  .nc-card,
+  .escudo-box,
+  .top-pill,
+  .card-description {
+    background: #1c2b45 !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55) !important;
+  }
+
+  // Superficies secundarias claras (rankings, detalles, listas)
+  .ranking-panel,
+  .booking-card,
+  .booking-detail,
+  .horario-item,
+  .db-card,
+  .db-card .card-header,
+  .search-row,
+  .search-input-row {
+    background: #223354 !important;
+    border-color: #2c3d5c !important;
+  }
+
+  // ── Textos ──
+  // Títulos claros sobre azul se mantienen claros (ya son #fff)
+  // Texto oscuro sobre paneles claros → ahora claro
+  [class$="-panel"] *,
+  .nc-panel *,
+  .nc-card *,
+  .booking-detail *,
+  .booking-card *,
+  .lib-content-area,
+  .lib-content-area * {
+    color: inherit;
+  }
+
+  // Reglas específicas para textos que usaban azul/negro fijo
+  .section-title,
+  .content-title,
+  .horario-hora,
+  .search-link,
+  .search-sep,
+  .setting-label,
+  .lib-content-area .section-title,
+  .lib-content-area .content-title {
+    color: #eef2f8 !important;
+  }
+
+  // Íconos que eran azul oscuro sobre superficie clara
+  .tile-icon,
+  .block-icon,
+  .fallback-icon {
+    color: var(--nc-gold) !important;
+  }
+
+  // Curvas SVG: rellenos fijos → tonos del tema oscuro
+  .curve-divider svg rect { fill: #1a1400 !important; }
+  .curve-divider svg path { fill: #0d1626 !important; }
+
+  // Barras/áreas doradas de navegación se conservan (identidad),
+  // pero las que eran claras (búsqueda, escudo) se oscurecen arriba.
+
+  // Inputs de búsqueda: texto legible
+  .search-input,
+  input.search-input {
+    color: #eef2f8 !important;
+    background: transparent !important;
+  }
+}

@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonContent, IonIcon, IonToggle, ViewWillEnter } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { logOutOutline, construct } from 'ionicons/icons';
+import { logOutOutline, construct, moonOutline } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-settings',
@@ -20,16 +21,25 @@ export class SettingsPage implements OnInit, OnDestroy, ViewWillEnter {
   loading = false;
 
   private userSub?: Subscription;
+  private themeSub?: Subscription;
 
-  constructor(private router: Router, private authService: AuthService) {
-    addIcons({ logOutOutline, construct });
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private themeService: ThemeService,
+  ) {
+    addIcons({ logOutOutline, construct, moonOutline });
   }
 
   ngOnInit(): void {
     // Suscripción reactiva para recibir cambios en tiempo real
     this.userSub = this.authService.currentUser$.subscribe(user => {
       this.notificationsMuted = user?.notificationsMuted ?? false;
-      this.darkMode = user?.darkMode ?? false;
+    });
+
+    // El estado del toggle sigue al tema activo (fuente de verdad: ThemeService)
+    this.themeSub = this.themeService.theme$.subscribe(theme => {
+      this.darkMode = theme === 'dark';
     });
   }
 
@@ -37,17 +47,25 @@ export class SettingsPage implements OnInit, OnDestroy, ViewWillEnter {
     // Refresh al volver de caché (ion-router-outlet)
     const user = this.authService.currentUser;
     this.notificationsMuted = user?.notificationsMuted ?? false;
-    this.darkMode = user?.darkMode ?? false;
+    this.darkMode = this.themeService.isDark;
   }
 
   ngOnDestroy(): void {
     this.userSub?.unsubscribe();
+    this.themeSub?.unsubscribe();
   }
 
   async toggleNotifications(event: CustomEvent): Promise<void> {
     this.notificationsMuted = event.detail.checked;
     const user = this.authService.currentUser;
     if (user) await this.authService.updateProfile(user.uid, { notificationsMuted: this.notificationsMuted });
+  }
+
+  /** Alterna entre modo claro y oscuro; aplica en vivo y persiste. */
+  async toggleDarkMode(event: CustomEvent): Promise<void> {
+    const enabled = event.detail.checked;
+    this.darkMode = enabled;
+    await this.themeService.toggleDark(enabled);
   }
 
   goToProfile(): void {

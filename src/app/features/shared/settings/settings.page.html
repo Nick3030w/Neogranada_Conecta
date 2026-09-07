@@ -40,6 +40,19 @@
           </ion-toggle>
         </div>
 
+        <!-- Toggle modo oscuro -->
+        <div class="setting-row">
+          <span class="setting-label">
+            <ion-icon name="moon-outline" class="setting-label-icon"></ion-icon>
+            Modo oscuro
+          </span>
+          <ion-toggle
+            [checked]="darkMode"
+            (ionChange)="toggleDarkMode($event)"
+            color="warning">
+          </ion-toggle>
+        </div>
+
         <!-- Botones de acción -->
         <button class="action-btn" (click)="goToProfile()">
           Ajustes de perfil

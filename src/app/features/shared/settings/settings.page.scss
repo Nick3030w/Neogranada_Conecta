@@ -127,6 +127,14 @@ ion-content.settings-content {
     font-family: 'Lilita One', cursive;
     font-size: 16px;
     font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .setting-label-icon {
+      font-size: 20px;
+      color: #c9a000;
+    }
   }
 
   ion-toggle {
@@ -191,4 +199,51 @@ ion-content.settings-content {
 .btn-confirm {
   background: #c9a000;
   color: #ffffff;
+}
+
+// ============================================================
+// Tema oscuro — página de configuración
+// ============================================================
+:host-context(body.theme-dark) {
+  ion-content.settings-content {
+    --background: #0d1626;
+  }
+
+  .settings-wrapper,
+  .settings-header,
+  .curve-divider {
+    background: #0d1626;
+  }
+
+  // La zona dorada inferior se atenúa para no deslumbrar en oscuro
+  .settings-bottom {
+    background: #1a1400;
+  }
+
+  // Panel: superficie oscura con texto claro
+  .settings-panel {
+    background: #1c2b45;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  }
+
+  .setting-row {
+    border-bottom-color: #2c3d5c;
+
+    .setting-label {
+      color: #eef2f8;
+    }
+  }
+
+  // Botones de acción: superficie oscura, borde dorado
+  .action-btn {
+    background: #223354;
+    color: #eef2f8;
+    border-color: var(--nc-gold);
+    box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+  }
+
+  // La curva SVG usa colores fijos en el HTML; ajustamos vía filtro
+  // para que combine con el fondo oscuro sin editar el markup.
+  .curve-divider svg rect { fill: #1a1400; }
+  .curve-divider svg path { fill: #0d1626; }
 }
