@@ -247,3 +247,40 @@ ion-content.register-content {
     text-decoration: none;
   }
 }
+
+// ============================================================
+// Tema oscuro — inputs legibles
+// ============================================================
+// Los recuadros de los campos se mantienen BLANCOS; el texto del
+// usuario debe permanecer oscuro para contrastar en cualquier tema.
+:host-context(body.theme-dark) {
+  .field-row {
+    background: #ffffff;
+
+    .field-icon { color: #555; }
+
+    // Input nativo (correo, código, etc.)
+    input,
+    input.field-input {
+      color: #1a2a4a;
+      -webkit-text-fill-color: #1a2a4a;
+      &::placeholder { color: #bbb; }
+    }
+
+    // ion-input de contraseña
+    ion-input,
+    .field-ion-input {
+      --color: #1a2a4a;
+      --placeholder-color: #bbb;
+      color: #1a2a4a;
+    }
+
+    // Select de programa académico
+    ion-select,
+    .field-select {
+      --color: #1a2a4a;
+      --placeholder-color: #bbb;
+      color: #1a2a4a;
+    }
+  }
+}

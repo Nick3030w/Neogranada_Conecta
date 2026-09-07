@@ -168,3 +168,23 @@ ion-content.profile-content {
   text-align: center;
   font-family: 'Lilita One', cursive;
 }
+
+// ============================================================
+// Tema oscuro — legibilidad de campos
+// ============================================================
+// Los recuadros de datos permanecen blancos; su texto debe ser
+// oscuro para contrastar en cualquier tema.
+:host-context(body.theme-dark) {
+  .field-box {
+    background: #ffffff !important;
+
+    .field-label { color: #1a2a4a !important; }
+
+    .field-input {
+      color: #1a2a4a !important;
+      -webkit-text-fill-color: #1a2a4a;
+      &::placeholder { color: #9aa5b4 !important; -webkit-text-fill-color: #9aa5b4; }
+      &[readonly]    { color: #4a5568 !important; -webkit-text-fill-color: #4a5568; }
+    }
+  }
+}

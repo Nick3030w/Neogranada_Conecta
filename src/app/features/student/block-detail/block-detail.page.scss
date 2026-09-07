@@ -257,3 +257,20 @@ ion-content.block-content {
     border-color: #999;
   }
 }
+
+// ============================================================
+// Tema oscuro — legibilidad de la tabla de espacios
+// ============================================================
+// Las filas se mantienen claras; el texto debe ser oscuro.
+:host-context(body.theme-dark) {
+  .table-row {
+    background: #ffffff !important;
+    border-top-color: #e0e0e0 !important;
+
+    .space-name { color: #1a2a4a !important; }
+    .space-desc { color: #666 !important; }
+  }
+
+  // Los badges de tipo conservan sus colores propios (buen contraste
+  // sobre fila blanca), no requieren cambios.
+}

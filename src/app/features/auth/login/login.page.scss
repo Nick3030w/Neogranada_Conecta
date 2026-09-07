@@ -260,3 +260,32 @@ ion-content.login-content {
     text-decoration: none;
   }
 }
+
+// ============================================================
+// Tema oscuro — inputs legibles
+// ============================================================
+// Los recuadros de los campos se mantienen BLANCOS, por lo que el
+// texto que escribe el usuario debe permanecer oscuro para contrastar,
+// sin importar el tema activo.
+:host-context(body.theme-dark) {
+  .field-input-row {
+    background: #ffffff;
+
+    .field-icon { color: #1a1a1a; }
+
+    // Input nativo
+    input,
+    input.field-input {
+      color: #1a2a4a;
+      -webkit-text-fill-color: #1a2a4a; // fuerza en WebKit/autofill
+      &::placeholder { color: #9aa5b4; }
+    }
+
+    // ion-input (usa CSS vars, incluyendo su parte interna)
+    ion-input {
+      --color: #1a2a4a;
+      --placeholder-color: #9aa5b4;
+      color: #1a2a4a;
+    }
+  }
+}
