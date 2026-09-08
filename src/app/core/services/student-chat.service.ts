@@ -3,7 +3,6 @@ import {
   Firestore,
   collection,
   doc,
-  getDoc,
   onSnapshot,
   query,
   serverTimestamp,
@@ -70,10 +69,15 @@ export class StudentChatService {
 
     const id = directConversationId(me.uid, peer.uid);
     const ref = doc(this.db, this.COL, id);
-    const snap = await getDoc(ref);
 
-    if (!snap.exists()) {
-      await setDoc(ref, {
+    // No leemos primero para decidir si crear: la regla de lectura exige que
+    // el usuario esté en participantIds, y un documento inexistente no los
+    // tiene, así que el getDoc previo se denegaría. En su lugar hacemos un
+    // setDoc con merge, que crea la conversación si no existe y solo refresca
+    // mi copia si ya existe, en una única operación idempotente.
+    await setDoc(
+      ref,
+      {
         type: 'direct',
         participantIds: [me.uid, peer.uid].sort(),
         participants: {
@@ -81,21 +85,12 @@ export class StudentChatService {
           [peer.uid]: this.contactToParticipant(peer),
         },
         topic: isConversationTopic(topic) ? topic : DEFAULT_CONVERSATION_TOPIC,
-        lastMessage: '',
-        lastMessageAt: null,
-        lastSenderId: '',
-        lastReadAt: {},
+        updatedAt: serverTimestamp(),
+        // createdAt solo se fija la primera vez; con merge no se pisa después
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
-    } else {
-      // Refresca la copia de mis datos: el nombre o el programa pueden
-      // haber cambiado en el perfil desde la última vez.
-      await updateDoc(ref, {
-        [`participants.${me.uid}`]: this.toParticipant(me),
-        updatedAt: serverTimestamp(),
-      });
-    }
+      },
+      { merge: true },
+    );
 
     return id;
   }

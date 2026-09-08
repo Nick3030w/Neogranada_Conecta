@@ -14,6 +14,8 @@ import { StudentContact } from '../interfaces/chat.interface';
 
 /** Cuántos estudiantes se traen al construir el directorio en memoria */
 const DIRECTORY_LIMIT = 500;
+/** Vida útil de la caché del directorio (ms). Pasado esto, se recarga */
+const DIRECTORY_TTL_MS = 60_000;
 /** Máximo de resultados devueltos al buscador */
 const MAX_RESULTS = 30;
 /** Mínimo de caracteres para que la búsqueda se dispare */
@@ -41,6 +43,8 @@ export class UserService {
 
   private directory?: StudentContact[];
   private directoryLoad?: Promise<StudentContact[]>;
+  /** Momento en que se cargó la caché, para caducarla y ver registros nuevos */
+  private directoryLoadedAt = 0;
 
   /**
    * Busca estudiantes por nombre (cualquier parte) o código estudiantil.
@@ -87,13 +91,20 @@ export class UserService {
   invalidateDirectory(): void {
     this.directory = undefined;
     this.directoryLoad = undefined;
+    this.directoryLoadedAt = 0;
   }
 
   // ── Internos ──────────────────────────────────────────────
 
-  /** Trae y memoriza el directorio de estudiantes (una sola vez por sesión). */
+  /**
+   * Trae y memoriza el directorio de estudiantes. La caché caduca a los
+   * DIRECTORY_TTL_MS para que los estudiantes registrados durante la sesión
+   * aparezcan en la búsqueda sin obligar a recargar la app, sin dejar de
+   * evitar una consulta por cada tecla.
+   */
   private loadDirectory(): Promise<StudentContact[]> {
-    if (this.directory) return Promise.resolve(this.directory);
+    const fresh = Date.now() - this.directoryLoadedAt < DIRECTORY_TTL_MS;
+    if (this.directory && fresh) return Promise.resolve(this.directory);
     if (this.directoryLoad) return this.directoryLoad;
 
     // Solo igualdad + limit: no requiere índice compuesto en Firestore
@@ -102,6 +113,7 @@ export class UserService {
     )
       .then((snap) => {
         this.directory = snap.docs.map((d) => this.toContact(d.id, d.data()));
+        this.directoryLoadedAt = Date.now();
         return this.directory;
       })
       .catch((error) => {
