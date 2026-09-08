@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonContent, IonIcon, ViewWillEnter } from '@ionic/angular/standalone';
@@ -26,15 +26,19 @@ export class AdminHomePage implements OnInit, OnDestroy, ViewWillEnter {
   hasUnreadChats = false;
   notificationsMuted = false;
 
-  private subs: Subscription[] = [];
+  // Referencias separadas: reciclar los listeners de mensajes no debe
+  // afectar a las suscripciones de perfil ni de reservas.
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly bookingService = inject(BookingService);
+  private readonly chatService = inject(ChatService);
+  private readonly resourceService = inject(ResourceService);
 
-  constructor(
-    private authService:    AuthService,
-    private router:         Router,
-    private bookingService: BookingService,
-    private chatService:    ChatService,
-    private resourceService: ResourceService,
-  ) {
+  private userSub?: Subscription;
+  private bookingSub?: Subscription;
+  private msgSubs: Subscription[] = [];
+
+  constructor() {
     addIcons({
       notifications, logOutOutline, calendar, construct,
       checkmarkCircle, personCircle, chatbubblesOutline,
@@ -43,11 +47,10 @@ export class AdminHomePage implements OnInit, OnDestroy, ViewWillEnter {
 
   ngOnInit(): void {
     // Suscripción reactiva al perfil del usuario para detectar cambios en tiempo real
-    const userSub = this.authService.currentUser$.subscribe(user => {
+    this.userSub = this.authService.currentUser$.subscribe(user => {
       this.user = user;
       this.notificationsMuted = user?.notificationsMuted ?? false;
     });
-    this.subs.push(userSub);
 
     const adminUid = this.authService.currentUser?.uid;
 
@@ -87,11 +90,11 @@ export class AdminHomePage implements OnInit, OnDestroy, ViewWillEnter {
           },
           error: () => { /* sesión cerrada — ignorar */ },
         });
-        this.subs.push(msgSub);
+        this.msgSubs.push(msgSub);
       });
     });
 
-    this.subs.unshift(bookingSub);
+    this.bookingSub = bookingSub;
   }
 
   ionViewWillEnter(): void {
@@ -102,13 +105,14 @@ export class AdminHomePage implements OnInit, OnDestroy, ViewWillEnter {
   }
 
   ngOnDestroy(): void {
-    this.subs.forEach(s => s.unsubscribe());
-    this.subs = [];
+    this.userSub?.unsubscribe();
+    this.bookingSub?.unsubscribe();
+    this.cancelMsgSubs();
   }
 
   private cancelMsgSubs(): void {
-    this.subs.slice(1).forEach(s => s.unsubscribe());
-    this.subs = this.subs.slice(0, 1);
+    this.msgSubs.forEach(s => s.unsubscribe());
+    this.msgSubs = [];
   }
 
   navigate(route: string): void    { this.router.navigate([route]); }

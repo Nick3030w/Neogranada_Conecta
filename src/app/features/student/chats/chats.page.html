@@ -5,8 +5,8 @@
     <div class="chats-header">
       <div class="header-top-row">
         <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
-        <button class="back-btn" (click)="goBack()">
-          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
+        <button class="back-btn" (click)="goBack()" aria-label="Volver al inicio">
+          <ion-icon name="log-out-outline" class="back-icon" aria-hidden="true"></ion-icon>
         </button>
       </div>
       <h1 class="page-title">MIS CHATS</h1>
@@ -24,50 +24,117 @@
     <div class="chats-bottom">
       <div class="chats-panel">
 
-        <!-- Cargando -->
-        <div *ngIf="loading" class="empty-area">
-          <ion-spinner name="crescent" color="medium"></ion-spinner>
+        <!-- Pestañas: solicitudes vs estudiantes -->
+        <div class="tabs-row" role="tablist">
+          <button class="tab-btn"
+                  role="tab"
+                  [class.active]="tab === 'bookings'"
+                  [attr.aria-selected]="tab === 'bookings'"
+                  (click)="selectTab('bookings')">
+            <ion-icon name="chatbubble-outline" aria-hidden="true"></ion-icon>
+            Solicitudes
+            <span class="tab-dot" *ngIf="bookingUnread > 0">{{ bookingUnread }}</span>
+          </button>
+          <button class="tab-btn"
+                  role="tab"
+                  [class.active]="tab === 'students'"
+                  [attr.aria-selected]="tab === 'students'"
+                  (click)="selectTab('students')">
+            <ion-icon name="people-outline" aria-hidden="true"></ion-icon>
+            Estudiantes
+            <span class="tab-dot" *ngIf="directUnread > 0">{{ directUnread }}</span>
+          </button>
         </div>
 
-        <!-- Sin chats activos -->
-        <div *ngIf="!loading && chatSummaries.length === 0" class="empty-area">
-          <ion-icon name="chatbubbles-outline" class="empty-icon"></ion-icon>
-          <p class="empty-text">No tienes solicitudes activas con chat disponible.</p>
-        </div>
+        <!-- ══════════ Pestaña: chats de solicitudes ══════════ -->
+        <ng-container *ngIf="tab === 'bookings'">
 
-        <!-- Lista de chats -->
-        <div *ngFor="let item of chatSummaries"
-             class="chat-item"
-             (click)="openChat(item.booking.id)">
-
-          <!-- Ícono izquierdo -->
-          <div class="chat-avatar">
-            <ion-icon name="chatbubble-outline" class="avatar-icon"></ion-icon>
+          <div *ngIf="loading" class="empty-area">
+            <ion-spinner name="crescent" color="medium"></ion-spinner>
           </div>
 
-          <!-- Info central -->
-          <div class="chat-info">
-            <div class="chat-top-row">
-              <span class="chat-resource">{{ item.booking.resourceName }}</span>
-              <span class="chat-status" [class]="statusClass(item.booking.status)">
-                {{ statusLabel(item.booking.status) }}
-              </span>
+          <div *ngIf="!loading && chatSummaries.length === 0" class="empty-area">
+            <ion-icon name="chatbubbles-outline" class="empty-icon" aria-hidden="true"></ion-icon>
+            <p class="empty-text">No tienes solicitudes activas con chat disponible.</p>
+          </div>
+
+          <div *ngFor="let item of chatSummaries"
+               class="chat-item"
+               (click)="openChat(item.booking.id)">
+
+            <div class="chat-avatar">
+              <ion-icon name="chatbubble-outline" class="avatar-icon" aria-hidden="true"></ion-icon>
             </div>
-            <span class="chat-date">{{ item.booking.date }} — {{ item.booking.startTime }} a {{ item.booking.endTime }}</span>
-            <span class="chat-last-msg" *ngIf="item.lastMessage">
-              {{ item.lastMessage }}
-            </span>
-            <span class="chat-last-msg no-msg" *ngIf="!item.lastMessage">
-              Sin mensajes aún
-            </span>
+
+            <div class="chat-info">
+              <div class="chat-top-row">
+                <span class="chat-resource">{{ item.booking.resourceName }}</span>
+                <span class="chat-status" [class]="statusClass(item.booking.status)">
+                  {{ statusLabel(item.booking.status) }}
+                </span>
+              </div>
+              <span class="chat-date">{{ item.booking.date }} — {{ item.booking.startTime }} a {{ item.booking.endTime }}</span>
+              <span class="chat-last-msg" *ngIf="item.lastMessage">{{ item.lastMessage }}</span>
+              <span class="chat-last-msg no-msg" *ngIf="!item.lastMessage">Sin mensajes aún</span>
+            </div>
+
+            <div class="unread-badge" *ngIf="item.unreadCount > 0">{{ item.unreadCount }}</div>
+
           </div>
 
-          <!-- Badge de no leídos -->
-          <div class="unread-badge" *ngIf="item.unreadCount > 0">
-            {{ item.unreadCount }}
+        </ng-container>
+
+        <!-- ══════════ Pestaña: chats entre estudiantes ══════════ -->
+        <ng-container *ngIf="tab === 'students'">
+
+          <!-- Acceso al directorio -->
+          <button type="button" class="new-chat-btn" (click)="goToDirectory()">
+            <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+            Buscar estudiantes
+          </button>
+
+          <div *ngIf="loadingConversations" class="empty-area">
+            <ion-spinner name="crescent" color="medium"></ion-spinner>
           </div>
 
-        </div>
+          <div *ngIf="!loadingConversations && conversations.length === 0" class="empty-area">
+            <ion-icon name="people-outline" class="empty-icon" aria-hidden="true"></ion-icon>
+            <p class="empty-text">
+              Aún no tienes chats con otros estudiantes.<br>
+              Búscalos por nombre o código estudiantil para escribirles.
+            </p>
+          </div>
+
+          <div *ngFor="let conv of conversations"
+               class="chat-item"
+               [class.unread]="hasUnread(conv)"
+               (click)="openDirectChat(conv)">
+
+            <div class="chat-avatar chat-avatar--person">
+              <span *ngIf="peerInitials(conv)" class="avatar-initials">{{ peerInitials(conv) }}</span>
+              <ion-icon *ngIf="!peerInitials(conv)" name="person-outline" class="avatar-icon" aria-hidden="true"></ion-icon>
+            </div>
+
+            <div class="chat-info">
+              <div class="chat-top-row">
+                <span class="chat-resource">{{ peerName(conv) }}</span>
+                <span class="topic-chip">
+                  <ion-icon [name]="topicIcon(conv)" aria-hidden="true"></ion-icon>
+                  {{ topicLabel(conv) }}
+                </span>
+              </div>
+              <span class="chat-date" *ngIf="peerOf(conv)?.studentCode">
+                Código {{ peerOf(conv)?.studentCode }}
+              </span>
+              <span class="chat-last-msg" *ngIf="conv.lastMessage">{{ conv.lastMessage }}</span>
+              <span class="chat-last-msg no-msg" *ngIf="!conv.lastMessage">Sin mensajes aún</span>
+            </div>
+
+            <div class="unread-dot" *ngIf="hasUnread(conv)" aria-label="Mensajes sin leer"></div>
+
+          </div>
+
+        </ng-container>
 
       </div>
     </div>

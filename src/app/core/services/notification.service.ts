@@ -62,12 +62,16 @@ export class NotificationService {
     title: string;
     body: string;
     relatedBookingId?: string;
+    relatedConversationId?: string;
+    relatedUserId?: string;
   }): Promise<string> {
     const docRef = await addDoc(collection(this.db, this.COL), {
       ...data,
-      relatedBookingId: data.relatedBookingId ?? '',
-      read:             false,
-      createdAt:        serverTimestamp(),
+      relatedBookingId:      data.relatedBookingId ?? '',
+      relatedConversationId: data.relatedConversationId ?? '',
+      relatedUserId:         data.relatedUserId ?? '',
+      read:                  false,
+      createdAt:             serverTimestamp(),
     });
     return docRef.id;
   }
@@ -142,6 +146,27 @@ export class NotificationService {
       title:            'Nuevo mensaje',
       body:             `${data.senderName} te envió un mensaje sobre tu solicitud de "${data.resourceName}".`,
       relatedBookingId: data.bookingId,
+    });
+  }
+
+  // ── Chat directo entre estudiantes ────────────────────────────
+
+  /** Avisa a un estudiante de que otro le escribió por chat directo. */
+  async notifyDirectMessage(data: {
+    userId: string;
+    conversationId: string;
+    senderId: string;
+    senderName: string;
+    preview: string;
+    topicLabel: string;
+  }): Promise<void> {
+    await this.create({
+      userId:                data.userId,
+      type:                  'direct_message',
+      title:                 `Mensaje de ${data.senderName}`,
+      body:                  `${data.topicLabel}: ${data.preview}`,
+      relatedConversationId: data.conversationId,
+      relatedUserId:         data.senderId,
     });
   }
 

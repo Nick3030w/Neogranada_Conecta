@@ -228,6 +228,36 @@ ion-content.catalog-content {
   display: block;
 }
 
+// ── Categoría favorita (preferencia del perfil) ───────────────
+.catalog-card--favorite {
+  .card-img-box {
+    border-color: #c9a000;
+    box-shadow: 3px 3px 0px rgba(201, 160, 0, 0.55);
+  }
+
+  .card-label { color: #8a6a00; }
+}
+
+.fav-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #c9a000;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+  ion-icon {
+    font-size: 12px;
+    color: #ffffff;
+  }
+}
+
 // Fallback cuando no hay imagen
 .card-img-fallback {
   position: absolute;

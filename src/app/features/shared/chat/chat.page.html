@@ -1,9 +1,29 @@
 <ion-header class="ion-no-border nc-header">
   <ion-toolbar>
     <div class="nc-toolbar">
-      <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="nc-toolbar-logo">
-      <span class="chat-title">Chat — Solicitud #{{ bookingId.slice(0, 8).toUpperCase() }}</span>
-      <button class="nc-icon-btn" (click)="goBack()">
+      <!-- Modo directo: avatar del otro estudiante. Modo solicitud: logo UMNG -->
+      <div class="peer-avatar" *ngIf="isDirect">
+        <img *ngIf="peer?.photoUrl" [src]="peer?.photoUrl" alt="" class="peer-avatar-img">
+        <span *ngIf="!peer?.photoUrl && peerInitials" class="peer-avatar-initials">{{ peerInitials }}</span>
+        <ion-icon *ngIf="!peer?.photoUrl && !peerInitials" name="person-outline"></ion-icon>
+      </div>
+      <img *ngIf="!isDirect"
+           src="assets/images/logo-umng.png"
+           alt="Logo UMNG"
+           class="nc-toolbar-logo">
+
+      <div class="chat-heading">
+        <span class="chat-title">{{ headerTitle }}</span>
+        <span class="chat-subtitle" *ngIf="isDirect">
+          <ion-icon [name]="topicIcon" aria-hidden="true"></ion-icon>
+          {{ topicLabel }}
+        </span>
+        <span class="chat-subtitle" *ngIf="isDirect && peer?.studentCode">
+          Código {{ peer?.studentCode }}
+        </span>
+      </div>
+
+      <button class="nc-icon-btn" (click)="goBack()" aria-label="Salir del chat">
         <ion-icon name="log-out-outline"></ion-icon>
       </button>
     </div>
@@ -13,8 +33,19 @@
 <ion-content>
   <div class="messages-container">
 
-    <div *ngIf="messages.length === 0" class="empty-chat">
-      <p>Inicia la conversación con la dependencia.</p>
+    <!-- Cargando / abriendo la conversación -->
+    <div *ngIf="loading" class="chat-state">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+
+    <!-- Error al resolver la conversación -->
+    <div *ngIf="!loading && errorMessage && messages.length === 0" class="chat-state">
+      <p class="chat-error">{{ errorMessage }}</p>
+    </div>
+
+    <!-- Conversación vacía -->
+    <div *ngIf="!loading && !errorMessage && messages.length === 0" class="empty-chat">
+      <p>{{ emptyStateText }}</p>
     </div>
 
     <div *ngFor="let msg of messages"
@@ -33,16 +64,23 @@
 </ion-content>
 
 <ion-footer class="ion-no-border">
+  <!-- Aviso de fallo de envío, sin tapar la barra de escritura -->
+  <div class="send-error" *ngIf="errorMessage && messages.length > 0" role="alert">
+    {{ errorMessage }}
+  </div>
+
   <div class="chat-input-bar">
     <ion-input
       [(ngModel)]="newMessage"
       placeholder="Escribe un mensaje..."
       class="chat-input"
+      [disabled]="loading || !channelId"
       (keyup.enter)="sendMessage()">
     </ion-input>
     <button class="send-btn"
             (click)="sendMessage()"
-            [disabled]="!newMessage.trim() || sending">
+            aria-label="Enviar mensaje"
+            [disabled]="!newMessage.trim() || sending || loading || !channelId">
       <ion-icon name="send-outline"></ion-icon>
     </button>
   </div>

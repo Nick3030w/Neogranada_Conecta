@@ -36,7 +36,9 @@
                class="notif-row"
                [class.unread]="!notif.read"
                [class.approved]="notif.type === 'booking_approved'"
-               [class.denied]="notif.type === 'booking_denied'">
+               [class.denied]="notif.type === 'booking_denied'"
+               [class.actionable]="isActionable(notif)"
+               (click)="open(notif)">
             <div class="notif-icon-box">
               <ion-icon [name]="getIcon(notif.type)" class="notif-bell"></ion-icon>
             </div>
@@ -45,6 +47,10 @@
               <span class="notif-body">{{ notif.body }}</span>
               <span class="notif-time">{{ notif.createdAt | date:'d MMM, h:mm a' }}</span>
             </div>
+            <ion-icon *ngIf="isActionable(notif)"
+                      name="chevron-forward-outline"
+                      class="notif-chevron"
+                      aria-hidden="true"></ion-icon>
           </div>
 
           <!-- Estado vacío -->

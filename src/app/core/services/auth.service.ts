@@ -18,7 +18,12 @@ import {
   serverTimestamp,
 } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { UserProfile, UserRole } from '../interfaces/user.interface';
+import {
+  DEFAULT_START_PAGE,
+  EditableProfileFields,
+  UserProfile,
+  resolveStartPage,
+} from '../interfaces/user.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -71,8 +76,14 @@ export class AuthService {
       role: 'student', // Siempre student en registro público
       createdAt: new Date(),
       updatedAt: new Date(),
+      // Personalización
+      photoUrl: '',
+      phone: '',
+      // Preferencias por defecto
       notificationsMuted: false,
       darkMode: false,
+      startPage: DEFAULT_START_PAGE['student'],
+      favoriteCategory: '',
     };
 
     await setDoc(doc(this.firestore, 'users', credential.user.uid), {
@@ -100,7 +111,8 @@ export class AuthService {
 
     this.currentUserSubject.next(profile);
 
-    const route = profile.role === 'admin' ? '/admin/home' : '/student/home';
+    // Respeta la pantalla de inicio elegida en el perfil (con lista blanca por rol)
+    const route = resolveStartPage(profile.role, profile.startPage);
     await this.router.navigate([route], { replaceUrl: true });
   }
 
@@ -116,8 +128,8 @@ export class AuthService {
     await sendPasswordResetEmail(this.auth, email);
   }
 
-  /** Actualiza datos editables del perfil */
-  async updateProfile(uid: string, data: Partial<Pick<UserProfile, 'fullName' | 'academicProgram' | 'notificationsMuted' | 'darkMode' | 'fcmToken'>>): Promise<void> {
+  /** Actualiza datos editables del perfil (no permite tocar uid, email, role ni código) */
+  async updateProfile(uid: string, data: Partial<EditableProfileFields>): Promise<void> {
     const ref = doc(this.firestore, 'users', uid);
     await updateDoc(ref, { ...data, updatedAt: serverTimestamp() });
 

@@ -1,0 +1,95 @@
+<ion-content class="students-content">
+  <div class="students-wrapper">
+
+    <!-- ── Zona azul ── -->
+    <div class="students-header">
+      <div class="header-top-row">
+        <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
+        <button class="back-btn" (click)="goBack()" aria-label="Volver a mis chats">
+          <ion-icon name="log-out-outline" class="back-icon" aria-hidden="true"></ion-icon>
+        </button>
+      </div>
+      <h1 class="page-title">BUSCAR<br>ESTUDIANTES</h1>
+    </div>
+
+    <!-- ── Curva SVG ── -->
+    <div class="curve-divider">
+      <svg viewBox="0 0 375 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="375" height="56" fill="#8a6a00"/>
+        <path d="M0,0 L375,0 L375,20 Q187,56 0,20 Z" fill="#1a2e5a"/>
+      </svg>
+    </div>
+
+    <!-- ── Zona dorada ── -->
+    <div class="students-bottom">
+      <div class="students-panel">
+
+        <!-- Buscador -->
+        <div class="search-box">
+          <ion-icon name="search-outline" class="search-icon" aria-hidden="true"></ion-icon>
+          <input class="search-input"
+                 type="search"
+                 inputmode="search"
+                 placeholder="Nombre o código estudiantil"
+                 aria-label="Buscar estudiantes por nombre o código"
+                 [ngModel]="term"
+                 (ngModelChange)="onTermChange($event)">
+          <button type="button"
+                  class="clear-btn"
+                  *ngIf="term"
+                  (click)="clearSearch()"
+                  aria-label="Limpiar búsqueda">
+            <ion-icon name="close-circle" aria-hidden="true"></ion-icon>
+          </button>
+        </div>
+
+        <p class="search-hint">
+          Escribe al menos {{ minLength }} caracteres. Puedes buscar por cualquier parte del nombre.
+        </p>
+
+        <!-- Buscando -->
+        <div *ngIf="searching" class="empty-area">
+          <ion-spinner name="crescent" color="medium"></ion-spinner>
+        </div>
+
+        <!-- Error -->
+        <div *ngIf="!searching && errorMessage" class="empty-area" role="alert">
+          <p class="empty-text error-text">{{ errorMessage }}</p>
+        </div>
+
+        <!-- Sin resultados -->
+        <div *ngIf="!searching && !errorMessage && searched && results.length === 0" class="empty-area">
+          <ion-icon name="people-outline" class="empty-icon" aria-hidden="true"></ion-icon>
+          <p class="empty-text">No encontramos estudiantes con «{{ term }}».</p>
+        </div>
+
+        <!-- Resultados -->
+        <button *ngFor="let student of results"
+                type="button"
+                class="student-item"
+                (click)="startChat(student)">
+
+          <div class="student-avatar">
+            <img *ngIf="student.photoUrl" [src]="student.photoUrl" alt="" class="student-avatar-img">
+            <span *ngIf="!student.photoUrl && initialsOf(student)" class="student-initials">
+              {{ initialsOf(student) }}
+            </span>
+            <ion-icon *ngIf="!student.photoUrl && !initialsOf(student)"
+                      name="person-outline"
+                      aria-hidden="true"></ion-icon>
+          </div>
+
+          <div class="student-info">
+            <span class="student-name">{{ student.fullName }}</span>
+            <span class="student-meta" *ngIf="student.studentCode">Código {{ student.studentCode }}</span>
+            <span class="student-meta" *ngIf="student.academicProgram">{{ student.academicProgram }}</span>
+          </div>
+
+          <ion-icon name="chatbubble-ellipses-outline" class="student-action" aria-hidden="true"></ion-icon>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+</ion-content>

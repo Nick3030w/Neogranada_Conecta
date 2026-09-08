@@ -35,7 +35,7 @@
             </ion-icon>
           </button>
           <div class="ranking-list" [class.ranking-list--open]="rankingOpen">
-            <div *ngFor="let cat of categories; let i = index" class="ranking-item">
+            <div *ngFor="let cat of rankedCategories; let i = index" class="ranking-item">
               <span class="rank-number" [class.rank-gold]="i === 0" [class.rank-silver]="i === 1" [class.rank-bronze]="i === 2">
                 {{ i + 1 }}
               </span>
@@ -47,8 +47,9 @@
 
         <div class="catalog-grid">
 
-          <button *ngFor="let cat of categories; let i = index"
+          <button *ngFor="let cat of categories"
                   class="catalog-card"
+                  [class.catalog-card--favorite]="cat.id === favoriteCategory"
                   (click)="selectCategory(cat.id)">
             <div class="card-img-box">
               <!-- Foto real si existe, fallback con ícono -->
@@ -59,6 +60,12 @@
               <div class="card-img-fallback" [style.display]="cat.showFallback ? 'flex' : 'none'">
                 <ion-icon [name]="cat.icon" class="fallback-icon"></ion-icon>
               </div>
+              <!-- Marca de categoría favorita (preferencia del perfil) -->
+              <span class="fav-badge"
+                    *ngIf="cat.id === favoriteCategory"
+                    title="Tu categoría favorita">
+                <ion-icon name="star" aria-hidden="true"></ion-icon>
+              </span>
             </div>
             <span class="card-label">{{ cat.label }}</span>
           </button>

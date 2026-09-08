@@ -193,3 +193,159 @@ ion-content.chats-content {
   padding: 0 6px;
   flex-shrink: 0;
 }
+
+// ── Pestañas: solicitudes vs estudiantes ──────────────────────
+.tabs-row {
+  display: flex;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+.tab-btn {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 42px;
+  padding: 0 8px;
+  background: #f0f0f0;
+  color: #666;
+  border: 2px solid #1a1a1a;
+  border-radius: 22px;
+  font-family: 'Lilita One', cursive;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  ion-icon { font-size: 16px; flex-shrink: 0; }
+
+  &.active {
+    background: #c9a000;
+    color: #ffffff;
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  &:active { opacity: 0.85; }
+}
+
+// Contador de no leídos sobre la pestaña
+.tab-dot {
+  position: absolute;
+  top: -4px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: #e74c3c;
+  color: #ffffff;
+  border: 1.5px solid #ffffff;
+  border-radius: 9px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ── Botón para abrir el directorio ────────────────────────────
+.new-chat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 46px;
+  background: #1a2e5a;
+  color: #ffffff;
+  border: 2px solid #1a1a1a;
+  border-radius: 24px;
+  font-family: 'Lilita One', cursive;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.25);
+  transition: opacity 0.15s;
+
+  ion-icon { font-size: 18px; color: #f0c040; }
+
+  &:active { opacity: 0.85; }
+}
+
+// ── Ajustes del ítem de chat directo ──────────────────────────
+.chat-item.unread {
+  border-color: #c9a000;
+  background: #fffbf0;
+}
+
+.chat-avatar--person {
+  border-radius: 50%;
+
+  .avatar-initials {
+    font-family: 'Lilita One', cursive;
+    font-size: 16px;
+    color: #f0c040;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Etiqueta del asunto de la conversación
+.topic-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  max-width: 52%;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: #eef1f7;
+  color: #55617a;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  ion-icon { font-size: 11px; flex-shrink: 0; color: #c9a000; }
+}
+
+// Punto de no leídos (los chats directos no cuentan mensajes, solo marcan)
+.unread-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #e74c3c;
+  flex-shrink: 0;
+}
+
+// ============================================================
+// Tema oscuro
+// ============================================================
+:host-context(body.theme-dark) {
+  .tab-btn {
+    background: #223354;
+    color: #a9b6cc;
+    border-color: var(--nc-gold);
+
+    &.active {
+      background: #c9a000;
+      color: #ffffff;
+    }
+  }
+
+  .tab-dot { border-color: #1c2b45; }
+
+  .new-chat-btn {
+    background: #223354;
+    border-color: var(--nc-gold);
+  }
+
+  .chat-item.unread {
+    background: #2a3554 !important;
+    border-color: var(--nc-gold) !important;
+  }
+
+  .topic-chip {
+    background: #16233a;
+    color: #cbd5e6;
+  }
+}

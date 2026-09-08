@@ -177,3 +177,18 @@ ion-content.notif-content {
 
   p { margin: 0; font-size: 14px; }
 }
+
+// ── Notificación que abre una pantalla ────────────────────────
+.notif-row.actionable {
+  cursor: pointer;
+  transition: transform 0.15s;
+
+  &:active { transform: scale(0.98); }
+}
+
+.notif-chevron {
+  font-size: 18px;
+  color: #c9a000;
+  flex-shrink: 0;
+  align-self: center;
+}

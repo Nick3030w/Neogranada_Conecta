@@ -46,22 +46,137 @@ ion-content.profile-content {
   }
 }
 
-// Avatar circular gris claro
+// ── Avatar editable ───────────────────────────────────────────
+.avatar-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
 .avatar-circle {
-  width: 100px;
-  height: 100px;
+  position: relative;
+  width: 108px;
+  height: 108px;
   background: #d0d4db;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+
+  &.has-photo {
+    background: #ffffff;
+    border: 3px solid #f0c040;
+  }
 
   .avatar-icon {
     font-size: 56px;
     color: #4a5568;
   }
+
+  .avatar-initials {
+    font-family: 'Lilita One', cursive;
+    font-size: 40px;
+    line-height: 1;
+    color: #1a2e5a;
+    letter-spacing: 1px;
+  }
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+// Velo mientras se procesa o guarda la foto
+.avatar-loading {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(26, 46, 90, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-spinner {
+    color: #f0c040;
+    width: 34px;
+    height: 34px;
+  }
+}
+
+// Botón cámara sobre el borde inferior derecho del avatar
+.avatar-camera-btn {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #c9a000;
+  border: 2.5px solid #1a2e5a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  transition: opacity 0.15s;
+
+  ion-icon {
+    font-size: 19px;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.avatar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.avatar-link {
+  background: transparent;
+  border: none;
+  padding: 2px 4px;
+  cursor: pointer;
+  font-family: 'Lilita One', cursive;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  color: #f0c040;
+  text-decoration: underline;
+
+  &:active {
+    opacity: 0.75;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--danger {
+    color: #ff8a80;
+  }
+}
+
+.avatar-sep {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
 }
 
 // Saludo "HOLA XXXXXXXX"
@@ -105,12 +220,43 @@ ion-content.profile-content {
   max-width: 400px;
   background: #ffffff;
   border-radius: 24px;
-  padding: 24px 20px 28px;
+  padding: 22px 20px 26px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
   margin-top: -4px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 22px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+// ── Secciones ─────────────────────────────────────────────────
+.section-heading {
+  font-family: 'Lilita One', cursive;
+  font-size: 17px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin: 0;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #f0c040;
+  letter-spacing: 0.3px;
+}
+
+.section-hint {
+  font-size: 12px;
+  color: #666;
+  margin: -8px 0 0;
+  line-height: 1.35;
+}
+
+.prefs-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 // ── Campos ────────────────────────────────────────────────────
@@ -132,7 +278,9 @@ ion-content.profile-content {
 }
 
 .field-label {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   font-family: 'Lilita One', cursive;
   font-size: 12px;
   color: #1a1a1a;
@@ -152,6 +300,115 @@ ion-content.profile-content {
 
   &::placeholder { color: #bbb; }
   &[readonly]     { color: #666; cursor: default; }
+}
+
+// Selects de preferencias dentro del recuadro blanco
+.select-box {
+  padding-bottom: 2px;
+}
+
+.field-select {
+  width: 100%;
+  min-height: 24px;
+  --color: #1a1a1a;
+  --placeholder-color: #bbb;
+  --padding-start: 0;
+  --padding-end: 0;
+  font-size: 14px;
+}
+
+.field-error {
+  display: block;
+  color: #c62828;
+  font-size: 11px;
+  margin-top: 4px;
+  padding-left: 2px;
+}
+
+.field-hint {
+  display: block;
+  color: #666;
+  font-size: 11px;
+  margin-top: 4px;
+  padding-left: 2px;
+}
+
+// ── Filas de preferencias con toggle ──────────────────────────
+.pref-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid #e0e0e0;
+
+  .pref-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Lilita One', cursive;
+    font-size: 15px;
+    color: #1a1a1a;
+  }
+
+  ion-toggle {
+    --handle-background: #fff;
+    --handle-background-checked: #fff;
+    --background: #ccc;
+    --background-checked: #c9a000;
+    padding: 0;
+  }
+}
+
+.pref-icon {
+  font-size: 17px;
+  color: #c9a000;
+  flex-shrink: 0;
+}
+
+// ── Botones GUARDAR / DESCARTAR ───────────────────────────────
+.bottom-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.btn-cancel,
+.btn-confirm {
+  flex: 1;
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Lilita One', cursive;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: #c9a000;
+
+  ion-spinner {
+    width: 20px;
+    height: 20px;
+    color: #ffffff;
+  }
+
+  &:active { opacity: 0.85; }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+.btn-cancel {
+  background: #8a8a8a;
 }
 
 // ── Mensajes ──────────────────────────────────────────────────
@@ -186,5 +443,32 @@ ion-content.profile-content {
       &::placeholder { color: #9aa5b4 !important; -webkit-text-fill-color: #9aa5b4; }
       &[readonly]    { color: #4a5568 !important; -webkit-text-fill-color: #4a5568; }
     }
+
+    // El select vive dentro del recuadro blanco: su texto sigue siendo oscuro
+    .field-select {
+      --color: #1a2a4a !important;
+      --placeholder-color: #9aa5b4 !important;
+    }
+
+    .pref-icon { color: #c9a000 !important; }
   }
+
+  // Encabezados y textos de apoyo sobre el panel oscuro
+  .section-heading { color: #eef2f8 !important; }
+  .section-hint,
+  .field-hint      { color: #a9b6cc !important; }
+  .field-error     { color: #ff8a80 !important; }
+  .success-msg     { color: #34d17f !important; }
+  .error-msg       { color: #ff8a80 !important; }
+
+  .pref-row {
+    border-bottom-color: #2c3d5c;
+
+    .pref-label { color: #eef2f8 !important; }
+  }
+
+  // Avatar sobre el chrome oscuro
+  .avatar-camera-btn { border-color: #0d1626; }
+  .avatar-circle.has-photo { background: #1c2b45; }
+  .avatar-initials { color: #1a2e5a !important; }
 }

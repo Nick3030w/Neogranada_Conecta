@@ -3,6 +3,7 @@ export type NotificationType =
   | 'booking_approved'
   | 'booking_denied'
   | 'chat_message'
+  | 'direct_message'
   | 'general';
 
 export interface AppNotification {
@@ -13,5 +14,9 @@ export interface AppNotification {
   body: string;
   read: boolean;
   relatedBookingId?: string;
+  /** Conversación directa asociada (solo en notificaciones de tipo direct_message) */
+  relatedConversationId?: string;
+  /** Autor del mensaje directo, para abrir la conversación al tocar la notificación */
+  relatedUserId?: string;
   createdAt: Date;
 }

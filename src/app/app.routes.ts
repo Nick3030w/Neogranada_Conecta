@@ -128,6 +128,18 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/student/chats/chats.page').then((m) => m.StudentChatsPage),
       },
+      // Directorio para buscar compañeros por nombre o código
+      {
+        path: 'students',
+        loadComponent: () =>
+          import('./features/student/students/students.page').then((m) => m.StudentDirectoryPage),
+      },
+      // Chat directo con otro estudiante (la conversación se resuelve por su uid)
+      {
+        path: 'dm/:peerId',
+        loadComponent: () =>
+          import('./features/shared/chat/chat.page').then((m) => m.ChatPage),
+      },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },

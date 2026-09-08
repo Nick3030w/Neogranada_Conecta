@@ -1,21 +1,58 @@
 <ion-content class="profile-content">
   <div class="profile-wrapper">
 
-    <!-- ── Zona azul: logo + botón salir + avatar + saludo ── -->
+    <!-- ── Zona azul: logo + botón salir + avatar editable + saludo ── -->
     <div class="profile-header">
       <div class="header-top-row">
         <img src="assets/images/logo-umng.png" alt="Logo UMNG" class="logo-img">
-        <button class="back-btn" (click)="goBack()">
-          <ion-icon name="log-out-outline" class="back-icon"></ion-icon>
+        <button class="back-btn" (click)="goBack()" aria-label="Volver al inicio">
+          <ion-icon name="log-out-outline" class="back-icon" aria-hidden="true"></ion-icon>
         </button>
       </div>
 
-      <!-- Avatar circular gris -->
-      <div class="avatar-circle">
-        <ion-icon name="person-outline" class="avatar-icon"></ion-icon>
+      <!-- Avatar: foto, iniciales o ícono según lo que haya -->
+      <div class="avatar-block">
+        <div class="avatar-circle" [class.has-photo]="!!photoUrl">
+          <img *ngIf="photoUrl" [src]="photoUrl" alt="Foto de perfil" class="avatar-img">
+          <span *ngIf="!photoUrl && initials" class="avatar-initials" aria-hidden="true">{{ initials }}</span>
+          <ion-icon *ngIf="!photoUrl && !initials" name="person-outline" class="avatar-icon" aria-hidden="true"></ion-icon>
+
+          <div class="avatar-loading" *ngIf="photoLoading">
+            <ion-spinner name="crescent"></ion-spinner>
+          </div>
+
+          <button type="button"
+                  class="avatar-camera-btn"
+                  (click)="openPhotoPicker()"
+                  [disabled]="photoLoading"
+                  [attr.aria-label]="photoUrl ? 'Cambiar foto de perfil' : 'Agregar foto de perfil'">
+            <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
+          </button>
+        </div>
+
+        <div class="avatar-actions">
+          <button type="button" class="avatar-link" (click)="openPhotoPicker()" [disabled]="photoLoading">
+            {{ photoUrl ? 'Cambiar foto' : 'Agregar foto' }}
+          </button>
+          <span class="avatar-sep" *ngIf="photoUrl" aria-hidden="true">·</span>
+          <button type="button"
+                  class="avatar-link avatar-link--danger"
+                  *ngIf="photoUrl"
+                  (click)="removePhoto()"
+                  [disabled]="photoLoading">
+            Quitar
+          </button>
+        </div>
+
+        <!-- Selector oculto: en Android ofrece cámara o galería -->
+        <input #photoInput
+               type="file"
+               accept="image/*"
+               class="photo-input"
+               (change)="onPhotoSelected($event)"
+               hidden>
       </div>
 
-      <!-- Saludo -->
       <h1 class="profile-greeting">HOLA {{ user?.fullName?.toUpperCase() ?? 'USUARIO' }}</h1>
     </div>
 
@@ -31,17 +68,24 @@
     <div class="profile-bottom">
       <div class="profile-panel">
 
-        <form [formGroup]="form" (ngSubmit)="onSave()">
+        <!-- ══ Datos personales ══════════════════════════════ -->
+        <form [formGroup]="form" (ngSubmit)="onSave()" novalidate>
+
+          <h2 class="section-heading">Datos personales</h2>
 
           <!-- Nombre -->
           <div class="field-block">
-            <div class="field-box" [class.has-error]="form.get('fullName')!.invalid && form.get('fullName')!.touched">
+            <div class="field-box" [class.has-error]="fullNameCtrl.invalid && fullNameCtrl.touched">
               <span class="field-label">Nombre:</span>
               <input class="field-input"
                      formControlName="fullName"
                      type="text"
-                     [placeholder]="user?.fullName ?? 'Tu nombre completo'">
+                     autocomplete="name"
+                     placeholder="Tu nombre completo">
             </div>
+            <span class="field-error" *ngIf="fullNameCtrl.invalid && fullNameCtrl.touched">
+              Ingresa tu nombre completo (mínimo 3 caracteres).
+            </span>
           </div>
 
           <!-- Correo (solo lectura) -->
@@ -68,20 +112,130 @@
 
           <!-- Cargo / Programa (según rol) -->
           <div class="field-block">
-            <div class="field-box" [class.has-error]="form.get('academicProgram')!.invalid && form.get('academicProgram')!.touched">
+            <div class="field-box" [class.has-error]="academicProgramCtrl.invalid && academicProgramCtrl.touched">
               <span class="field-label">{{ isAdmin ? 'Cargo:' : 'Programa:' }}</span>
               <input class="field-input"
                      formControlName="academicProgram"
                      type="text"
                      [placeholder]="isAdmin ? 'Tu cargo' : 'Tu programa académico'">
             </div>
+            <span class="field-error" *ngIf="academicProgramCtrl.invalid && academicProgramCtrl.touched">
+              {{ isAdmin ? 'Ingresa tu cargo.' : 'Ingresa tu programa académico.' }}
+            </span>
           </div>
 
-          <!-- Mensajes -->
-          <div class="success-msg" *ngIf="successMessage">{{ successMessage }}</div>
-          <div class="error-msg"   *ngIf="errorMessage">{{ errorMessage }}</div>
+          <!-- Teléfono de contacto (opcional) -->
+          <div class="field-block">
+            <div class="field-box" [class.has-error]="phoneCtrl.invalid && phoneCtrl.touched">
+              <span class="field-label">Teléfono (opcional):</span>
+              <input class="field-input"
+                     formControlName="phone"
+                     type="tel"
+                     inputmode="tel"
+                     autocomplete="tel"
+                     placeholder="Ej: 300 123 4567">
+            </div>
+            <span class="field-error" *ngIf="phoneCtrl.invalid && phoneCtrl.touched">
+              Ingresa un teléfono válido: 7 a 20 caracteres, solo números y los signos + ( ) -
+            </span>
+          </div>
+
+          <!-- Guardar / descartar datos personales -->
+          <div class="bottom-actions">
+            <button type="button"
+                    class="btn-cancel"
+                    (click)="onDiscard()"
+                    [disabled]="loading || !form.dirty">
+              DESCARTAR
+            </button>
+            <button type="submit"
+                    class="btn-confirm"
+                    [disabled]="loading || !form.dirty">
+              <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+              <span *ngIf="!loading">GUARDAR</span>
+            </button>
+          </div>
 
         </form>
+
+        <!-- ══ Preferencias de la cuenta ══════════════════════ -->
+        <div class="prefs-block">
+          <h2 class="section-heading">Preferencias de la cuenta</h2>
+          <p class="section-hint">Estos ajustes se aplican y se guardan al instante.</p>
+
+          <!-- Modo oscuro -->
+          <div class="pref-row">
+            <span class="pref-label">
+              <ion-icon name="moon-outline" class="pref-icon" aria-hidden="true"></ion-icon>
+              Modo oscuro
+            </span>
+            <ion-toggle [checked]="darkMode"
+                        (ionChange)="toggleDarkMode($event)"
+                        aria-label="Modo oscuro"
+                        color="warning">
+            </ion-toggle>
+          </div>
+
+          <!-- Silenciar notificaciones -->
+          <div class="pref-row">
+            <span class="pref-label">
+              <ion-icon name="notifications-off-outline" class="pref-icon" aria-hidden="true"></ion-icon>
+              Silenciar notificaciones
+            </span>
+            <ion-toggle [checked]="notificationsMuted"
+                        (ionChange)="toggleNotifications($event)"
+                        aria-label="Silenciar notificaciones"
+                        color="warning">
+            </ion-toggle>
+          </div>
+
+          <!-- Pantalla de inicio -->
+          <div class="field-block">
+            <div class="field-box select-box">
+              <span class="field-label">
+                <ion-icon name="home-outline" class="pref-icon" aria-hidden="true"></ion-icon>
+                Pantalla de inicio:
+              </span>
+              <ion-select [value]="startPage"
+                          (ionChange)="onStartPageChange($event)"
+                          interface="action-sheet"
+                          cancelText="Cancelar"
+                          aria-label="Pantalla de inicio"
+                          class="field-select">
+                <ion-select-option *ngFor="let opt of startPageOptions" [value]="opt.value">
+                  {{ opt.label }}
+                </ion-select-option>
+              </ion-select>
+            </div>
+            <span class="field-hint">Es la pantalla que verás al iniciar sesión.</span>
+          </div>
+
+          <!-- Categoría favorita (solo estudiantes) -->
+          <div class="field-block" *ngIf="!isAdmin">
+            <div class="field-box select-box">
+              <span class="field-label">
+                <ion-icon name="star-outline" class="pref-icon" aria-hidden="true"></ion-icon>
+                Categoría favorita:
+              </span>
+              <ion-select [value]="favoriteCategory"
+                          (ionChange)="onFavoriteCategoryChange($event)"
+                          interface="action-sheet"
+                          cancelText="Cancelar"
+                          aria-label="Categoría favorita"
+                          class="field-select">
+                <ion-select-option *ngFor="let opt of categoryOptions" [value]="opt.value">
+                  {{ opt.label }}
+                </ion-select-option>
+              </ion-select>
+            </div>
+            <span class="field-hint">Aparecerá primera y destacada en el catálogo.</span>
+          </div>
+
+        </div>
+
+        <!-- ══ Mensajes ══════════════════════════════════════ -->
+        <div class="success-msg" *ngIf="successMessage" role="status">{{ successMessage }}</div>
+        <div class="error-msg" *ngIf="errorMessage" role="alert">{{ errorMessage }}</div>
 
       </div>
     </div>
