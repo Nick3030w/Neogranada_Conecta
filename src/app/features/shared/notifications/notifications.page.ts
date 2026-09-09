@@ -6,7 +6,7 @@ import { addIcons } from 'ionicons';
 import {
   logOutOutline, notifications, notificationsOffOutline,
   checkmarkDoneOutline, closeOutline, timeOutline, chatbubbleOutline,
-  chatbubbleEllipsesOutline, chevronForwardOutline,
+  chatbubbleEllipsesOutline, chevronForwardOutline, alarmOutline,
 } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
@@ -34,7 +34,7 @@ export class NotificationsPage implements OnInit, OnDestroy {
     addIcons({
       logOutOutline, notifications, notificationsOffOutline, checkmarkDoneOutline,
       closeOutline, timeOutline, chatbubbleOutline, chatbubbleEllipsesOutline,
-      chevronForwardOutline,
+      chevronForwardOutline, alarmOutline,
     });
   }
 
@@ -59,25 +59,49 @@ export class NotificationsPage implements OnInit, OnDestroy {
   /** Icono según el tipo de notificación */
   getIcon(type: AppNotification['type']): string {
     const map: Record<AppNotification['type'], string> = {
-      booking_approved: 'checkmark-done-outline',
-      booking_denied:   'close-outline',
-      booking_pending:  'time-outline',
-      chat_message:     'chatbubble-outline',
-      direct_message:   'chatbubble-ellipses-outline',
-      general:          'notifications',
+      booking_approved:       'checkmark-done-outline',
+      booking_denied:         'close-outline',
+      booking_pending:        'time-outline',
+      booking_reminder_start: 'alarm-outline',
+      booking_reminder_end:   'alarm-outline',
+      chat_message:           'chatbubble-outline',
+      direct_message:         'chatbubble-ellipses-outline',
+      general:                'notifications',
     };
     return map[type] ?? 'notifications';
   }
 
-  /** Solo los mensajes directos llevan a una pantalla concreta por ahora */
+  /** Tipos de notificación que llevan a una pantalla concreta al tocarlas */
   isActionable(notif: AppNotification): boolean {
-    return notif.type === 'direct_message' && !!notif.relatedUserId;
+    if (notif.type === 'direct_message') return !!notif.relatedUserId;
+    if (
+      notif.type === 'booking_reminder_start' ||
+      notif.type === 'booking_reminder_end' ||
+      notif.type === 'booking_approved' ||
+      notif.type === 'booking_pending' ||
+      notif.type === 'booking_denied'
+    ) {
+      return !!notif.relatedBookingId;
+    }
+    return false;
   }
 
-  /** Abre la conversación asociada a la notificación. */
+  /** Abre la conversación o la reserva asociada a la notificación. */
   open(notif: AppNotification): void {
     if (!this.isActionable(notif)) return;
-    this.router.navigate(['/student/dm', notif.relatedUserId]);
+
+    if (notif.type === 'direct_message') {
+      this.router.navigate(['/student/dm', notif.relatedUserId]);
+      return;
+    }
+
+    // El admin solo tiene un listado de pendientes (sin ruta por id)
+    const role = this.authService.currentUser?.role;
+    if (role === 'admin') {
+      this.router.navigate(['/admin/confirmation']);
+      return;
+    }
+    this.router.navigate(['/student/confirmation', notif.relatedBookingId]);
   }
 
   goBack(): void {

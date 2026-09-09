@@ -2,6 +2,8 @@ export type NotificationType =
   | 'booking_pending'
   | 'booking_approved'
   | 'booking_denied'
+  | 'booking_reminder_start'
+  | 'booking_reminder_end'
   | 'chat_message'
   | 'direct_message'
   | 'general';

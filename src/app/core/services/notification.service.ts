@@ -134,6 +134,34 @@ export class NotificationService {
     });
   }
 
+  // ── Recordatorios de booking ──────────────────────────────────
+
+  /** Avisa que se acerca la hora en que el estudiante debe usar el recurso */
+  async notifyReminderStart(
+    booking: Pick<Booking, 'id' | 'studentId' | 'resourceName' | 'startTime'>
+  ): Promise<void> {
+    await this.create({
+      userId:           booking.studentId,
+      type:             'booking_reminder_start',
+      title:            'Tu reserva está por comenzar',
+      body:             `Tu turno para usar "${booking.resourceName}" empieza a las ${booking.startTime}.`,
+      relatedBookingId: booking.id,
+    });
+  }
+
+  /** Avisa que se acerca la hora en que el estudiante debe devolver el recurso */
+  async notifyReminderEnd(
+    booking: Pick<Booking, 'id' | 'studentId' | 'resourceName' | 'endTime'>
+  ): Promise<void> {
+    await this.create({
+      userId:           booking.studentId,
+      type:             'booking_reminder_end',
+      title:            'Debes devolver el recurso pronto',
+      body:             `Recuerda devolver "${booking.resourceName}" antes de las ${booking.endTime}.`,
+      relatedBookingId: booking.id,
+    });
+  }
+
   async notifyChatMessage(data: {
     userId: string;
     bookingId: string;
