@@ -8,12 +8,14 @@ import { RouterLink } from '@angular/router';
 import {
   IonContent, IonButton, IonInput, IonSpinner,
   IonIcon, IonSelect, IonSelectOption, IonInputPasswordToggle,
+  IonCheckbox,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   personOutline, mailOutline, cardOutline,
   schoolOutline, lockClosedOutline, arrowBackOutline, alertCircleOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
+import { CredentialsService } from '../../../core/services/credentials.service';
 
 /** Validador personalizado: contraseña segura */
 function strongPasswordValidator(control: AbstractControl): ValidationErrors | null {
@@ -49,6 +51,7 @@ function passwordMatchValidator(group: AbstractControl): ValidationErrors | null
     RouterLink,
     IonContent, IonButton, IonInput, IonSpinner,
     IonIcon, IonSelect, IonSelectOption, IonInputPasswordToggle,
+    IonCheckbox,
   ],
 })
 export class RegisterPage implements OnInit {
@@ -63,7 +66,8 @@ export class RegisterPage implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private credentialsService: CredentialsService
   ) {
     addIcons({arrowBackOutline,personOutline,mailOutline,cardOutline,schoolOutline,lockClosedOutline,alertCircleOutline,});
   }
@@ -77,17 +81,19 @@ export class RegisterPage implements OnInit {
         academicProgram: ['', Validators.required],
         password:        ['', [Validators.required, strongPasswordValidator]],
         confirmPassword: ['', Validators.required],
+        rememberPassword: [false],
       },
       { validators: passwordMatchValidator }
     );
   }
 
-  get fullName()        { return this.form.get('fullName')!; }
-  get email()           { return this.form.get('email')!; }
-  get studentCode()     { return this.form.get('studentCode')!; }
-  get academicProgram() { return this.form.get('academicProgram')!; }
-  get password()        { return this.form.get('password')!; }
-  get confirmPassword() { return this.form.get('confirmPassword')!; }
+  get fullName()         { return this.form.get('fullName')!; }
+  get email()            { return this.form.get('email')!; }
+  get studentCode()      { return this.form.get('studentCode')!; }
+  get academicProgram()  { return this.form.get('academicProgram')!; }
+  get password()         { return this.form.get('password')!; }
+  get confirmPassword()  { return this.form.get('confirmPassword')!; }
+  get rememberPassword() { return this.form.get('rememberPassword')!; }
 
   async onRegister(): Promise<void> {
     if (this.form.invalid) {
@@ -98,14 +104,22 @@ export class RegisterPage implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
+    const email = this.email.value.trim();
+    const password = this.password.value;
+
     try {
       await this.authService.register({
         fullName:        this.fullName.value.trim(),
-        email:           this.email.value.trim(),
+        email,
         studentCode:     this.studentCode.value.trim(),
         academicProgram: this.academicProgram.value,
-        password:        this.password.value,
+        password,
       });
+
+      // Guarda las credenciales de forma cifrada solo si el usuario lo pidió
+      if (this.rememberPassword.value) {
+        await this.credentialsService.save(email, password);
+      }
     } catch (error) {
       this.errorMessage = AuthService.getErrorMessage(error);
     } finally {

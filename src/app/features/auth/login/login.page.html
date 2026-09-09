@@ -79,6 +79,16 @@
             </span>
           </div>
 
+          <!-- Recordar mis datos -->
+          <div class="remember-row">
+            <ion-checkbox
+              formControlName="rememberMe"
+              labelPlacement="end"
+              justify="start">
+              Recordar mis datos
+            </ion-checkbox>
+          </div>
+
           <!-- Error general -->
           <div class="error-box" *ngIf="errorMessage">
             <ion-icon name="alert-circle-outline"></ion-icon>

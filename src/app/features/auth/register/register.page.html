@@ -132,6 +132,16 @@
             </span>
           </div>
 
+          <!-- Guardar contraseña -->
+          <div class="remember-row">
+            <ion-checkbox
+              formControlName="rememberPassword"
+              labelPlacement="end"
+              justify="start">
+              ¿Guardar contraseña para próximos inicios de sesión?
+            </ion-checkbox>
+          </div>
+
           <!-- Error general -->
           <div class="error-box" *ngIf="errorMessage">
             <ion-icon name="alert-circle-outline"></ion-icon>

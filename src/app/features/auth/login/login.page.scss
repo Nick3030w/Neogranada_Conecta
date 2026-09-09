@@ -191,6 +191,20 @@ ion-content.login-content {
   }
 }
 
+// ── Recordar mis datos ────────────────────────────────────────
+.remember-row {
+  margin-bottom: 14px;
+
+  ion-checkbox {
+    --size: 20px;
+    --checkbox-background-checked: #c9a000;
+    --border-color-checked: #c9a000;
+    font-size: 14px;
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+}
+
 // ── Errores ───────────────────────────────────────────────────
 .field-error {
   display: block;
@@ -291,6 +305,11 @@ ion-content.login-content {
       &:hover { background: #b8e4f0 !important; }
       &:not(:last-child) { border-bottom-color: #e0e0e0 !important; }
     }
+  }
+
+  // Texto del checkbox "Recordar mis datos" sobre panel blanco
+  .remember-row ion-checkbox {
+    color: #1a1a1a !important;
   }
 
   .field-input-row {

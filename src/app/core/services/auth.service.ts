@@ -59,7 +59,8 @@ export class AuthService {
     academicProgram: string;
     password: string;
   }): Promise<void> {
-    // Sin restricción de dominio: se acepta cualquier correo válido
+    // Solo se permiten correos institucionales
+    this.validateInstitutionalEmail(data.email);
 
     const credential = await createUserWithEmailAndPassword(
       this.auth,
