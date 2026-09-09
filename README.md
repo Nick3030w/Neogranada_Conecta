@@ -19,7 +19,7 @@
 
 ---
 
-## � Tabla de Contenidos
+## Tabla de Contenidos
 
 - [Descripción](#-descripción)
 - [Características](#-características)
@@ -34,7 +34,7 @@
 
 ---
 
-## 🎯 Descripción
+## Descripción
 
 **Neogranada Conecta** es una aplicación móvil híbrida que digitaliza y centraliza el proceso de préstamo y reserva de recursos universitarios en la Universidad Militar Nueva Granada.
 
@@ -42,42 +42,40 @@ La plataforma elimina los procesos manuales y presenciales, ofreciendo a estudia
 
 | Recurso | Descripción |
 |---------|-------------|
-| 🏫 Aulas | Reserva de salones para actividades académicas |
-| 🔬 Laboratorios | Solicitud de espacios de práctica e investigación |
-| 🏀 Elementos deportivos | Préstamo de material para actividades físicas |
-| 🎵 Instrumentos musicales | Gestión de equipos musicales disponibles |
-| 🎲 Material lúdico | Préstamo de recursos recreativos y didácticos |
-| 📚 Biblioteca | Consulta de información y recursos bibliográficos |
-| 💾 Bases de datos | Acceso a recursos digitales académicos |
-| 🩺 Botiquín | Información sobre recursos de primeros auxilios |
+| Aulas | Reserva de salones para actividades académicas |
+| Laboratorios | Solicitud de espacios de práctica e investigación |
+| Elementos deportivos | Préstamo de material para actividades físicas |
+| Instrumentos musicales | Gestión de equipos musicales disponibles |
+| Material lúdico | Préstamo de recursos recreativos y didácticos |
+| Biblioteca | Consulta de información y recursos bibliográficos |
+| Bases de datos | Acceso a recursos digitales académicos |
+| Botiquín | Información sobre recursos de primeros auxilios |
 
 ---
 
-## ✨ Características
+## Características
 
-### 👨‍🎓 Portal Estudiante
+### Portal Estudiante
 
 - **Catálogo de recursos** — Exploración completa de recursos disponibles con filtros por categoría
 - **Disponibilidad en tiempo real** — Consulta de horarios libres antes de reservar
 - **Reserva inteligente** — Agendamiento con validación de conflictos de horario
 - **Calendario personal** — Visualización de todas las reservas activas y pasadas
 - **Chat en tiempo real** — Comunicación directa con administradores por cada solicitud
-- **Chat entre estudiantes** — Búsqueda de compañeros por nombre o código estudiantil y conversación uno a uno, sin solicitud de amistad, con un asunto universitario que da contexto (reserva de un recurso, trabajo en grupo, actividad deportiva…)
 - **Mapa interactivo** — Ubicación de bloques y recursos dentro del campus
 - **Notificaciones** — Alertas sobre estado de solicitudes y novedades
 - **Tutorial de bienvenida** — Guía interactiva para nuevos usuarios
-- **Perfil personalizable** — Foto de perfil (cámara o galería), datos de contacto y preferencias de cuenta: tema, notificaciones, pantalla de inicio y categoría favorita del catálogo
+- **Perfil personalizable** — Configuración de datos y preferencias
 
-### 👨‍💼 Portal Administrador
+### Portal Administrador
 
 - **Panel de gestión** — Vista centralizada de todas las solicitudes entrantes
 - **Aprobación/Rechazo** — Flujo ágil con motivos de denegación personalizados
 - **Calendario administrativo** — Panorama completo de reservas aprobadas
 - **Chat con estudiantes** — Comunicación contextual por cada reserva
 - **Notificaciones inteligentes** — Control de alertas con opción de silencio
-- **Perfil personalizable** — Misma pantalla de configuración de perfil que el estudiante: foto, cargo, contacto y preferencias de cuenta
 
-### 🔐 Seguridad y Acceso
+### Seguridad y Acceso
 
 - Autenticación segura con Firebase Auth
 - Control de acceso basado en roles (`student` | `admin`)
@@ -86,7 +84,7 @@ La plataforma elimina los procesos manuales y presenciales, ofreciendo a estudia
 
 ---
 
-## 🛠 Stack Tecnológico
+## Stack Tecnológico
 
 ### ¿Por qué estas tecnologías?
 
@@ -129,7 +127,7 @@ La plataforma elimina los procesos manuales y presenciales, ofreciendo a estudia
 
 ---
 
-## 🏗 Arquitectura
+## Arquitectura
 
 La aplicación sigue una **arquitectura modular basada en features** con separación clara de responsabilidades:
 
@@ -151,13 +149,9 @@ src/app/
 │   └── services/               # Lógica de negocio
 │       ├── auth.service.ts
 │       ├── booking.service.ts
-│       ├── chat.service.ts          # Mensajería por canal (solicitud o conversación)
-│       ├── student-chat.service.ts  # Conversaciones directas entre estudiantes
-│       ├── user.service.ts          # Directorio y búsqueda de estudiantes
-│       ├── image.service.ts         # Recorte/compresión de la foto de perfil
+│       ├── chat.service.ts
 │       ├── notification.service.ts
-│       ├── resource.service.ts
-│       └── theme.service.ts
+│       └── resource.service.ts
 │
 ├── 📁 features/                # Módulos por dominio
 │   ├── auth/                   # Autenticación
@@ -176,7 +170,6 @@ src/app/
 │   │   ├── map/
 │   │   ├── block-detail/
 │   │   ├── chats/
-│   │   ├── students/           # Directorio para buscar compañeros
 │   │   └── tutorial/
 │   ├── admin/                  # Área administrativa
 │   │   ├── home/
@@ -201,26 +194,9 @@ src/app/
 - **Guard-based routing** — Seguridad declarativa a nivel de ruta
 - **Feature-first organization** — Código organizado por funcionalidad, no por tipo de archivo
 
-### Colecciones en Firestore
-
-| Colección | Contenido |
-|-----------|-----------|
-| `users/{uid}` | Perfil, foto (data URL) y preferencias de cuenta |
-| `resources/{id}` | Catálogo de recursos |
-| `bookings/{id}` | Solicitudes de reserva |
-| `notifications/{id}` | Avisos por usuario |
-| `conversations/{id}` | Conversaciones directas entre estudiantes |
-| `chats/{channelId}/messages/{id}` | Mensajes de cualquier chat |
-
-**Un solo canal de mensajes.** Tanto el chat de una solicitud como el chat entre estudiantes guardan sus mensajes en `chats/{channelId}/messages`. El `channelId` es el `bookingId` en el primer caso y el `conversationId` en el segundo, así que la pantalla de chat se reutiliza sin duplicar lógica.
-
-**Conversaciones sin duplicados.** El id de una conversación directa se deriva de los dos `uid` ordenados (`uidA__uidB`), de modo que dos estudiantes siempre caen en el mismo hilo y no hace falta solicitud de amistad: basta con abrirlo. El documento guarda `participantIds` (para consultar con `array-contains`), una copia mínima de cada participante (nombre, código y programa, sin la foto para no inflar el documento), el asunto y `lastReadAt` por usuario para saber qué está sin leer.
-
-> **Reglas de seguridad:** las reglas de Firestore se administran en la consola de Firebase y no viven en este repositorio. La colección `conversations` debe permitir lectura y escritura solo a los `uid` incluidos en `participantIds`, y el directorio de estudiantes requiere que un estudiante autenticado pueda leer los perfiles de otros estudiantes para poder buscarlos.
-
 ---
 
-## 🚀 Instalación
+## Instalación
 
 ### Prerrequisitos
 
@@ -291,7 +267,7 @@ npx cap open android
 
 ---
 
-## 🎨 Diseño y UX
+## Diseño y UX
 
 La interfaz sigue la identidad visual institucional de la Universidad Militar Nueva Granada:
 
@@ -316,7 +292,7 @@ La interfaz sigue la identidad visual institucional de la Universidad Militar Nu
 
 ## 📄 Licencia
 
-Este proyecto es de uso **académico y educativo**, desarrollado como parte del programa académico de la Universidad Militar Nueva Granada.
+Este proyecto es de uso **académico y educativo**, desarrollado por Nick303w
 
 ---
 
