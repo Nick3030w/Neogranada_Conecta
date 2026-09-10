@@ -17,7 +17,7 @@ import { buildSystemPrompt } from './knowledge-base';
 const GEMINI_API_KEY = defineSecret('GEMINI_API_KEY');
 
 /** Modelo pequeño y económico, ideal para Q&A de FAQ. */
-const MODEL = 'gemini-2.5-flash';
+const MODEL = 'gemini-flash-latest';
 
 /** Un turno de la conversación tal como llega desde la app. */
 interface ClientTurn {

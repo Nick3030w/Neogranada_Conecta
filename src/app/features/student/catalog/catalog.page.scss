@@ -180,10 +180,10 @@ ion-content.catalog-content {
   justify-content: center;
   flex-shrink: 0;
   background: #b0bec5;
-  color: #ffffff;
+  color: #1a2a4a;
 
   &.rank-gold   { background: #f0c040; color: #1a1a1a; }
-  &.rank-silver { background: #9e9e9e; color: #ffffff; }
+  &.rank-silver { background: #9e9e9e; color: #1a2a4a; }
   &.rank-bronze { background: #a0522d; color: #ffffff; }
 }
 
@@ -254,7 +254,7 @@ ion-content.catalog-content {
 
   ion-icon {
     font-size: 12px;
-    color: #ffffff;
+    color: #1a1a1a;
   }
 }
 
@@ -282,4 +282,30 @@ ion-content.catalog-content {
   text-align: center;
   text-transform: capitalize;
   line-height: 1.2;
+}
+
+// ============================================================
+// Tema oscuro — legibilidad sobre paneles oscurecidos
+// ============================================================
+// .catalog-panel y .ranking-panel pasan a fondo oscuro por la regla
+// global de sufijo `-panel`, pero sus textos internos (con selectores
+// propios y mayor especificidad por el scoping de Angular) seguían
+// fijos en tonos oscuros. Los aclaramos aquí para que sigan siendo
+// legibles sobre el nuevo fondo oscuro.
+:host-context(body.theme-dark) {
+  .ranking-header {
+    .ranking-icon,
+    .ranking-title,
+    .ranking-chevron {
+      color: #eef2f8;
+    }
+  }
+
+  .card-label {
+    color: #eef2f8;
+  }
+
+  .catalog-card--favorite .card-label {
+    color: var(--nc-gold);
+  }
 }

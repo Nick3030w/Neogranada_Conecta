@@ -206,7 +206,7 @@ ion-content.booking-content { --background: #1a2e5a; }
   width: 100%;
   height: 48px;
   background: #c9a000;
-  color: #ffffff;
+  color: #1a2e5a;
   border: none;
   border-radius: 12px;
   font-family: 'Lilita One', cursive;
@@ -276,7 +276,7 @@ ion-content.booking-content { --background: #1a2e5a; }
   .optional {
     font-family: inherit;
     font-size: 12px;
-    color: #888;
+    color: var(--nc-gray-dark);
     font-weight: 400;
   }
 }
@@ -313,7 +313,7 @@ ion-content.booking-content { --background: #1a2e5a; }
     overflow: hidden;
     text-overflow: ellipsis;
 
-    &.placeholder { color: #888; font-weight: 400; }
+    &.placeholder { color: #4a5568; font-weight: 400; }
   }
   .caret-icon { font-size: 14px; color: #1a1a1a; flex-shrink: 0; transition: transform 0.2s; &.open { transform: rotate(180deg); } }
 }
@@ -331,7 +331,7 @@ ion-content.booking-content { --background: #1a2e5a; }
   font-size: 13px;
   color: #1a2e5a;
 
-  ion-icon { font-size: 16px; color: #c9a000; flex-shrink: 0; }
+  ion-icon { font-size: 16px; color: #8a6a00; flex-shrink: 0; }
   strong { font-weight: 700; }
 }
 
@@ -401,7 +401,7 @@ ion-content.booking-content { --background: #1a2e5a; }
     font-size: 12px;
     color: #666;
 
-    ion-icon { font-size: 12px; color: #c9a000; }
+    ion-icon { font-size: 12px; color: #8a6a00; }
   }
 
   .resource-check {
@@ -567,7 +567,7 @@ ion-content.booking-content { --background: #1a2e5a; }
   width: 100%; border: none; background: transparent;
   font-size: 14px; color: #1a1a1a; outline: none;
   resize: none; font-family: inherit; line-height: 1.5;
-  &::placeholder { color: #888; }
+  &::placeholder { color: #4a5568; }
 }
 
 // ── Errores ───────────────────────────────────────────────────
@@ -585,7 +585,7 @@ ion-content.booking-content { --background: #1a2e5a; }
 // ── Botón CONFIRMAR RESERVA ───────────────────────────────────
 .btn-continuar {
   width: 100%; height: 52px;
-  background: #c9a000; color: #ffffff;
+  background: #c9a000; color: #1a2e5a;
   border: none; border-radius: 12px;
   font-family: 'Lilita One', cursive;
   font-size: 18px; font-weight: 400; letter-spacing: 1px;
@@ -596,7 +596,7 @@ ion-content.booking-content { --background: #1a2e5a; }
 
   &:disabled { opacity: 0.4; cursor: not-allowed; }
   &:not(:disabled):active { opacity: 0.85; }
-  ion-spinner { width: 20px; height: 20px; color: #ffffff; }
+  ion-spinner { width: 20px; height: 20px; color: #1a2e5a; }
 }
 
 // ============================================================
@@ -653,6 +653,7 @@ ion-content.booking-content { --background: #1a2e5a; }
     border-color: var(--nc-gold) !important;
     color: #eef2f8 !important;
 
+    ion-icon { color: var(--nc-gold) !important; }
     strong { color: var(--nc-gold) !important; }
   }
 

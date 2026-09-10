@@ -98,7 +98,7 @@ ion-content.block-content {
   font-size: 14px;
   width: fit-content;
 
-  ion-icon { font-size: 18px; color: #c9a000; }
+  ion-icon { font-size: 18px; color: #8a6a00; }
   &:active { opacity: 0.7; }
 }
 
@@ -106,11 +106,11 @@ ion-content.block-content {
 .empty-state {
   text-align: center;
   padding: 32px 16px;
-  color: #888;
+  color: #666;
 
   .empty-icon {
     font-size: 48px;
-    color: #c9a000;
+    color: #8a6a00;
     display: block;
     margin-bottom: 10px;
   }
@@ -267,10 +267,25 @@ ion-content.block-content {
     background: #ffffff !important;
     border-top-color: #e0e0e0 !important;
 
+    &.row-odd { background: #f7f7f7 !important; }
+
     .space-name { color: #1a2a4a !important; }
     .space-desc { color: #666 !important; }
   }
 
   // Los badges de tipo conservan sus colores propios (buen contraste
   // sobre fila blanca), no requieren cambios.
+
+  // Botón "Volver al mapa" y estado vacío: sobre el panel oscurecido
+  // (regla global) necesitan reafirmar su contraste porque tienen
+  // color propio con la misma especificidad que `[class$="-panel"] *`.
+  .btn-back {
+    color: #eef2f8 !important;
+    ion-icon { color: var(--nc-gold) !important; }
+  }
+
+  .empty-state {
+    color: #a9b6cc !important;
+    .empty-icon { color: var(--nc-gold) !important; }
+  }
 }

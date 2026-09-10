@@ -112,7 +112,7 @@ ion-content.map-content {
   color: #1a1a1a;
   outline: none;
 
-  &::placeholder { color: #888; }
+  &::placeholder { color: #6b6b6b; }
 }
 
 .search-icon {
@@ -129,11 +129,14 @@ ion-content.map-content {
 }
 
 // Fila de cada bloque
+// (fondo azul oscuro fijo + texto/ícono dorado: mismo patrón de alto
+// contraste usado en btn-check/cal-nav-btn. El gris-azulado anterior
+// #7a8faa daba solo ~1.3:1 de contraste contra el dorado.)
 .block-row {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: #7a8faa;
+  background: #1a2e5a;
   border-radius: 16px;
   padding: 12px 14px;
   border: none;
@@ -169,7 +172,7 @@ ion-content.map-content {
   flex: 1;
   font-family: 'Lilita One', cursive;
   font-size: 18px;
-  color: #c9a000;
+  color: #f0c040;
   text-align: left;
   letter-spacing: 0.5px;
 }
@@ -184,7 +187,7 @@ ion-content.map-content {
 
   .arrow-icon {
     font-size: 34px;
-    color: #c9a000;
+    color: #f0c040;
   }
 }
 
@@ -192,6 +195,41 @@ ion-content.map-content {
 .empty-state {
   text-align: center;
   padding: 24px;
-  color: #888;
+  color: #666;
   font-size: 14px;
+}
+
+// ============================================================
+// Tema oscuro — la página no tenía overrides propios.
+// ============================================================
+// `.map-panel` pasa a superficie oscura por la regla global (sufijo
+// `-panel`), la cual también aclara el texto de TODOS sus descendientes
+// (`[class$="-panel"] *`). Como `.search-box` es un recuadro que se
+// mantiene BLANCO (para que el texto tecleado sea legible) y no está
+// en la lista de excepciones de global.scss, sin este bloque su texto
+// quedaría claro sobre fondo claro. `.block-row`/`.block-icon-circle`
+// usan colores fijos propios que igualan en especificidad a la regla
+// global y necesitan reafirmarse explícitamente.
+:host-context(body.theme-dark) {
+  // Buscador: recuadro blanco fijo → texto e ícono oscuros
+  .search-box {
+    background: #e8e8e8;
+  }
+
+  .search-input {
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a;
+    &::placeholder { color: #6b6b6b !important; }
+  }
+
+  .search-icon { color: #555 !important; }
+
+  // Fila de bloque: ya es azul oscuro fijo con texto dorado, se reafirma
+  // para que no lo sobreescriba el texto claro genérico de `.map-panel *`
+  .block-name { color: #f0c040 !important; }
+  .block-arrow-circle .arrow-icon { color: #f0c040 !important; }
+  .block-icon-circle .block-icon { color: #1a2e5a !important; }
+
+  // Estado vacío legible sobre el panel oscuro
+  .empty-state { color: #a9b6cc !important; }
 }

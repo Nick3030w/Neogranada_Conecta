@@ -247,7 +247,7 @@ ion-content.avail-content {
   width: 100%;
   height: 52px;
   background: #c9a000;
-  color: #ffffff;
+  color: #1a2e5a;
   border: none;
   border-radius: 12px;
   font-family: 'Lilita One', cursive;
@@ -259,4 +259,26 @@ ion-content.avail-content {
   transition: opacity 0.15s;
 
   &:active { opacity: 0.85; }
+}
+
+// ============================================================
+// Tema oscuro — la página no tenía overrides propios.
+// ============================================================
+// Los recuadros con fondo propio (pill, imagen, badges, info-box)
+// conservan su color y no se ven afectados por el oscurecimiento
+// de `.avail-panel`. Pero `.avail-count` y `.load-text` estaban
+// pensados para verse sobre el panel BLANCO original; al oscurecerse
+// el panel (regla global de sufijo `-panel`) su contraste cae.
+:host-context(body.theme-dark) {
+  .avail-count {
+    color: #34d17f;
+  }
+
+  .load-text {
+    color: #a9b6cc;
+  }
+
+  .load-spinner {
+    color: var(--nc-gold);
+  }
 }

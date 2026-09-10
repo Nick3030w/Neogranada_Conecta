@@ -1,6 +1,12 @@
 :host {
   --nc-blue: #1a2e5a;
-  --nc-gold: #8a6a00;
+  // Dorado oscuro: solo para FONDOS donde va encima un ícono/texto blanco
+  // (el avatar del bot). No se usa para texto/bordes porque sobre el fondo
+  // navy de la página tiene muy poco contraste.
+  --chat-gold-bg: #8a6a00;
+  // Dorado institucional brillante: para texto/íconos/bordes que van
+  // directamente sobre el fondo navy de la página (buen contraste).
+  --chat-gold-accent: var(--nc-gold, #f0c040);
 }
 
 /* ── Cabecera ───────────────────────────────────────────── */
@@ -30,7 +36,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--nc-gold);
+  background: var(--chat-gold-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -78,11 +84,12 @@
   margin: 0 auto 12px;
   border-radius: 50%;
   background: var(--nc-blue);
-  color: var(--nc-gold);
+  color: var(--chat-gold-accent);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 34px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .welcome h2 {
@@ -106,19 +113,23 @@
 }
 
 .faq-chip {
-  border: 1px solid var(--nc-blue);
-  background: transparent;
-  color: var(--nc-blue);
+  // El fondo de la página (ion-content) es siempre azul institucional en
+  // ambos temas, así que el chip necesita texto/borde CLARO para
+  // contrastar (antes usaba var(--nc-blue), azul sobre azul = invisible).
+  border: 1.5px solid var(--chat-gold-accent);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
   border-radius: 18px;
   padding: 8px 14px;
   font-size: 13px;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .faq-chip:active {
-  background: var(--nc-blue);
-  color: #fff;
+  background: var(--chat-gold-accent);
+  border-color: var(--chat-gold-accent);
+  color: var(--nc-blue);
 }
 
 /* ── Burbujas ───────────────────────────────────────────── */
@@ -151,6 +162,9 @@
   background: var(--nc-blue);
   color: #fff;
   border-bottom-right-radius: 4px;
+  // Sombra sutil para separar la burbuja del fondo navy de la página
+  // (que usa un tono muy parecido) y darle definición.
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
 }
 
 .message-bubble.other .bubble-content {

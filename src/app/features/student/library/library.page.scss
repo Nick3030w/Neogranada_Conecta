@@ -52,7 +52,7 @@ ion-content.library-content {
   span {
     font-family: 'Lilita One', cursive;
     font-size: 18px;
-    color: #ffffff;
+    color: #1a2e5a;
     letter-spacing: 1px;
   }
 }
@@ -189,7 +189,7 @@ ion-content.library-content {
   background: transparent;
   box-sizing: border-box;
 
-  &::placeholder { color: #aaa; }
+  &::placeholder { color: #767676; }
 }
 
 // Botón buscar — azul oscuro con lupa
@@ -250,7 +250,7 @@ ion-content.library-content {
 // Breadcrumb
 .breadcrumb {
   font-size: 13px;
-  color: #888;
+  color: #666;
   margin: 0 0 12px;
 }
 
@@ -342,12 +342,54 @@ ion-content.library-content {
   }
 }
 
+// ============================================================
+// Tema oscuro — ajustes de legibilidad específicos de biblioteca
+// ============================================================
+// global.scss ya oscurece `.lib-content-area` y aclara sus textos
+// por defecto, y ya fuerza `.search-link`/`.search-sep` a color claro
+// (pensado para textos sobre fondos oscuros). En esta página esas
+// clases viven sobre superficies que NO cambian con el tema
+// (`.search-section` sigue dorada, `.frase-title`/`.info-title` tienen
+// color propio con más especificidad que la regla global de texto
+// claro). Los corregimos aquí para que sigan contrastando bien.
+:host-context(body.theme-dark) {
+  // Título y textos sobre el fondo dorado del buscador: mantienen
+  // azul oscuro (la regla global los pondría casi blancos sobre dorado).
+  .search-link,
+  .search-sep {
+    color: #1a2e5a !important;
+  }
+
+  // Títulos con color de marca fijo sobre el área de contenido,
+  // que ahora es oscura: se aclaran para mantener contraste.
+  .frase-title,
+  .info-title {
+    color: #eef2f8;
+  }
+
+  // Textos con gris/oscuro fijo sobre `.lib-content-area`: la regla
+  // global que aclara el texto del área pierde por especificidad ante
+  // estos selectores propios (más específicos por el scoping del
+  // componente), así que se corrigen aquí explícitamente.
+  .breadcrumb {
+    color: #a9b6cc;
+  }
+
+  .frase-text {
+    color: #c3cee0;
+  }
+
+  .horario-dia {
+    color: #eef2f8;
+  }
+}
+
 // Botón volver
 .btn-volver {
   width: 100%;
   height: 48px;
   background: #c9a000;
-  color: #ffffff;
+  color: #1a2e5a;
   border: none;
   border-radius: 12px;
   font-family: 'Lilita One', cursive;

@@ -172,7 +172,7 @@ ion-content.cal-content {
 
   &.empty { visibility: hidden; }
 
-  &.other-month { color: #bbb; }
+  &.other-month { color: #4a2e28; }
 
   &.today {
     background: #1a2e5a;
@@ -330,7 +330,7 @@ ion-content.cal-content {
   .cal-day {
     color: #1a1a1a !important;
 
-    &.other-month { color: #7a5a54 !important; }
+    &.other-month { color: #4a2e28 !important; }
     &.today       { background: #1a2e5a !important; color: #ffffff !important; }
     &.has-booking { background: #ffffff !important; color: #1a1a1a !important; }
     &.selected    { background: #f0c040 !important; color: #1a1a1a !important; }

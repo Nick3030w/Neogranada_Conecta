@@ -119,9 +119,12 @@ ion-content.db-content {
   height: 100%;
 
   .fallback-icon {
+    // Opacidad reducida a la mitad diluía el contraste por debajo de 3:1
+    // contra el fondo gris claro del área del logo; se sube a 0.7 para
+    // mantener el aspecto "atenuado" sin perder legibilidad.
     font-size: 36px;
     color: #1a2e5a;
-    opacity: 0.5;
+    opacity: 0.7;
   }
 }
 
@@ -159,8 +162,10 @@ ion-content.db-content {
   transition: transform 0.2s;
 
   ion-icon {
+    // Blanco sobre dorado #c9a000 daba ~2.5:1 (por debajo de 3:1 para
+    // gráficos/iconos). Azul oscuro institucional contrasta mucho mejor.
     font-size: 14px;
-    color: #ffffff;
+    color: #1a2e5a;
     transition: transform 0.2s;
   }
 
@@ -188,7 +193,7 @@ ion-content.db-content {
   width: 100%;
   height: 48px;
   background: #c9a000;
-  color: #ffffff;
+  color: #1a2e5a;
   border: none;
   border-radius: 12px;
   font-family: 'Lilita One', cursive;
@@ -200,4 +205,19 @@ ion-content.db-content {
   transition: opacity 0.15s;
 
   &:active { opacity: 0.85; }
+}
+
+// ============================================================
+// Tema oscuro — la página no tenía overrides propios.
+// ============================================================
+// `.card-description` está en la lista global de superficies que
+// pasan a fondo oscuro (#1c2b45), pero su párrafo interno mantiene
+// el color oscuro fijo `#333`, quedando texto oscuro sobre fondo
+// oscuro. `.card-footer`/`.card-logo-area` no siguen la convención
+// de sufijos y mantienen su fondo claro fijo en ambos temas, por lo
+// que su texto oscuro (`.card-name`) sigue siendo legible sin cambios.
+:host-context(body.theme-dark) {
+  .card-description p {
+    color: #c3cee0;
+  }
 }
