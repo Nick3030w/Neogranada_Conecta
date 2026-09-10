@@ -6,6 +6,7 @@ import { addIcons } from 'ionicons';
 import {
   newspaper, film, calendar, construct,
   map, personCircle, notifications, logOutOutline, chatbubblesOutline,
+  sparkles,
 } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
@@ -48,6 +49,7 @@ export class StudentHomePage implements OnInit, OnDestroy {
     addIcons({
       newspaper, film, calendar, construct,
       map, personCircle, notifications, logOutOutline, chatbubblesOutline,
+      sparkles,
     });
   }
 

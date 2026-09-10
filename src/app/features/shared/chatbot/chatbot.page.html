@@ -1,0 +1,82 @@
+<ion-header class="ion-no-border nc-header">
+  <ion-toolbar>
+    <div class="nc-toolbar">
+      <button class="nc-icon-btn" (click)="goBack()" aria-label="Volver">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </button>
+
+      <div class="bot-avatar">
+        <ion-icon name="sparkles-outline"></ion-icon>
+      </div>
+
+      <div class="chat-heading">
+        <span class="chat-title">NeoBot</span>
+        <span class="chat-subtitle">Asistente de NeoConecta</span>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="messages-container">
+
+    <!-- Bienvenida + FAQ integradas (solo antes del primer mensaje) -->
+    <div *ngIf="showWelcome" class="welcome">
+      <div class="welcome-icon">
+        <ion-icon name="sparkles-outline"></ion-icon>
+      </div>
+      <h2>¡Hola! Soy NeoBot 👋</h2>
+      <p>Resuelvo tus dudas sobre cómo usar NeoConecta. Toca una pregunta frecuente o escríbeme.</p>
+
+      <div class="faq-chips">
+        <button
+          *ngFor="let q of faqSuggestions"
+          class="faq-chip"
+          type="button"
+          (click)="askSuggestion(q)">
+          {{ q }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Conversación -->
+    <div *ngFor="let msg of messages"
+         class="message-bubble"
+         [class.own]="msg.role === 'user'"
+         [class.other]="msg.role === 'model'">
+
+      <!-- Placeholder mientras responde el bot -->
+      <div *ngIf="msg.pending" class="bubble-content typing">
+        <ion-spinner name="dots"></ion-spinner>
+      </div>
+
+      <div *ngIf="!msg.pending" class="bubble-content">{{ msg.text }}</div>
+    </div>
+
+    <!-- Ancla para auto-scroll al último mensaje -->
+    <div #scrollAnchor></div>
+
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <div class="send-error" *ngIf="errorMessage" role="alert">
+    {{ errorMessage }}
+  </div>
+
+  <div class="chat-input-bar">
+    <ion-input
+      [(ngModel)]="newMessage"
+      placeholder="Escribe tu pregunta..."
+      class="chat-input"
+      [disabled]="sending"
+      (keyup.enter)="send()">
+    </ion-input>
+    <button class="send-btn"
+            (click)="send()"
+            aria-label="Enviar pregunta"
+            [disabled]="!newMessage.trim() || sending">
+      <ion-icon name="send-outline"></ion-icon>
+    </button>
+  </div>
+</ion-footer>

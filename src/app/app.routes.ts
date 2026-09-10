@@ -128,6 +128,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/student/chats/chats.page').then((m) => m.StudentChatsPage),
       },
+      // Asistente virtual (NeoBot) con FAQ integradas
+      {
+        path: 'chatbot',
+        loadComponent: () =>
+          import('./features/shared/chatbot/chatbot.page').then((m) => m.ChatbotPage),
+      },
       // Directorio para buscar compañeros por nombre o código
       {
         path: 'students',
