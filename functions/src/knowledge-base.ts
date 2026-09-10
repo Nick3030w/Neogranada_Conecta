@@ -1,7 +1,7 @@
 /**
  * Base de conocimiento del chatbot de NeoConecta.
  *
- * Esto NO es "entrenamiento" (fine-tuning). Es "grounding por contexto":
+ * Es "grounding por contexto":
  * todo este texto se le inyecta al modelo como instrucción de sistema y se
  * le ordena responder ÚNICAMENTE con esta información. Así el chatbot solo
  * resuelve dudas de la aplicación y nada más.
