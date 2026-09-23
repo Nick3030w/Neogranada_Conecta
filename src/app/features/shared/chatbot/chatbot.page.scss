@@ -32,6 +32,11 @@
   padding: 4px;
 }
 
+/* Empuja el botón de historial al extremo derecho del toolbar. */
+.history-btn {
+  margin-left: auto;
+}
+
 .bot-avatar {
   width: 40px;
   height: 40px;

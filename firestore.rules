@@ -1,0 +1,81 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function myRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    // ── users ──────────────────────────────────────────────
+    // Cualquier autenticado puede leer perfiles (buscador de estudiantes,
+    // nombres en chats y notificaciones). Solo el dueño edita el suyo.
+    match /users/{uid} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == uid;
+      allow update: if isSignedIn() && request.auth.uid == uid;
+      allow delete: if false;
+    }
+
+    // ── conversations (chat directo entre estudiantes) ─────
+    match /conversations/{conversationId} {
+      allow read: if isSignedIn()
+                  && request.auth.uid in resource.data.participantIds;
+      allow create: if isSignedIn()
+                    && request.auth.uid in request.resource.data.participantIds;
+      allow update: if isSignedIn()
+                    && request.auth.uid in resource.data.participantIds;
+      allow delete: if false;
+    }
+
+    // ── chats: mensajes de solicitudes y de chats directos ─
+    match /chats/{channelId}/messages/{messageId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+                    && request.resource.data.senderId == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // ── chatbotConversations (historial con NeoBot) ────────
+    // Cada conversación pertenece a un estudiante (ownerId). Solo su dueño
+    // puede leerla, crearla, actualizarla o eliminarla.
+    match /chatbotConversations/{conversationId} {
+      allow read: if isSignedIn()
+                  && resource.data.ownerId == request.auth.uid;
+      allow create: if isSignedIn()
+                    && request.resource.data.ownerId == request.auth.uid;
+      allow update: if isSignedIn()
+                    && resource.data.ownerId == request.auth.uid
+                    && request.resource.data.ownerId == request.auth.uid;
+      allow delete: if isSignedIn()
+                    && resource.data.ownerId == request.auth.uid;
+    }
+
+    // ── notifications ──────────────────────────────────────
+    match /notifications/{notifId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if false;
+    }
+
+    // ── resources ──────────────────────────────────────────
+    match /resources/{resourceId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && myRole() == 'admin';
+    }
+
+    // ── bookings ───────────────────────────────────────────
+    match /bookings/{bookingId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+                    && request.resource.data.studentId == request.auth.uid;
+      allow update: if isSignedIn()
+                    && (resource.data.studentId == request.auth.uid || myRole() == 'admin');
+      allow delete: if false;
+    }
+  }
+}

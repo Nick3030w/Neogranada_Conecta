@@ -134,6 +134,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/shared/chatbot/chatbot.page').then((m) => m.ChatbotPage),
       },
+      // Historial de conversaciones guardadas con NeoBot
+      {
+        path: 'chatbot-history',
+        loadComponent: () =>
+          import('./features/shared/chatbot/chatbot-history.page').then(
+            (m) => m.ChatbotHistoryPage
+          ),
+      },
       // Directorio para buscar compañeros por nombre o código
       {
         path: 'students',

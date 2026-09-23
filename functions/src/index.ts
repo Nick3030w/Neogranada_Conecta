@@ -16,8 +16,11 @@ import { buildSystemPrompt } from './knowledge-base';
 // Se crea con:  firebase functions:secrets:set GEMINI_API_KEY
 const GEMINI_API_KEY = defineSecret('GEMINI_API_KEY');
 
-/** Modelo pequeño y económico, ideal para Q&A de FAQ. */
-const MODEL = 'gemini-flash-latest';
+/**
+ * Modelo pequeño, rápido y económico, ideal para Q&A de FAQ.
+ * Gemini 3.1 Flash-Lite ofrece límites de uso más altos que modelos anteriores.
+ */
+const MODEL = 'gemini-3.1-flash-lite';
 
 /** Un turno de la conversación tal como llega desde la app. */
 interface ClientTurn {
