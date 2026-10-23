@@ -199,11 +199,20 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background: var(--ion-background-color, #fff);
+  // La barra acompaña el fondo navy de la página en ambos temas, para que el
+  // input gris claro resalte con buen contraste en lugar de confundirse.
+  background: var(--nc-blue);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .chat-input {
   --background: #f0f0f3;
+  // El input hereda el color de texto del tema (blanco), que sobre el fondo
+  // gris claro resultaba ilegible. Fijamos texto oscuro y placeholder gris
+  // medio de forma explícita, en ambos temas.
+  --color: #1a2e5a;
+  --placeholder-color: #8a94a6;
+  --placeholder-opacity: 1;
   --padding-start: 14px;
   --padding-end: 14px;
   --border-radius: 20px;

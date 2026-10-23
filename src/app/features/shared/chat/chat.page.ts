@@ -17,6 +17,7 @@ import { addIcons } from 'ionicons';
 import { sendOutline, logOutOutline, personOutline } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
+import { BookingService } from '../../../core/services/booking.service';
 import { ChatService } from '../../../core/services/chat.service';
 import { StudentChatService } from '../../../core/services/student-chat.service';
 import { UserService } from '../../../core/services/user.service';
@@ -74,6 +75,7 @@ export class ChatPage implements OnInit, OnDestroy, AfterViewChecked {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly chatService = inject(ChatService);
+  private readonly bookingService = inject(BookingService);
   private readonly studentChatService = inject(StudentChatService);
   private readonly userService = inject(UserService);
 
@@ -104,6 +106,7 @@ export class ChatPage implements OnInit, OnDestroy, AfterViewChecked {
     }
 
     this.listenMessages();
+    void this.markBookingRead();
   }
 
   ngOnDestroy(): void {
@@ -229,8 +232,12 @@ export class ChatPage implements OnInit, OnDestroy, AfterViewChecked {
         this.shouldScroll = true;
 
         // Al recibir mensajes con la pantalla abierta, quedan leídos
-        if (this.isDirect && msgs.length > 0) {
-          void this.studentChatService.markAsRead(this.channelId);
+        if (msgs.length > 0) {
+          if (this.isDirect) {
+            void this.studentChatService.markAsRead(this.channelId);
+          } else {
+            void this.markBookingRead();
+          }
         }
       },
       error: () => {
@@ -238,6 +245,12 @@ export class ChatPage implements OnInit, OnDestroy, AfterViewChecked {
         this.errorMessage = 'No se pudieron cargar los mensajes.';
       },
     });
+  }
+
+  /** Marca el chat de la solicitud como leído por el usuario en sesión. */
+  private async markBookingRead(): Promise<void> {
+    const uid = this.currentUser?.uid;
+    if (uid) await this.bookingService.markChatRead(this.bookingId, uid);
   }
 
   private scrollToBottom(): void {

@@ -196,11 +196,16 @@ export class StudentChatsPage implements OnInit, OnDestroy {
 
         // Suscribe a los mensajes de cada chat
         active.forEach((booking, i) => {
+          // Momento de la última lectura de ESTE usuario (si existe)
+          const lastRead = booking.lastReadAt?.[uid];
           const msgSub = this.chatService.getMessages(booking.id).subscribe({
             next: msgs => {
               if (msgs.length > 0) {
-                const last   = msgs[msgs.length - 1];
-                const unread = msgs.filter(m => m.senderId !== uid).length;
+                const last = msgs[msgs.length - 1];
+                // No leídos = mensajes ajenos posteriores a la última lectura
+                const unread = msgs.filter(
+                  m => m.senderId !== uid && (!lastRead || m.createdAt.getTime() > lastRead.getTime()),
+                ).length;
                 this.chatSummaries[i] = {
                   ...this.chatSummaries[i],
                   lastMessage: last.content,

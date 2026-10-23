@@ -22,6 +22,12 @@ export interface Booking {
   observations?: string;
   status: BookingStatus;
   denialReason?: string;
+  /**
+   * Última vez que cada participante (estudiante o admin) abrió el chat de
+   * la solicitud. Sirve para contar como no leídos solo los mensajes
+   * posteriores a esa marca, igual que en las conversaciones directas.
+   */
+  lastReadAt?: Record<string, Date | undefined>;
   createdAt: Date;
   updatedAt: Date;
 }

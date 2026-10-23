@@ -47,11 +47,19 @@ export class BookingService {
     const endTime     = (data['endTime'] as string | undefined)
       ?? (legacyTime ? BookingService.addMinutes(legacyTime, 30) : '');
 
+    // Convierte el mapa de timestamps de lectura a fechas
+    const rawRead = (data['lastReadAt'] as Record<string, Timestamp>) ?? {};
+    const lastReadAt: Record<string, Date | undefined> = {};
+    Object.keys(rawRead).forEach(uid => {
+      lastReadAt[uid] = rawRead[uid]?.toDate?.();
+    });
+
     return {
-      ...(data as Omit<Booking, 'id' | 'createdAt' | 'updatedAt' | 'startTime' | 'endTime'>),
+      ...(data as Omit<Booking, 'id' | 'createdAt' | 'updatedAt' | 'startTime' | 'endTime' | 'lastReadAt'>),
       id,
       startTime,
       endTime,
+      lastReadAt,
       createdAt: (data['createdAt'] as Timestamp)?.toDate?.() ?? new Date(),
       updatedAt: (data['updatedAt'] as Timestamp)?.toDate?.() ?? new Date(),
     };
@@ -211,5 +219,23 @@ export class BookingService {
       status:    'cancelada' as BookingStatus,
       updatedAt: serverTimestamp(),
     });
+  }
+
+  // ── Lectura del chat ──────────────────────────────────────────
+
+  /**
+   * Marca el chat de una solicitud como leído por un usuario, guardando el
+   * momento en `lastReadAt.{uid}`. No toca `updatedAt` para no alterar el
+   * orden de la lista ni disparar otras lógicas basadas en esa fecha.
+   */
+  async markChatRead(bookingId: string, uid: string): Promise<void> {
+    if (!bookingId || !uid) return;
+    try {
+      await updateDoc(doc(this.db, this.COL, bookingId), {
+        [`lastReadAt.${uid}`]: serverTimestamp(),
+      });
+    } catch {
+      /* el booking puede haber cambiado; no es crítico */
+    }
   }
 }

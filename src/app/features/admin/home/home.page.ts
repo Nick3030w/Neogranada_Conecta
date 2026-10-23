@@ -77,10 +77,15 @@ export class AdminHomePage implements OnInit, OnDestroy, ViewWillEnter {
       let checked = 0;
 
       active.forEach(booking => {
+        const lastRead = booking.lastReadAt?.[adminUid];
         const msgSub = this.chatService.getMessages(booking.id).subscribe({
           next: msgs => {
-            // No leídos = mensajes del estudiante (no del admin)
-            if (msgs.some(m => m.senderId !== adminUid)) {
+            // No leídos = mensajes del estudiante posteriores a la última
+            // vez que el admin abrió ese chat
+            const hasUnread = msgs.some(
+              m => m.senderId !== adminUid && (!lastRead || m.createdAt.getTime() > lastRead.getTime()),
+            );
+            if (hasUnread) {
               unreadFound = true;
             }
             checked++;

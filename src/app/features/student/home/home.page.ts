@@ -110,9 +110,14 @@ export class StudentHomePage implements OnInit, OnDestroy {
       let checked = 0;
 
       active.forEach(booking => {
+        const lastRead = booking.lastReadAt?.[uid];
         const msgSub = this.chatService.getMessages(booking.id).subscribe({
           next: msgs => {
-            if (msgs.some(m => m.senderId !== uid)) unreadFound = true;
+            // Solo cuenta como no leído lo que llegó después de la última lectura
+            const hasUnread = msgs.some(
+              m => m.senderId !== uid && (!lastRead || m.createdAt.getTime() > lastRead.getTime()),
+            );
+            if (hasUnread) unreadFound = true;
 
             checked++;
             if (checked === active.length) this.unreadBookingChats = unreadFound;

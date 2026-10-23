@@ -16,8 +16,21 @@ import { buildSystemPrompt } from './knowledge-base';
 // Se crea con:  firebase functions:secrets:set GEMINI_API_KEY
 const GEMINI_API_KEY = defineSecret('GEMINI_API_KEY');
 
-/** Modelo pequeño y económico, ideal para Q&A de FAQ. */
-const MODEL = 'gemini-flash-latest';
+/**
+ * Modelos en orden de preferencia. Si el primero está saturado (503) o sin
+ * cuota (429), se intenta con el siguiente. Todos son modelos Flash pequeños
+ * y económicos, ideales para Q&A de FAQ.
+ */
+const MODELS = ['gemini-flash-latest', 'gemini-flash-lite-latest'];
+
+/** Espera en milisegundos. */
+const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+
+/** true si el error de Gemini es transitorio y conviene reintentar. */
+function isTransient(err: unknown): boolean {
+  const status = (err as { status?: number })?.status;
+  return status === 503 || status === 429 || status === 500;
+}
 
 /** Un turno de la conversación tal como llega desde la app. */
 interface ClientTurn {
@@ -68,32 +81,67 @@ export const askChatbot = onCall(
       { role: 'user' as const, parts: [{ text: message }] },
     ];
 
-    // 4) Llama a Gemini con el system prompt que lo ata al contexto de la app.
-    try {
-      const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY.value() });
+    // 4) Llama a Gemini. Ante saturación (503) o falta de cuota (429):
+    //    - reintenta el mismo modelo con backoff creciente, y
+    //    - si aun así falla, prueba el siguiente modelo de la lista.
+    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY.value() });
+    const systemInstruction = buildSystemPrompt();
 
-      const response = await ai.models.generateContent({
-        model: MODEL,
-        contents,
-        config: {
-          systemInstruction: buildSystemPrompt(),
-          temperature: 0.3, // respuestas consistentes, poco "creativas"
-          maxOutputTokens: 600,
-        },
-      });
+    let lastError: unknown = null;
 
-      const reply = (response.text ?? '').trim();
-      if (!reply) {
-        return {
-          reply:
-            'Lo siento, no pude generar una respuesta en este momento. Intenta reformular tu pregunta.',
-        };
+    for (const model of MODELS) {
+      // 3 intentos por modelo: esperas de 0.5s, 1.5s y 3.5s.
+      const delays = [500, 1500, 3500];
+
+      for (let attempt = 0; attempt < delays.length; attempt++) {
+        try {
+          const response = await ai.models.generateContent({
+            model,
+            contents,
+            config: {
+              systemInstruction,
+              temperature: 0.3, // respuestas consistentes, poco "creativas"
+              maxOutputTokens: 600,
+            },
+          });
+
+          const reply = (response.text ?? '').trim();
+          if (!reply) {
+            return {
+              reply:
+                'Lo siento, no pude generar una respuesta en este momento. Intenta reformular tu pregunta.',
+            };
+          }
+
+          return { reply };
+        } catch (err) {
+          lastError = err;
+
+          // Si no es transitorio (p. ej. key inválida), no insistas.
+          if (!isTransient(err)) {
+            console.error(`Error no recuperable con ${model}:`, err);
+            throw new HttpsError(
+              'internal',
+              'El asistente no está disponible por ahora. Intenta más tarde.'
+            );
+          }
+
+          console.warn(
+            `Modelo ${model} no disponible (intento ${attempt + 1}). Reintentando...`
+          );
+
+          // Espera antes del siguiente intento (salvo que sea el último).
+          if (attempt < delays.length - 1) await sleep(delays[attempt]);
+        }
       }
-
-      return { reply };
-    } catch (err) {
-      console.error('Error llamando a Gemini:', err);
-      throw new HttpsError('internal', 'El asistente no está disponible por ahora. Intenta más tarde.');
+      // Agotados los reintentos de este modelo, pasa al siguiente.
     }
+
+    // Todos los modelos y reintentos fallaron.
+    console.error('Gemini saturado tras todos los reintentos:', lastError);
+    throw new HttpsError(
+      'unavailable',
+      'El asistente está muy solicitado en este momento. Espera unos segundos e intenta de nuevo.'
+    );
   }
 );
