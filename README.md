@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/TypeScript-5.9-3178c6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.9"/>
 </p>
 
-<h1 align="center">📱 Neogranada Conecta</h1>
+<h1 align="center">Neogranada Conecta</h1>
 
 <p align="center">
   <strong>Plataforma móvil de gestión de préstamos y reservas de recursos académicos</strong><br/>
@@ -27,19 +27,19 @@
 ## Tabla de Contenidos
 
 - [Descripción](#descripción)
-- [Funcionalidades Destacadas](#-funcionalidades-destacadas)
-  - [Asistente Virtual con IA — NeoBot](#-asistente-virtual-con-ia--neobot)
-  - [Chat en Tiempo Real entre Estudiantes](#-chat-en-tiempo-real-entre-estudiantes)
+- [Funcionalidades Destacadas](#funcionalidades-destacadas)
+  - [Asistente Virtual con IA — NeoBot](#asistente-virtual-con-ia--neobot)
+  - [Chat en Tiempo Real entre Estudiantes](#chat-en-tiempo-real-entre-estudiantes)
 - [Características Completas](#características-completas)
 - [Stack Tecnológico](#stack-tecnológico)
 - [Arquitectura](#arquitectura)
-- [Decisiones de Ingeniería](#-decisiones-de-ingeniería)
+- [Decisiones de Ingeniería](#decisiones-de-ingeniería)
 - [Instalación](#instalación)
-- [Scripts Disponibles](#-scripts-disponibles)
-- [Compilación Android](#-compilación-android)
+- [Scripts Disponibles](#scripts-disponibles)
+- [Compilación Android](#compilación-android)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Diseño y UX](#diseño-y-ux)
-- [Licencia](#-licencia)
+- [Licencia](#licencia)
 
 ---
 
@@ -62,26 +62,26 @@ La plataforma elimina los procesos manuales y presenciales, ofreciendo a estudia
 
 ---
 
-## ⭐ Funcionalidades Destacadas
+## Funcionalidades Destacadas
 
-### 🤖 Asistente Virtual con IA — NeoBot
+### Asistente Virtual con IA — NeoBot
 
 **NeoBot** es un asistente conversacional integrado en la app, impulsado por **Google Gemini**, que resuelve dudas de los estudiantes sobre reservas, recursos y uso de la plataforma en lenguaje natural.
 
 La parte más interesante no es que "responda preguntas", sino **cómo está construido**, priorizando seguridad y control de costos:
 
-- **🔒 La API key nunca viaja al cliente.** En lugar de llamar a Gemini desde Angular (lo que expondría la clave en el bundle y permitiría que cualquiera agotara la cuota), la app invoca una **Cloud Function** (`askChatbot`) que actúa como *proxy seguro*. La clave se almacena como **secreto de Firebase** (`defineSecret`) y solo existe en el servidor.
-- **🔐 Acceso autenticado.** La función rechaza cualquier petición sin sesión válida (`HttpsError 'unauthenticated'`), de modo que solo estudiantes y administradores logueados consumen el modelo.
-- **🛡️ Validación y saneamiento de entrada.** Se valida que el mensaje no esté vacío ni exceda 1000 caracteres, y se recorta el historial a los últimos turnos antes de enviarlo al modelo.
-- **💰 Control de gasto.** Uso de `maxInstances` para acotar picos, modelo *Flash-Lite* (rápido y económico) y `maxOutputTokens` limitados.
-- **🎯 Respuestas en contexto.** Un *system prompt* propio (`knowledge-base.ts`) ancla al modelo al dominio de la aplicación, y una `temperature` baja (0.3) prioriza respuestas consistentes sobre creativas.
-- **💾 Historial de conversaciones.** El estudiante puede consultar sus charlas previas con NeoBot.
+- **La API key nunca viaja al cliente.** En lugar de llamar a Gemini desde Angular (lo que expondría la clave en el bundle y permitiría que cualquiera agotara la cuota), la app invoca una **Cloud Function** (`askChatbot`) que actúa como *proxy seguro*. La clave se almacena como **secreto de Firebase** (`defineSecret`) y solo existe en el servidor.
+- **Acceso autenticado.** La función rechaza cualquier petición sin sesión válida (`HttpsError 'unauthenticated'`), de modo que solo estudiantes y administradores logueados consumen el modelo.
+- **Validación y saneamiento de entrada.** Se valida que el mensaje no esté vacío ni exceda 1000 caracteres, y se recorta el historial a los últimos turnos antes de enviarlo al modelo.
+- **Control de gasto.** Uso de `maxInstances` para acotar picos, modelo *Flash-Lite* (rápido y económico) y `maxOutputTokens` limitados.
+- **Respuestas en contexto.** Un *system prompt* propio (`knowledge-base.ts`) ancla al modelo al dominio de la aplicación, y una `temperature` baja (0.3) prioriza respuestas consistentes sobre creativas.
+- **Historial de conversaciones.** El estudiante puede consultar sus charlas previas con NeoBot.
 
 ```
 ┌──────────────┐   httpsCallable   ┌────────────────────┐   API segura   ┌──────────┐
 │  App Angular │ ───────────────▶ │  Cloud Function     │ ─────────────▶ │  Gemini  │
 │  (ChatbotSvc)│                   │  askChatbot (proxy) │                │  (API)   │
-│   SIN key    │ ◀─────────────── │  key = secreto 🔒   │ ◀───────────── │          │
+│   SIN key    │ ◀─────────────── │  key = secreto      │ ◀───────────── │          │
 └──────────────┘     respuesta     └────────────────────┘                └──────────┘
 ```
 
@@ -89,20 +89,20 @@ La parte más interesante no es que "responda preguntas", sino **cómo está con
 
 ---
 
-### 💬 Chat en Tiempo Real entre Estudiantes
+### Chat en Tiempo Real entre Estudiantes
 
 La app incluye **mensajería directa (DM) uno a uno entre estudiantes**, pensada para coordinar trabajos en grupo, grupos de estudio, actividades deportivas/culturales o préstamos de recursos. Está construida sobre **Cloud Firestore** con actualizaciones en tiempo real mediante `onSnapshot`.
 
 Puntos técnicos que vale la pena resaltar:
 
-- **🆔 Identificadores de conversación determinísticos.** Cada par de estudiantes comparte un único documento cuyo id se deriva de ordenar sus `uid` (`uidA__uidB`). Esto **elimina hilos duplicados por diseño** y hace innecesario cualquier sistema de "solicitud de amistad": abrir la conversación basta para empezar a escribir.
-- **♻️ Escritura idempotente sin lectura previa.** La conversación se crea o refresca con un único `setDoc({ merge: true })`, evitando un `getDoc` previo que las reglas de seguridad denegarían sobre un documento aún inexistente. Un solo *round-trip*, sin condiciones de carrera.
-- **⚡ Tiempo real reactivo (RxJS + Firestore).** Las conversaciones se exponen como `Observable` que sigue el *stream* del perfil autenticado (`switchMap`, `distinctUntilChanged`), de modo que la lista arranca en cuanto el `uid` está disponible, incluso tras recargar.
-- **📑 Consultas optimizadas sin índices compuestos.** Se consulta con `array-contains` sobre `participantIds` y el **ordenamiento se resuelve en cliente**, evitando exigir índices compuestos en Firestore.
-- **✅ Estado de lectura por participante.** Cada conversación guarda `lastReadAt` por usuario, lo que permite calcular mensajes no leídos y badges de notificación de forma precisa.
-- **🏷️ Conversaciones con contexto.** Cada chat se etiqueta con un *asunto* académico (reserva, trabajo en grupo, estudio, deportiva, cultural o general).
-- **🔔 Notificaciones desacopladas.** El aviso al destinatario es secundario: si la notificación falla, el mensaje ya se entregó (el envío nunca depende del aviso).
-- **🧩 Reutilización de infraestructura.** Los mensajes directos y los de las solicitudes de reserva comparten la misma estructura (`chats/{channelId}/messages`), reutilizando la misma pantalla de chat para ambos casos.
+- **Identificadores de conversación determinísticos.** Cada par de estudiantes comparte un único documento cuyo id se deriva de ordenar sus `uid` (`uidA__uidB`). Esto **elimina hilos duplicados por diseño** y hace innecesario cualquier sistema de "solicitud de amistad": abrir la conversación basta para empezar a escribir.
+- **Escritura idempotente sin lectura previa.** La conversación se crea o refresca con un único `setDoc({ merge: true })`, evitando un `getDoc` previo que las reglas de seguridad denegarían sobre un documento aún inexistente. Un solo *round-trip*, sin condiciones de carrera.
+- **Tiempo real reactivo (RxJS + Firestore).** Las conversaciones se exponen como `Observable` que sigue el *stream* del perfil autenticado (`switchMap`, `distinctUntilChanged`), de modo que la lista arranca en cuanto el `uid` está disponible, incluso tras recargar.
+- **Consultas optimizadas sin índices compuestos.** Se consulta con `array-contains` sobre `participantIds` y el **ordenamiento se resuelve en cliente**, evitando exigir índices compuestos en Firestore.
+- **Estado de lectura por participante.** Cada conversación guarda `lastReadAt` por usuario, lo que permite calcular mensajes no leídos y badges de notificación de forma precisa.
+- **Conversaciones con contexto.** Cada chat se etiqueta con un *asunto* académico (reserva, trabajo en grupo, estudio, deportiva, cultural o general).
+- **Notificaciones desacopladas.** El aviso al destinatario es secundario: si la notificación falla, el mensaje ya se entregó (el envío nunca depende del aviso).
+- **Reutilización de infraestructura.** Los mensajes directos y los de las solicitudes de reserva comparten la misma estructura (`chats/{channelId}/messages`), reutilizando la misma pantalla de chat para ambos casos.
 
 > **Por qué importa:** modela un problema real de datos (unicidad, concurrencia, lectura en tiempo real y eficiencia de consultas) con soluciones elegantes en lugar de fuerza bruta — justo lo que distingue a un desarrollador que *diseña* de uno que solo *conecta*.
 
@@ -117,9 +117,9 @@ Puntos técnicos que vale la pena resaltar:
 - **Reserva inteligente** — Agendamiento con validación de conflictos de horario
 - **Calendario personal** — Visualización de reservas activas y pasadas
 - **Chat con administradores** — Comunicación directa por cada solicitud
-- **Chat entre estudiantes (DM)** — Mensajería instantánea uno a uno ⭐
+- **Chat entre estudiantes (DM)** — Mensajería instantánea uno a uno
 - **Directorio de estudiantes** — Búsqueda de compañeros por nombre o código
-- **Asistente NeoBot (IA)** — Resolución de dudas con Google Gemini ⭐
+- **Asistente NeoBot (IA)** — Resolución de dudas con Google Gemini
 - **Mapa interactivo** — Ubicación de bloques y recursos del campus
 - **Notificaciones** — Alertas sobre estado de solicitudes y mensajes
 - **Tutorial de bienvenida** — Guía interactiva para nuevos usuarios
@@ -200,7 +200,7 @@ La aplicación sigue una **arquitectura modular basada en features** con separac
 ```
 src/app/
 │
-├── 📁 core/                    # Capa central (singleton)
+├── core/                       # Capa central (singleton)
 │   ├── guards/                 # Protección de rutas (funcionales)
 │   │   ├── auth.guard.ts       # Requiere sesión activa
 │   │   ├── no-auth.guard.ts    # Solo usuarios sin sesión
@@ -217,8 +217,8 @@ src/app/
 │       ├── auth.service.ts
 │       ├── booking.service.ts
 │       ├── chat.service.ts
-│       ├── student-chat.service.ts     # DM entre estudiantes ⭐
-│       ├── chatbot.service.ts          # Cliente de NeoBot (IA) ⭐
+│       ├── student-chat.service.ts     # DM entre estudiantes
+│       ├── chatbot.service.ts          # Cliente de NeoBot (IA)
 │       ├── chatbot-history.service.ts
 │       ├── notification.service.ts
 │       ├── reminder.service.ts
@@ -227,7 +227,7 @@ src/app/
 │       ├── theme.service.ts
 │       └── user.service.ts
 │
-├── 📁 features/                # Módulos por dominio
+├── features/                   # Módulos por dominio
 │   ├── auth/                   # login · register · forgot-password
 │   ├── student/                # home · catalog · availability · booking ·
 │   │                           # confirmation · calendar · library · databases ·
@@ -240,7 +240,7 @@ src/app/
 
 functions/                      # Cloud Functions (backend serverless)
 ├── src/
-│   ├── index.ts                # askChatbot: proxy seguro a Gemini ⭐
+│   ├── index.ts                # askChatbot: proxy seguro a Gemini
 │   └── knowledge-base.ts       # System prompt del asistente
 └── package.json
 ```
@@ -256,7 +256,7 @@ functions/                      # Cloud Functions (backend serverless)
 
 ---
 
-## 🧠 Decisiones de Ingeniería
+## Decisiones de Ingeniería
 
 Un resumen de las decisiones técnicas que sustentan el proyecto y el razonamiento detrás de ellas:
 
@@ -317,7 +317,7 @@ firebase functions:secrets:set GEMINI_API_KEY
 
 ---
 
-## 📜 Scripts Disponibles
+## Scripts Disponibles
 
 ### Aplicación
 
@@ -340,7 +340,7 @@ firebase functions:secrets:set GEMINI_API_KEY
 
 ---
 
-## 📱 Compilación Android
+## Compilación Android
 
 ```bash
 # Compilar la aplicación web
@@ -385,21 +385,21 @@ La interfaz sigue la identidad visual institucional de la Universidad Militar Nu
 
 ### Principios UX
 
-- ✅ Navegación intuitiva con máximo 3 taps para completar una reserva
-- ✅ Estados de carga y vacíos con mensajes claros
-- ✅ Feedback inmediato con iconografía y color
-- ✅ Tutorial de onboarding para nuevos usuarios
-- ✅ Modo oscuro configurable
-- ✅ Mensajes de error traducidos a lenguaje claro en español
+- Navegación intuitiva con máximo 3 taps para completar una reserva
+- Estados de carga y vacíos con mensajes claros
+- Feedback inmediato con iconografía y color
+- Tutorial de onboarding para nuevos usuarios
+- Modo oscuro configurable
+- Mensajes de error traducidos a lenguaje claro en español
 
 ---
 
-## 📄 Licencia
+## Licencia
 
-Este proyecto es de uso **académico y educativo**, desarrollado por **Nick303w** como estudiante de Ingeniería de Sistemas de la Universidad Militar Nueva Granada.
+Este proyecto es de uso **académico y educativo**, desarrollado por **Nick303w**, estudiante de la **Fundación Universitaria Konrad Lorenz**, como solución para la comunidad de la **Universidad Militar Nueva Granada**.
 
 ---
 
 <p align="center">
-  Desarrollado con 💙 para la comunidad Neogranadina
+  Desarrollado para la comunidad Neogranadina
 </p>
