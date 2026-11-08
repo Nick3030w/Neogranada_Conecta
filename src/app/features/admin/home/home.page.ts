@@ -54,9 +54,9 @@ export class AdminHomePage implements OnInit, OnDestroy, ViewWillEnter {
 
     const adminUid = this.authService.currentUser?.uid;
 
-    this.resourceService.seedIfEmpty().catch(err =>
-      console.error('Error al inicializar recursos:', err)
-    );
+    this.resourceService.seedIfEmpty()
+      .then(() => this.resourceService.syncBlockSpaces())
+      .catch(err => console.error('Error al inicializar recursos:', err));
 
     if (!adminUid) return;
 
