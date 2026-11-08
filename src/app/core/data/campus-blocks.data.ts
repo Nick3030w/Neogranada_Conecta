@@ -14,7 +14,6 @@ export const BLOCKS_DATA: Record<string, BlockInfo> = {
   A: {
     id: 'A',
     name: 'Bloque A',
-    faculty: 'Facultad de Ingeniería',
     coverImage: `${IMG}/bloque_a/1.jpeg`,
     syncWithFirestore: true,
     spaces: [
@@ -29,7 +28,6 @@ export const BLOCKS_DATA: Record<string, BlockInfo> = {
   B: {
     id: 'B',
     name: 'Bloque B',
-    faculty: 'Facultad de Ciencias Económicas',
     coverImage: `${IMG}/bloque_b/1.jpeg`,
     syncWithFirestore: true,
     spaces: [
@@ -42,11 +40,11 @@ export const BLOCKS_DATA: Record<string, BlockInfo> = {
   C: {
     id: 'C',
     name: 'Bloque C',
-    faculty: 'Facultad de Derecho',
     coverImage: `${IMG}/bloque_c/4.jpeg`,
     syncWithFirestore: true,
     spaces: [
       { name: 'Aula Especial P301', type: 'Aula',            floor: '3', description: 'Aula especial, piso 3', imageUrl: `${IMG}/bloque_c/4.jpeg` },
+      { name: 'Aula Especial P302', type: 'Aula',            floor: '3', description: 'Aula especial, piso 3', imageUrl: `${IMG}/bloque_c/3.jpeg` },
       { name: 'Aula Especial P303', type: 'Aula',            floor: '3', description: 'Aula especial, piso 3', imageUrl: `${IMG}/bloque_c/2.jpeg` },
       { name: 'Aula Especial P304', type: 'Aula',            floor: '3', description: 'Aula especial, piso 3', imageUrl: `${IMG}/bloque_c/1.jpeg` },
       { name: 'Sala de Sistemas 1', type: 'Sala de cómputo', description: 'Sala de cómputo', imageUrl: `${IMG}/bloque_c/5.jpeg` },
@@ -59,7 +57,6 @@ export const BLOCKS_DATA: Record<string, BlockInfo> = {
   D: {
     id: 'D',
     name: 'Bloque D',
-    faculty: 'Facultad de Medicina',
     // Sin fotos todavía: sus espacios no se sincronizan y conservan los nombres del seed original.
     syncWithFirestore: false,
     spaces: [
@@ -80,7 +77,6 @@ export const BLOCKS_DATA: Record<string, BlockInfo> = {
   E: {
     id: 'E',
     name: 'Bloque E',
-    faculty: 'Facultad de Ciencias Básicas',
     coverImage: `${IMG}/bloque_e/1.jpeg`,
     syncWithFirestore: true,
     spaces: [
@@ -94,7 +90,6 @@ export const BLOCKS_DATA: Record<string, BlockInfo> = {
   F: {
     id: 'F',
     name: 'Bloque F',
-    faculty: 'Facultad de Relaciones Internacionales',
     coverImage: `${IMG}/bloque_f/5.jpeg`,
     syncWithFirestore: true,
     spaces: [
@@ -103,7 +98,7 @@ export const BLOCKS_DATA: Record<string, BlockInfo> = {
       { name: 'Laboratorio Calor y Ondas',                    type: 'Laboratorio', description: 'Laboratorio de física',                       imageUrl: `${IMG}/bloque_f/3.jpeg` },
       { name: 'Laboratorio Física Electricidad y Magnetismo', type: 'Laboratorio', description: 'Laboratorio de física',                       imageUrl: `${IMG}/bloque_f/4.jpeg` },
       { name: 'Laboratorio Física Óptica y Acústica',         type: 'Laboratorio', description: 'Laboratorio de física',                       imageUrl: `${IMG}/bloque_f/4.jpeg` },
-      { name: 'Laboratorio de Hidráulica',                    type: 'Laboratorio', description: 'Laboratorio de hidráulica, Facultad de Ingeniería', imageUrl: `${IMG}/bloque_f/5.jpeg` },
+      { name: 'Laboratorio de Hidráulica',                    type: 'Laboratorio', description: 'Laboratorio de hidráulica', imageUrl: `${IMG}/bloque_f/5.jpeg` },
     ],
   },
 };

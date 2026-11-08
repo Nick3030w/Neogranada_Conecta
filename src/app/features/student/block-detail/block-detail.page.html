@@ -40,7 +40,6 @@
         <!-- Foto de portada del bloque -->
         <div *ngIf="block?.coverImage" class="block-cover">
           <img [src]="block!.coverImage" [alt]="'Foto del ' + block!.name" loading="lazy">
-          <span class="block-cover-label">{{ block!.faculty }}</span>
         </div>
 
         <!-- Sin datos -->

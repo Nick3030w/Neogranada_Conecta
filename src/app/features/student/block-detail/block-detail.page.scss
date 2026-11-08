@@ -46,15 +46,6 @@ ion-content.block-content {
   width: 100%;
 }
 
-.faculty-label {
-  font-size: 13px;
-  color: #f0c040;
-  text-align: center;
-  margin: 4px 0 8px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-}
-
 // ── Curva SVG ─────────────────────────────────────────────────
 .curve-divider {
   width: 100%; line-height: 0; background: #1a2e5a;
@@ -223,19 +214,6 @@ ion-content.block-content {
   }
 }
 
-.block-cover-label {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 8px 12px;
-  background: linear-gradient(transparent, rgba(26, 46, 90, 0.9));
-  color: #f0c040;
-  font-family: 'Lilita One', cursive;
-  font-size: 14px;
-  letter-spacing: 0.3px;
-}
-
 // ── Miniatura de foto del espacio ─────────────────────────────
 .space-thumb {
   width: 48px;
@@ -381,7 +359,4 @@ ion-content.block-content {
     color: #a9b6cc !important;
     .empty-icon { color: var(--nc-gold) !important; }
   }
-
-  // Etiqueta de la portada: dorado sobre degradado azul
-  .block-cover-label { color: #f0c040 !important; }
 }

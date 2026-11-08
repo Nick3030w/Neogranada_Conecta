@@ -30,7 +30,6 @@ export interface BlockSpace {
 export interface BlockInfo {
   id: string;
   name: string;
-  faculty: string;
   /** Foto de portada del bloque (ruta dentro de assets) */
   coverImage?: string;
   /**
