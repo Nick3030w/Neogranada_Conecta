@@ -18,10 +18,14 @@ import { Resource, ResourceCategory, ResourceStatus } from '../interfaces/resour
 import { BlockSpaceType } from '../interfaces/campus-block.interface';
 import { BLOCKS_LIST } from '../data/campus-blocks.data';
 
-/** Tipos de espacio de un bloque que se sincronizan como recurso reservable. */
+/**
+ * Tipos de espacio de un bloque que se sincronizan como recurso reservable.
+ * Las salas de cómputo se reservan dentro de la categoría Laboratorios.
+ */
 const SYNCED_SPACE_CATEGORIES: Partial<Record<BlockSpaceType, ResourceCategory>> = {
   'Aula': 'aula',
   'Laboratorio': 'laboratorio',
+  'Sala de cómputo': 'laboratorio',
 };
 
 // Re-exportamos para que los componentes puedan importar desde el servicio si lo prefieren
@@ -131,12 +135,12 @@ export class ResourceService {
     if (!snap.empty) return;
 
     const seeds: Omit<Resource, 'id' | 'createdAt' | 'updatedAt'>[] = [
-      // ── Bloque A — Facultad de Ingeniería ─────────────────────
+      // ── Bloque A ─────────────────────
       { name: 'Piano Digital',              description: 'Piano digital Yamaha para préstamo',         category: 'instrumentos_musicales', status: 'disponible', location: 'Bloque A' },
       { name: 'Guitarra Acústica',          description: 'Guitarra acústica para préstamo',            category: 'instrumentos_musicales', status: 'disponible', location: 'Bloque A' },
       { name: 'Guitarra Eléctrica',         description: 'Guitarra eléctrica para préstamo',           category: 'instrumentos_musicales', status: 'disponible', location: 'Bloque A' },
       { name: 'Batería',                    description: 'Batería acústica para préstamo',             category: 'instrumentos_musicales', status: 'disponible', location: 'Bloque A' },
-      // ── Bloque D — Facultad de Medicina ──────────────────────
+      // ── Bloque D ──────────────────────
       { name: 'Aula especial IV-A',         description: 'Aula especial piso IV',                      category: 'aula',                   status: 'disponible', location: 'Bloque D' },
       { name: 'Aula especial IV-B',         description: 'Aula especial piso IV',                      category: 'aula',                   status: 'disponible', location: 'Bloque D' },
       { name: 'Aula especial IX-A (D)',     description: 'Aula especial piso IX',                      category: 'aula',                   status: 'disponible', location: 'Bloque D' },
@@ -149,7 +153,7 @@ export class ResourceService {
       { name: 'Redes y mallas',             description: 'Redes deportivas para préstamo',             category: 'elementos_deportivos',   status: 'disponible', location: 'Bloque D' },
       { name: 'Raquetas de tenis',          description: 'Set de raquetas de tenis para préstamo',     category: 'elementos_deportivos',   status: 'disponible', location: 'Bloque D' },
       { name: 'Raquetas de ping pong',      description: 'Set de raquetas de ping pong para préstamo', category: 'elementos_deportivos',   status: 'disponible', location: 'Bloque D' },
-      // ── Bloque E — Facultad de Ciencias Básicas ───────────────
+      // ── Bloque E ───────────────
       { name: 'Violín',                     description: 'Violín para préstamo estudiantil',           category: 'instrumentos_musicales', status: 'disponible', location: 'Bloque E' },
       { name: 'Balones de baloncesto',      description: 'Balones de baloncesto para préstamo',        category: 'elementos_deportivos',   status: 'disponible', location: 'Bloque E' },
       { name: 'Balones de voleibol',        description: 'Balones de voleibol para préstamo',          category: 'elementos_deportivos',   status: 'disponible', location: 'Bloque E' },

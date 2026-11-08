@@ -23,7 +23,7 @@ export class MapPage {
   blocks: CampusBlock[] = BLOCKS_LIST.map(b => ({
     id: b.id,
     name: b.name,
-    description: b.faculty,
+    description: '',
     imageUrl: b.coverImage,
   }));
 
