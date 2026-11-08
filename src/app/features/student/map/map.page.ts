@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { addIcons } from 'ionicons';
 import { logOutOutline, searchOutline, business, arrowForwardCircle } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 import { CampusBlock } from '../../../core/interfaces/campus-block.interface';
+import { BLOCKS_LIST } from '../../../core/data/campus-blocks.data';
 
 @Component({
   selector: 'app-map',
@@ -18,16 +19,18 @@ import { CampusBlock } from '../../../core/interfaces/campus-block.interface';
 export class MapPage {
   searchQuery = '';
 
-  blocks: CampusBlock[] = [
-    { id: 'A', name: 'Bloque A', description: 'Facultad de Ingeniería' },
-    { id: 'B', name: 'Bloque B', description: 'Facultad de Ciencias Económicas' },
-    { id: 'C', name: 'Bloque C', description: 'Facultad de Derecho' },
-    { id: 'D', name: 'Bloque D', description: 'Facultad de Medicina' },
-    { id: 'E', name: 'Bloque E', description: 'Facultad de Ciencias Básicas' },
-    { id: 'F', name: 'Bloque F', description: 'Facultad de Relaciones Internacionales' },
-  ];
+  /** Bloques del campus con su foto de portada (si la tienen). */
+  blocks: CampusBlock[] = BLOCKS_LIST.map(b => ({
+    id: b.id,
+    name: b.name,
+    description: b.faculty,
+    imageUrl: b.coverImage,
+  }));
 
-  constructor(private router: Router, private authService: AuthService) {
+  private router = inject(Router);
+  private authService = inject(AuthService);
+
+  constructor() {
     addIcons({ logOutOutline, searchOutline, business, arrowForwardCircle });
   }
 

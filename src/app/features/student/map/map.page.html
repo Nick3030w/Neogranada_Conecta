@@ -39,9 +39,16 @@
           <button *ngFor="let block of filteredBlocks"
                   class="block-row"
                   (click)="selectBlock(block)">
-            <!-- Círculo dorado con ícono edificio -->
-            <div class="block-icon-circle">
-              <ion-icon name="business" class="block-icon"></ion-icon>
+            <!-- Círculo dorado con foto del bloque (o ícono si no tiene foto) -->
+            <div class="block-icon-circle" [class.has-photo]="block.imageUrl">
+              <img *ngIf="block.imageUrl; else blockIcon"
+                   [src]="block.imageUrl"
+                   [alt]="'Foto del ' + block.name"
+                   class="block-photo"
+                   loading="lazy">
+              <ng-template #blockIcon>
+                <ion-icon name="business" class="block-icon"></ion-icon>
+              </ng-template>
             </div>
             <!-- Nombre del bloque -->
             <span class="block-name">{{ block.name | uppercase }}</span>

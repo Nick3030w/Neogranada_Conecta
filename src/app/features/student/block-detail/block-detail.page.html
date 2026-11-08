@@ -37,6 +37,12 @@
           <span>Volver al mapa</span>
         </button>
 
+        <!-- Foto de portada del bloque -->
+        <div *ngIf="block?.coverImage" class="block-cover">
+          <img [src]="block!.coverImage" [alt]="'Foto del ' + block!.name" loading="lazy">
+          <span class="block-cover-label">{{ block!.faculty }}</span>
+        </div>
+
         <!-- Sin datos -->
         <div *ngIf="!block" class="empty-state">
           <p>Bloque no encontrado.</p>
@@ -64,9 +70,18 @@
 
             <!-- Ícono + nombre -->
             <div class="space-info">
-              <div class="space-icon-box">
-                <ion-icon [name]="getTypeIcon(space.type)" class="space-icon"></ion-icon>
-              </div>
+              <button *ngIf="space.imageUrl; else iconBox"
+                      type="button"
+                      class="space-thumb"
+                      [attr.aria-label]="'Ver foto de ' + space.name"
+                      (click)="openPreview(space)">
+                <img [src]="space.imageUrl" [alt]="space.name" loading="lazy">
+              </button>
+              <ng-template #iconBox>
+                <div class="space-icon-box">
+                  <ion-icon [name]="getTypeIcon(space.type)" class="space-icon"></ion-icon>
+                </div>
+              </ng-template>
               <div class="space-text">
                 <span class="space-name">{{ space.name }}</span>
                 <span class="space-desc" *ngIf="space.description">{{ space.description }}</span>
@@ -85,5 +100,14 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Visor de foto ampliada -->
+  <div *ngIf="previewSpace" class="photo-viewer" (click)="closePreview()">
+    <button type="button" class="photo-viewer-close" aria-label="Cerrar foto" (click)="closePreview()">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+    <img [src]="previewSpace.imageUrl" [alt]="previewSpace.name" (click)="$event.stopPropagation()">
+    <span class="photo-viewer-caption">{{ previewSpace.name }}</span>
   </div>
 </ion-content>
