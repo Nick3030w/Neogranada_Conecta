@@ -46,33 +46,74 @@
         <!-- Formulario principal -->
         <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!loadingResources && resources.length > 0">
 
-          <!-- ── SELECTOR DE RECURSO ── -->
-          <div class="field-block">
-            <label class="field-label">Recurso</label>
+          <!-- ── SELECTOR DE BLOQUE (solo aulas) ── -->
+          <div class="field-block" *ngIf="isAulaCategory">
+            <label class="field-label">Bloque</label>
             <div class="field-select-box"
+                 (click)="toggleBlockPicker()"
+                 [class.has-error]="!selectedBlock && resource.touched">
+              <ion-icon name="business-outline" class="field-icon"></ion-icon>
+              <span class="field-value" [class.placeholder]="!selectedBlock">
+                {{ selectedBlock || 'Seleccionar' }}
+              </span>
+              <ion-icon name="caret-down" class="caret-icon" [class.open]="showBlockPicker"></ion-icon>
+            </div>
+            <span class="field-error" *ngIf="!selectedBlock && resource.touched">
+              Selecciona un bloque.
+            </span>
+
+            <!-- Dropdown de bloques -->
+            <div class="dropdown-panel resource-dropdown" *ngIf="showBlockPicker">
+              <div class="resource-list">
+                <button *ngFor="let block of blocks"
+                        type="button"
+                        class="resource-item"
+                        [class.selected]="block === selectedBlock"
+                        (click)="selectBlock(block)">
+                  <div class="resource-item-info">
+                    <span class="resource-item-name">{{ block }}</span>
+                    <span class="resource-item-location">
+                      <ion-icon name="location-outline"></ion-icon>
+                      {{ countInBlock(block) }} {{ countInBlock(block) === 1 ? 'aula disponible' : 'aulas disponibles' }}
+                    </span>
+                  </div>
+                  <ion-icon name="checkmark-circle-outline"
+                            class="resource-check"
+                            *ngIf="block === selectedBlock">
+                  </ion-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SELECTOR DE RECURSO (en aulas: salón del bloque elegido) ── -->
+          <div class="field-block">
+            <label class="field-label">{{ isAulaCategory ? 'Salón' : 'Recurso' }}</label>
+            <div class="field-select-box"
+                 [class.disabled]="isAulaCategory && !selectedBlock"
                  (click)="toggleResourcePicker()"
-                 [class.has-error]="resource.invalid && resource.touched">
+                 [class.has-error]="resource.invalid && resource.touched && (!isAulaCategory || selectedBlock)">
               <ion-icon name="location-outline" class="field-icon"></ion-icon>
               <span class="field-value" [class.placeholder]="!selectedResource">
                 {{ selectedResourceLabel }}
               </span>
               <ion-icon name="caret-down" class="caret-icon" [class.open]="showResourcePicker"></ion-icon>
             </div>
-            <span class="field-error" *ngIf="resource.invalid && resource.touched">
-              Selecciona un recurso.
+            <span class="field-error" *ngIf="resource.invalid && resource.touched && (!isAulaCategory || selectedBlock)">
+              {{ isAulaCategory ? 'Selecciona un salón.' : 'Selecciona un recurso.' }}
             </span>
 
             <!-- Dropdown de recursos -->
             <div class="dropdown-panel resource-dropdown" *ngIf="showResourcePicker">
               <div class="resource-list">
-                <button *ngFor="let res of resources"
+                <button *ngFor="let res of visibleResources"
                         type="button"
                         class="resource-item"
                         [class.selected]="res.id === selectedResource?.id"
                         (click)="selectResource(res)">
                   <div class="resource-item-info">
                     <span class="resource-item-name">{{ res.name }}</span>
-                    <span class="resource-item-location">
+                    <span class="resource-item-location" *ngIf="!isAulaCategory">
                       <ion-icon name="location-outline"></ion-icon>
                       {{ res.location }}
                     </span>

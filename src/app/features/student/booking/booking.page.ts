@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,7 +8,7 @@ import {
   logOutOutline, calendarOutline, timeOutline, caretDown,
   chevronBackOutline, chevronForwardOutline, searchOutline,
   checkmarkCircleOutline, closeCircleOutline, locationOutline,
-  documentTextOutline, closeOutline,
+  documentTextOutline, closeOutline, businessOutline,
 } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
@@ -41,6 +41,10 @@ export class BookingPage implements OnInit, OnDestroy {
   selectedResource: Resource | null = null;
   showResourcePicker     = false;
 
+  // ── Selector de bloque (solo categoría aulas) ─────────────────
+  selectedBlock: string | null = null;
+  showBlockPicker = false;
+
   // ── Estado de verificación de disponibilidad ──────────────────
   availabilityResult: AvailabilityResult = 'idle';
 
@@ -68,20 +72,20 @@ export class BookingPage implements OnInit, OnDestroy {
     return slots;
   })();
 
-  constructor(
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService,
-    private bookingService: BookingService,
-    private notificationService: NotificationService,
-    private resourceService: ResourceService,
-  ) {
+  private fb                  = inject(FormBuilder);
+  private route               = inject(ActivatedRoute);
+  private router              = inject(Router);
+  private authService         = inject(AuthService);
+  private bookingService      = inject(BookingService);
+  private notificationService = inject(NotificationService);
+  private resourceService     = inject(ResourceService);
+
+  constructor() {
     addIcons({
       logOutOutline, calendarOutline, timeOutline, caretDown,
       chevronBackOutline, chevronForwardOutline, searchOutline,
       checkmarkCircleOutline, closeCircleOutline, locationOutline,
-      documentTextOutline, closeOutline,
+      documentTextOutline, closeOutline, businessOutline,
     });
     this.categoryId = this.route.snapshot.paramMap.get('resourceId') ?? '';
   }
@@ -102,6 +106,10 @@ export class BookingPage implements OnInit, OnDestroy {
         next: resources => {
           this.resources        = resources;
           this.loadingResources = false;
+          // Si el bloque elegido ya no tiene aulas disponibles, lo limpiamos
+          if (this.selectedBlock && !this.blocks.includes(this.selectedBlock)) {
+            this.selectedBlock = null;
+          }
           // Si el recurso seleccionado ya no está disponible, lo limpiamos
           if (this.selectedResource) {
             const stillAvailable = resources.find(r => r.id === this.selectedResource!.id);
@@ -131,7 +139,49 @@ export class BookingPage implements OnInit, OnDestroy {
   get selectedEndTimeLabel(): string   { return this.endTime.value   || 'Seleccionar'; }
   get selectedResourceLabel(): string {
     if (!this.selectedResource) return 'Seleccionar';
+    // En aulas el bloque ya se muestra en su propio selector
+    if (this.isAulaCategory) return this.selectedResource.name;
     return `${this.selectedResource.name} — ${this.selectedResource.location}`;
+  }
+
+  // ── Selector de bloque (solo aulas) ───────────────────────────
+  /** En la categoría aulas se elige primero el bloque y luego el salón. */
+  get isAulaCategory(): boolean { return this.categoryId === 'aula'; }
+
+  /** Bloques que tienen al menos un aula disponible, ordenados (A → Z). */
+  get blocks(): string[] {
+    return [...new Set(this.resources.map(r => r.location))]
+      .sort((a, b) => a.localeCompare(b, 'es'));
+  }
+
+  /** Recursos que se muestran en el selector: en aulas, solo los del bloque elegido. */
+  get visibleResources(): Resource[] {
+    if (!this.isAulaCategory) return this.resources;
+    if (!this.selectedBlock) return [];
+    return this.resources.filter(r => r.location === this.selectedBlock);
+  }
+
+  /** Cantidad de aulas disponibles en un bloque. */
+  countInBlock(block: string): number {
+    return this.resources.filter(r => r.location === block).length;
+  }
+
+  toggleBlockPicker(): void {
+    this.showBlockPicker     = !this.showBlockPicker;
+    this.showResourcePicker  = false;
+    this.showCalendar        = false;
+    this.showStartTimePicker = false;
+    this.showEndTimePicker   = false;
+  }
+
+  selectBlock(block: string): void {
+    this.showBlockPicker = false;
+    if (block === this.selectedBlock) return;
+    this.selectedBlock = block;
+    // Al cambiar de bloque se limpia el salón elegido
+    this.selectedResource = null;
+    this.resource.setValue('');
+    this.availabilityResult = 'idle';
   }
 
   /** Slots de hora de fin válidos: solo los posteriores a la hora de inicio elegida. */
@@ -142,6 +192,9 @@ export class BookingPage implements OnInit, OnDestroy {
 
   // ── Selector de recurso ───────────────────────────────────────
   toggleResourcePicker(): void {
+    // En aulas, primero debe elegirse el bloque
+    if (this.isAulaCategory && !this.selectedBlock) return;
+    this.showBlockPicker     = false;
     this.showResourcePicker  = !this.showResourcePicker;
     this.showCalendar        = false;
     this.showStartTimePicker = false;
@@ -162,6 +215,7 @@ export class BookingPage implements OnInit, OnDestroy {
     this.showStartTimePicker = false;
     this.showEndTimePicker   = false;
     this.showResourcePicker  = false;
+    this.showBlockPicker     = false;
   }
 
   get calMonthName(): string {
@@ -227,6 +281,7 @@ export class BookingPage implements OnInit, OnDestroy {
     this.showEndTimePicker   = false;
     this.showCalendar        = false;
     this.showResourcePicker  = false;
+    this.showBlockPicker     = false;
   }
 
   selectStartTime(slot: string): void {
@@ -247,6 +302,7 @@ export class BookingPage implements OnInit, OnDestroy {
     this.showStartTimePicker = false;
     this.showCalendar        = false;
     this.showResourcePicker  = false;
+    this.showBlockPicker     = false;
   }
 
   selectEndTime(slot: string): void {
@@ -264,6 +320,7 @@ export class BookingPage implements OnInit, OnDestroy {
       this.showStartTimePicker = false;
       this.showEndTimePicker   = false;
       this.showResourcePicker  = false;
+      this.showBlockPicker     = false;
     }
   }
 
