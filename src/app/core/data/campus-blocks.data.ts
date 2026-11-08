@@ -95,7 +95,7 @@ export const BLOCKS_DATA: Record<string, BlockInfo> = {
     spaces: [
       { name: 'Laboratorio Calidad de Aguas',                 type: 'Laboratorio', description: 'Laboratorio de análisis de calidad de aguas', imageUrl: `${IMG}/bloque_f/1.jpeg` },
       { name: 'Laboratorio Física Mecánica',                  type: 'Laboratorio', description: 'Laboratorio de física',                       imageUrl: `${IMG}/bloque_f/2.jpeg` },
-      { name: 'Laboratorio Calor y Ondas',                    type: 'Laboratorio', description: 'Laboratorio de física',                       imageUrl: `${IMG}/bloque_f/3.jpeg` },
+      { name: 'Laboratorio Física Calor y Ondas',             type: 'Laboratorio', description: 'Laboratorio de física',                       imageUrl: `${IMG}/bloque_f/3.jpeg` },
       { name: 'Laboratorio Física Electricidad y Magnetismo', type: 'Laboratorio', description: 'Laboratorio de física',                       imageUrl: `${IMG}/bloque_f/4.jpeg` },
       { name: 'Laboratorio Física Óptica y Acústica',         type: 'Laboratorio', description: 'Laboratorio de física',                       imageUrl: `${IMG}/bloque_f/4.jpeg` },
       { name: 'Laboratorio de Hidráulica',                    type: 'Laboratorio', description: 'Laboratorio de hidráulica', imageUrl: `${IMG}/bloque_f/5.jpeg` },
