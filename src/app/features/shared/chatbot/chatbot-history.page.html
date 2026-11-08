@@ -1,0 +1,73 @@
+<ion-header class="ion-no-border nc-header">
+  <ion-toolbar>
+    <div class="nc-toolbar">
+      <button class="nc-icon-btn" (click)="goBack()" aria-label="Volver">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </button>
+
+      <div class="bot-avatar">
+        <ion-icon name="sparkles-outline"></ion-icon>
+      </div>
+
+      <div class="chat-heading">
+        <span class="chat-title">Conversaciones</span>
+        <span class="chat-subtitle">Tu historial con NeoBot</span>
+      </div>
+
+      <button class="nc-icon-btn new-btn" (click)="startNew()" aria-label="Nueva conversación">
+        <ion-icon name="add-outline"></ion-icon>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="history-container">
+
+    <ng-container *ngIf="conversations$ | async as conversations; else loading">
+
+      <!-- Vacío -->
+      <div *ngIf="conversations.length === 0" class="empty">
+        <div class="empty-icon">
+          <ion-icon name="chatbubbles-outline"></ion-icon>
+        </div>
+        <h2>Aún no tienes conversaciones</h2>
+        <p>Cuando hables con NeoBot, tus conversaciones se guardarán aquí para que puedas consultarlas más tarde.</p>
+        <button class="start-btn" type="button" (click)="startNew()">
+          Iniciar una conversación
+        </button>
+      </div>
+
+      <!-- Lista -->
+      <button
+        *ngFor="let c of conversations"
+        class="conversation-card"
+        type="button"
+        (click)="open(c)">
+        <div class="card-body">
+          <span class="card-title">{{ c.title }}</span>
+          <span class="card-preview">{{ preview(c) }}</span>
+          <span class="card-date">{{ c.updatedAt | date:'short' }}</span>
+        </div>
+
+        <span
+          class="delete-btn"
+          role="button"
+          aria-label="Eliminar conversación"
+          (click)="confirmDelete(c, $event)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </span>
+
+        <ion-icon class="chevron" name="chevron-forward-outline"></ion-icon>
+      </button>
+
+    </ng-container>
+
+    <ng-template #loading>
+      <div class="loading">
+        <ion-spinner name="dots"></ion-spinner>
+      </div>
+    </ng-template>
+
+  </div>
+</ion-content>

@@ -19,9 +19,10 @@ const GEMINI_API_KEY = defineSecret('GEMINI_API_KEY');
 /**
  * Modelos en orden de preferencia. Si el primero está saturado (503) o sin
  * cuota (429), se intenta con el siguiente. Todos son modelos Flash pequeños
- * y económicos, ideales para Q&A de FAQ.
+ * y económicos, ideales para Q&A de FAQ. Gemini 3.1 Flash-Lite ofrece
+ * límites de uso más altos que modelos anteriores.
  */
-const MODELS = ['gemini-flash-latest', 'gemini-flash-lite-latest'];
+const MODELS = ['gemini-3.1-flash-lite', 'gemini-flash-latest', 'gemini-flash-lite-latest'];
 
 /** Espera en milisegundos. */
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));

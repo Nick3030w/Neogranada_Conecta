@@ -26,3 +26,30 @@ export interface AskChatbotRequest {
 export interface AskChatbotResponse {
   reply: string;
 }
+
+/**
+ * Una conversación con NeoBot guardada en Firestore para que el estudiante
+ * pueda consultarla más adelante.
+ *
+ * Los mensajes se guardan embebidos en el propio documento (no en una
+ * subcolección): una charla con el bot es corta y siempre se lee completa,
+ * así que un único documento es más simple y barato de leer.
+ */
+export interface ChatbotConversation {
+  /** Id del documento en Firestore. */
+  id: string;
+  /** uid del estudiante dueño de la conversación. */
+  ownerId: string;
+  /** Título legible (se deriva del primer mensaje del usuario). */
+  title: string;
+  /** Turnos de la conversación, en orden. */
+  messages: ChatbotStoredMessage[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/** Un turno tal como se guarda (sin el flag efímero `pending`). */
+export interface ChatbotStoredMessage {
+  role: ChatbotRole;
+  text: string;
+}
