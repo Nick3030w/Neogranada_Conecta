@@ -1,12 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonContent, IonIcon, IonToggle, ViewWillEnter } from '@ionic/angular/standalone';
+import { Capacitor } from '@capacitor/core';
 import { addIcons } from 'ionicons';
-import { logOutOutline, construct, moonOutline } from 'ionicons/icons';
+import { logOutOutline, construct, moonOutline, alarmOutline } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { ReminderPermissionState, ReminderService } from '../../../core/services/reminder.service';
 
 @Component({
   selector: 'app-settings',
@@ -20,26 +22,38 @@ export class SettingsPage implements OnInit, OnDestroy, ViewWillEnter {
   darkMode = false;
   loading = false;
 
+  /** Sección de recordatorios: solo en la app nativa y para estudiantes */
+  showReminders = false;
+  reminderState: ReminderPermissionState = { notifications: 'unavailable', exactAlarm: 'unavailable' };
+  reminderBusy = false;
+
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private themeService = inject(ThemeService);
+  private reminderService = inject(ReminderService);
+
   private userSub?: Subscription;
   private themeSub?: Subscription;
+  private reminderSub?: Subscription;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private themeService: ThemeService,
-  ) {
-    addIcons({ logOutOutline, construct, moonOutline });
+  constructor() {
+    addIcons({ logOutOutline, construct, moonOutline, alarmOutline });
   }
 
   ngOnInit(): void {
     // Suscripción reactiva para recibir cambios en tiempo real
     this.userSub = this.authService.currentUser$.subscribe(user => {
       this.notificationsMuted = user?.notificationsMuted ?? false;
+      this.showReminders = Capacitor.isNativePlatform() && user?.role === 'student';
     });
 
     // El estado del toggle sigue al tema activo (fuente de verdad: ThemeService)
     this.themeSub = this.themeService.theme$.subscribe(theme => {
       this.darkMode = theme === 'dark';
+    });
+
+    this.reminderSub = this.reminderService.permissionState$.subscribe(state => {
+      this.reminderState = state;
     });
   }
 
@@ -48,11 +62,14 @@ export class SettingsPage implements OnInit, OnDestroy, ViewWillEnter {
     const user = this.authService.currentUser;
     this.notificationsMuted = user?.notificationsMuted ?? false;
     this.darkMode = this.themeService.isDark;
+
+    if (this.showReminders) void this.reminderService.refreshPermissionState();
   }
 
   ngOnDestroy(): void {
     this.userSub?.unsubscribe();
     this.themeSub?.unsubscribe();
+    this.reminderSub?.unsubscribe();
   }
 
   async toggleNotifications(event: CustomEvent): Promise<void> {
@@ -66,6 +83,46 @@ export class SettingsPage implements OnInit, OnDestroy, ViewWillEnter {
     const enabled = event.detail.checked;
     this.darkMode = enabled;
     await this.themeService.toggleDark(enabled);
+  }
+
+  // ── Recordatorios de reservas ──────────────────────────────────
+
+  /** true si faltan las notificaciones del sistema (se pueden volver a pedir) */
+  get notificationsOff(): boolean {
+    return this.reminderState.notifications === 'denied' || this.reminderState.notifications === 'prompt';
+  }
+
+  get notificationsLabel(): string {
+    if (this.reminderState.notifications === 'granted') return 'Activadas';
+    return this.notificationsOff ? 'Desactivadas' : 'No disponible';
+  }
+
+  get exactAlarmLabel(): string {
+    switch (this.reminderState.exactAlarm) {
+      case 'granted': return 'Permitidas';
+      case 'denied':  return 'No permitidas';
+      default:        return 'No disponible';
+    }
+  }
+
+  /** Vuelve a pedir el permiso de notificaciones. */
+  async retryNotificationPermission(): Promise<void> {
+    this.reminderBusy = true;
+    try {
+      await this.reminderService.requestNotificationPermission();
+    } finally {
+      this.reminderBusy = false;
+    }
+  }
+
+  /** Abre la pantalla del sistema "Alarmas y recordatorios". */
+  async openExactAlarmSettings(): Promise<void> {
+    this.reminderBusy = true;
+    try {
+      await this.reminderService.openExactAlarmSettings();
+    } finally {
+      this.reminderBusy = false;
+    }
   }
 
   goToProfile(): void {

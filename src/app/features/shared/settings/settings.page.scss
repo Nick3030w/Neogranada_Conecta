@@ -145,6 +145,59 @@ ion-content.settings-content {
   }
 }
 
+// ── Recordatorios de reservas (solo app nativa) ───────────────
+.reminders-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid #e0e0e0;
+
+  .setting-label {
+    color: #1a1a1a;
+    font-family: 'Lilita One', cursive;
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .setting-label-icon {
+      font-size: 20px;
+      color: #c9a000;
+    }
+  }
+}
+
+.reminder-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
+.reminder-badge {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #fdecea;
+  color: #b3261e;
+
+  &.is-ok {
+    background: #e6f4ea;
+    color: #1e7b3c;
+  }
+}
+
+.reminder-hint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #4a5568;
+}
+
 // ── Botones de acción ─────────────────────────────────────────
 .action-btn {
   width: 100%;
@@ -165,6 +218,12 @@ ion-content.settings-content {
 
   &:active  { opacity: 0.8; }
   &:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  // Variante compacta para la sección de recordatorios
+  &.action-btn--small {
+    height: 40px;
+    font-size: 14px;
+  }
 }
 
 // ── Botones CANCELAR / CONFIRMAR ──────────────────────────────
@@ -231,6 +290,27 @@ ion-content.settings-content {
 
     .setting-label {
       color: #eef2f8;
+    }
+  }
+
+  .reminders-block {
+    border-bottom-color: #2c3d5c;
+
+    .setting-label {
+      color: #eef2f8;
+    }
+  }
+
+  .reminder-status { color: #eef2f8; }
+  .reminder-hint   { color: #9aa5b4; }
+
+  .reminder-badge {
+    background: rgba(231, 76, 60, 0.18);
+    color: #ff8a80;
+
+    &.is-ok {
+      background: rgba(46, 204, 113, 0.18);
+      color: #7ee2a8;
     }
   }
 

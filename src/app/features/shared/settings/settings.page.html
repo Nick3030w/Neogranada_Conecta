@@ -53,6 +53,49 @@
           </ion-toggle>
         </div>
 
+        <!-- Recordatorios de reservas (solo app nativa, estudiantes) -->
+        <div class="reminders-block" *ngIf="showReminders">
+          <span class="setting-label">
+            <ion-icon name="alarm-outline" class="setting-label-icon"></ion-icon>
+            Recordatorios de reservas
+          </span>
+
+          <div class="reminder-status">
+            <span>Notificaciones</span>
+            <span class="reminder-badge" [class.is-ok]="reminderState.notifications === 'granted'">
+              {{ notificationsLabel }}
+            </span>
+          </div>
+          <ng-container *ngIf="notificationsOff">
+            <p class="reminder-hint">
+              Sin notificaciones no te llegarán los recordatorios. Si Android no muestra
+              el permiso, actívalo en Ajustes &gt; Apps &gt; Neogranada Conecta &gt; Notificaciones.
+            </p>
+            <button class="action-btn action-btn--small"
+                    (click)="retryNotificationPermission()"
+                    [disabled]="reminderBusy">
+              Reintentar
+            </button>
+          </ng-container>
+
+          <div class="reminder-status">
+            <span>Alarmas exactas</span>
+            <span class="reminder-badge" [class.is-ok]="reminderState.exactAlarm === 'granted'">
+              {{ exactAlarmLabel }}
+            </span>
+          </div>
+          <ng-container *ngIf="reminderState.exactAlarm === 'denied'">
+            <p class="reminder-hint">
+              Sin "Alarmas y recordatorios" los recordatorios pueden llegar con retraso.
+            </p>
+            <button class="action-btn action-btn--small"
+                    (click)="openExactAlarmSettings()"
+                    [disabled]="reminderBusy">
+              Permitir alarmas exactas
+            </button>
+          </ng-container>
+        </div>
+
         <!-- Botones de acción -->
         <button class="action-btn" (click)="goToProfile()">
           Ajustes de perfil

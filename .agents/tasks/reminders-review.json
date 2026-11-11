@@ -1,0 +1,30 @@
+{
+  "verdict": "APPROVED",
+  "findings": [
+    {
+      "title": "Diálogos encadenados en el primer arranque",
+      "severity": "non-blocking",
+      "confidence": "likely",
+      "detail": "Si el estudiante ya tiene sesión y niega el diálogo del sistema al arrancar, enseguida sale 'Notificaciones desactivadas'; con 'Reintentar' puede volver a salir el diálogo del sistema y después 'Activa las notificaciones' (hasta cuatro diálogos seguidos). Hay que probarlo en el teléfono; si resulta molesto, omitir el aviso propio en el mismo arranque en que el sistema acaba de preguntar."
+    },
+    {
+      "title": "Sin color institucional en la sección nueva",
+      "severity": "non-blocking",
+      "confidence": "confirmed",
+      "detail": "Ningún estilo nuevo de settings.page.scss usa #1a2a4a; siguen la paleta propia de la página (#1a2e5a, dorado, #1a1a1a). Hay que confirmar con el usuario si basta con esa coherencia o si quiere el azul institucional, por ejemplo en el texto de .reminder-status."
+    },
+    {
+      "title": "Estilos de .setting-label duplicados",
+      "severity": "nit",
+      "confidence": "confirmed",
+      "detail": ".reminders-block .setting-label copia línea por línea .setting-row .setting-label, y su override del tema oscuro también está duplicado. Se puede usar un selector compartido."
+    },
+    {
+      "title": "La cola recorre todo el historial en cada snapshot",
+      "severity": "non-blocking",
+      "confidence": "likely",
+      "detail": "syncBookings cancela y reprograma en serie todas las reservas aprobadas y cancela todas las demás en cada snapshot de Firestore, incluidas las que ya terminaron. Filtrar las reservas cuya hora de fin ya pasó reduciría las llamadas al plugin."
+    }
+  ],
+  "reviewDoc": "c:\\Neogranada_Conecta/.agents/tasks/reminders-review.md"
+}
