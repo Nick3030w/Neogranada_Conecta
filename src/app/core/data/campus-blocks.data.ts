@@ -120,9 +120,11 @@ export const BLOCKS_DATA: Record<string, BlockInfo> = {
     id: 'CAPILLA',
     name: 'Capilla',
     coverImage: `${COVERS}/capilla.jpeg`,
-    // Sin espacios reservables por ahora: no hay nada que sincronizar.
+    // Espacio informativo (tipo "Otro"): no se reserva, así que no se sincroniza.
     syncWithFirestore: false,
-    spaces: [],
+    spaces: [
+      { name: 'Capilla', type: 'Otro', imageUrl: `${COVERS}/capilla.jpeg` },
+    ],
   },
 };
 
