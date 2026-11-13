@@ -97,7 +97,7 @@ export const BLOCKS_DATA: Record<string, BlockInfo> = {
   BIENESTAR: {
     id: 'BIENESTAR',
     name: 'Bienestar',
-    coverImage: `${COVERS}/bienestar.webp`,
+    coverImage: `${COVERS}/bienestar.jpeg`,
     syncWithFirestore: true,
     spaces: [
       // Elementos deportivos
@@ -116,7 +116,15 @@ export const BLOCKS_DATA: Record<string, BlockInfo> = {
       { name: 'Violín',                type: 'Instrumento musical', description: 'Violín para préstamo estudiantil',           imageUrl: `${IMG}/bienestar/violin.webp` },
     ],
   },
+  CAPILLA: {
+    id: 'CAPILLA',
+    name: 'Capilla',
+    coverImage: `${COVERS}/capilla.jpeg`,
+    // Sin espacios reservables por ahora: no hay nada que sincronizar.
+    syncWithFirestore: false,
+    spaces: [],
+  },
 };
 
-/** Lista ordenada de bloques (A → F y Bienestar al final). */
+/** Lista ordenada de bloques (A → F, Bienestar y Capilla al final). */
 export const BLOCKS_LIST: BlockInfo[] = Object.values(BLOCKS_DATA);
