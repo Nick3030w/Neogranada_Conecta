@@ -32,7 +32,7 @@ export const CATEGORY_LABELS: Record<ResourceCategory, string> = {
   elementos_deportivos: 'Elementos deportivos',
   laboratorio: 'Laboratorios',
   biblioteca: 'Biblioteca',
-  base_datos: 'Base de datos',
+  base_datos: 'Bases de datos académicas',
   instrumentos_musicales: 'Instrumentos',
   material_ludico: 'Material lúdico',
   botiquin: 'Botiquín',

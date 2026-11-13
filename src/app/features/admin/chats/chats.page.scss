@@ -77,7 +77,7 @@ ion-content.chats-content { --background: #1a2e5a; }
   gap: 12px;
   ion-spinner { width: 36px; height: 36px; }
   .empty-icon { font-size: 56px; color: #b0bec5; }
-  .empty-text { font-size: 14px; color: #777; text-align: center; line-height: 1.4; }
+  .empty-text { font-size: 14px; color: #666; text-align: center; line-height: 1.4; }
 }
 
 .chat-item {
@@ -146,7 +146,7 @@ ion-content.chats-content { --background: #1a2e5a; }
 
 .chat-resource {
   font-size: 11px;
-  color: #888;
+  color: #666;
 }
 
 .chat-last-msg {
@@ -155,13 +155,13 @@ ion-content.chats-content { --background: #1a2e5a; }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  &.no-msg { color: #aaa; font-style: italic; }
+  &.no-msg { color: #666; font-style: italic; }
 }
 
 .unread-badge {
   min-width: 22px;
   height: 22px;
-  background: #e74c3c;
+  background: #c62828;
   color: #ffffff;
   border-radius: 11px;
   font-size: 11px;
@@ -171,4 +171,24 @@ ion-content.chats-content { --background: #1a2e5a; }
   justify-content: center;
   padding: 0 6px;
   flex-shrink: 0;
+}
+
+// ============================================================
+// Tema oscuro
+// ============================================================
+// La tarjeta del chat no termina en "-card", así que la regla global no
+// la oscurece, pero sí aclara sus textos (están dentro de .chats-panel).
+// Se oscurece aquí, igual que en los chats del estudiante.
+:host-context(body.theme-dark) {
+  .chat-item {
+    background: #223354;
+    border-color: #2c3d5c;
+  }
+
+  .chat-student           { color: #ffffff; }
+  .chat-resource          { color: #a9b6cc; }
+  .chat-last-msg          { color: #cbd5e6; }
+  .chat-last-msg.no-msg   { color: #a9b6cc; }
+  .empty-area .empty-text { color: #a9b6cc; }
+  .unread-badge           { color: #ffffff; }
 }

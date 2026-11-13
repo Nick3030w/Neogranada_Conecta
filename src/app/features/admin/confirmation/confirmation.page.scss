@@ -319,12 +319,12 @@ ion-content.conf-content {
   box-sizing: border-box;
 
   &:focus { border-color: #c9a000; }
-  &::placeholder { color: #999; }
+  &::placeholder { color: #666; }
 }
 
 .modal-error {
   font-size: 12px;
-  color: #e74c3c;
+  color: #c62828;
   margin-top: -6px;
 }
 
@@ -350,3 +350,29 @@ ion-content.conf-content {
 
 .modal-btn-cancel { background: #e0e0e0; color: #1a1a1a; }
 .modal-btn-deny   { background: #e8857a; color: #1a1a1a; }
+
+// ============================================================
+// Tema oscuro — legibilidad de las solicitudes
+// ============================================================
+// Cada .conf-panel pasa a superficie oscura por la regla global, pero los
+// selectores anidados de esta página conservaban el texto oscuro del tema
+// claro, y los botones de color recibían texto claro.
+:host-context(body.theme-dark) {
+  .request-id-pill {
+    border-color: var(--nc-gold);
+
+    span { color: #eef2f8; }
+  }
+
+  .detail-row {
+    .detail-label { color: #a9b6cc; }
+    .detail-value { color: #eef2f8; }
+  }
+
+  // Botones de color claro: texto oscuro, como en el tema claro
+  .btn-deny,
+  .btn-accept { color: #1a1a1a; }
+
+  .processing-row span,
+  .empty-panel .empty-text { color: #a9b6cc; }
+}

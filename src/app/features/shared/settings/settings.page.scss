@@ -250,14 +250,12 @@ ion-content.settings-content {
   &:active { opacity: 0.85; }
 }
 
-.btn-cancel {
+// Texto azul oscuro sobre dorado (el blanco no contrastaba). El selector
+// anidado le gana a la regla global de texto claro del tema oscuro.
+.bottom-actions .btn-cancel,
+.bottom-actions .btn-confirm {
   background: #c9a000;
-  color: #ffffff;
-}
-
-.btn-confirm {
-  background: #c9a000;
-  color: #ffffff;
+  color: #1a2e5a;
 }
 
 // ============================================================

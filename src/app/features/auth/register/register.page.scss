@@ -147,15 +147,17 @@ ion-content.register-content {
   padding: 0;
   height: 100%;
 
-  &::placeholder { color: #bbb; }
+  &::placeholder { color: #6b7280; }
 }
 
-// ion-input para contraseñas (necesita el toggle)
+// ion-input para contraseñas (necesita el toggle).
+// Ionic pinta el placeholder al 60 % salvo que se fije la opacidad.
 .field-ion-input {
   flex: 1;
   --background: transparent;
   --color: #1a1a1a;
-  --placeholder-color: #bbb;
+  --placeholder-color: #6b7280;
+  --placeholder-opacity: 1;
   --padding-start: 0;
   --padding-end: 0;
   --min-height: 42px;
@@ -169,10 +171,12 @@ ion-content.register-content {
   padding: 4px 12px;
 }
 
+// ion-select no tiene --color: el valor elegido hereda `color`
 .field-select {
   flex: 1;
-  --color: #1a1a1a;
-  --placeholder-color: #bbb;
+  color: #1a1a1a;
+  --placeholder-color: #6b7280;
+  --placeholder-opacity: 1;
   font-size: 14px;
 }
 
@@ -192,7 +196,7 @@ ion-content.register-content {
 // ── Errores ───────────────────────────────────────────────────
 .field-error {
   display: block;
-  color: #e74c3c;
+  color: #c0392b;
   font-size: 11px;
   margin-top: 4px;
   padding-left: 2px;
@@ -206,7 +210,7 @@ ion-content.register-content {
   border: 1.5px solid #e74c3c;
   border-radius: 10px;
   padding: 10px 14px;
-  color: #e74c3c;
+  color: #c0392b;
   font-size: 13px;
   margin-bottom: 16px;
 
@@ -214,11 +218,12 @@ ion-content.register-content {
 }
 
 // ── Botón CREAR CUENTA ────────────────────────────────────────
+// Texto azul oscuro sobre dorado: el blanco no contrastaba
 .btn-registrar {
   width: 100%;
   height: 50px;
   background: #c9a000;
-  color: #ffffff;
+  color: #1a2e5a;
   border: none;
   border-radius: 10px;
   font-family: 'Lilita One', cursive;
@@ -237,7 +242,11 @@ ion-content.register-content {
   &:disabled { opacity: 0.6; cursor: not-allowed; }
   &:active   { opacity: 0.85; }
 
-  ion-spinner { width: 20px; height: 20px; color: #ffffff; }
+  ion-spinner { width: 20px; height: 20px; color: #1a2e5a; }
+
+  // El texto va en un <span>: en tema oscuro la regla global de los
+  // paneles lo pintaría claro sobre el dorado
+  span { color: #1a2e5a; }
 }
 
 // ── Link a login ──────────────────────────────────────────────
@@ -254,7 +263,7 @@ ion-content.register-content {
   }
 
   .login-link {
-    color: #c9a000;
+    color: #8a6a00;
     font-size: 13px;
     font-weight: 700;
     text-decoration: none;
@@ -277,28 +286,39 @@ ion-content.register-content {
     input.field-input {
       color: #1a2a4a !important;
       -webkit-text-fill-color: #1a2a4a !important;
-      &::placeholder { color: #bbb !important; -webkit-text-fill-color: #bbb !important; }
+      &::placeholder { color: #6b7280 !important; -webkit-text-fill-color: #6b7280 !important; }
     }
 
     // ion-input de contraseña
     ion-input,
     .field-ion-input {
       --color: #1a2a4a !important;
-      --placeholder-color: #bbb !important;
+      --placeholder-color: #6b7280 !important;
       color: #1a2a4a !important;
     }
 
-    // Select de programa académico
+    // Select de programa académico (ion-select no tiene --color)
     ion-select,
     .field-select {
-      --color: #1a2a4a !important;
-      --placeholder-color: #bbb !important;
+      --placeholder-color: #6b7280 !important;
       color: #1a2a4a !important;
     }
   }
 
-  // Texto del checkbox "Guardar contraseña" sobre panel blanco
+  // Casilla "Guardar contraseña": va sobre el panel oscuro → texto claro
   .remember-row ion-checkbox {
-    color: #1a1a1a !important;
+    color: #eef2f8 !important;
+    --border-color: #a9b6cc;
   }
+
+  // Texto y enlace de inicio de sesión sobre el panel oscuro
+  .login-row {
+    .login-text { color: #a9b6cc; }
+    .login-link { color: #f0c040; }
+  }
+
+  // Errores: rojo claro legible sobre el panel oscuro
+  .field-error,
+  .error-box,
+  .error-box * { color: #ff8a80; }
 }

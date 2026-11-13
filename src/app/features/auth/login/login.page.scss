@@ -208,7 +208,7 @@ ion-content.login-content {
 // ── Errores ───────────────────────────────────────────────────
 .field-error {
   display: block;
-  color: #e74c3c;
+  color: #c0392b;
   font-size: 11px;
   margin-top: 4px;
 }
@@ -221,7 +221,7 @@ ion-content.login-content {
   border: 1px solid #e74c3c;
   border-radius: 8px;
   padding: 10px 14px;
-  color: #e74c3c;
+  color: #c0392b;
   font-size: 13px;
   margin-bottom: 14px;
 
@@ -229,11 +229,12 @@ ion-content.login-content {
 }
 
 // ── Botón VERIFICAR ───────────────────────────────────────────
+// Texto azul oscuro sobre dorado: el blanco no contrastaba
 .btn-verificar {
   width: 100%;
   height: 50px;
   background: #c9a000;
-  color: #ffffff;
+  color: #1a2e5a;
   border: none;
   border-radius: 10px;
   font-size: 16px;
@@ -251,7 +252,11 @@ ion-content.login-content {
   &:disabled { opacity: 0.6; cursor: not-allowed; }
   &:active   { opacity: 0.85; }
 
-  ion-spinner { width: 20px; height: 20px; color: #ffffff; }
+  ion-spinner { width: 20px; height: 20px; color: #1a2e5a; }
+
+  // El texto va en un <span>: en tema oscuro la regla global de los
+  // paneles lo pintaría claro sobre el dorado
+  span { color: #1a2e5a; }
 }
 
 // ── Registro ──────────────────────────────────────────────────
@@ -268,7 +273,7 @@ ion-content.login-content {
   }
 
   .register-link {
-    color: #c9a000;
+    color: #8a6a00;
     font-size: 13px;
     font-weight: 700;
     text-decoration: none;
@@ -307,10 +312,22 @@ ion-content.login-content {
     }
   }
 
-  // Texto del checkbox "Recordar mis datos" sobre panel blanco
+  // Casilla "Recordar mis datos": va sobre el panel oscuro → texto claro
   .remember-row ion-checkbox {
-    color: #1a1a1a !important;
+    color: #eef2f8 !important;
+    --border-color: #a9b6cc;
   }
+
+  // Texto y enlace de registro sobre el panel oscuro
+  .register-row {
+    .register-text { color: #a9b6cc; }
+    .register-link { color: #f0c040; }
+  }
+
+  // Errores: rojo claro legible sobre el panel oscuro
+  .field-error,
+  .error-box,
+  .error-box ion-icon { color: #ff8a80; }
 
   .field-input-row {
     background: #ffffff !important;

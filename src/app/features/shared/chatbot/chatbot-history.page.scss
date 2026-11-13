@@ -134,10 +134,12 @@
   min-width: 0;
 }
 
+// La tarjeta es blanca en tema claro (y azul oscura en el oscuro): el texto
+// no puede usar --ion-text-color, que en el tema claro es blanco.
 .card-title {
   font-weight: 700;
   font-size: 15px;
-  color: var(--ion-text-color, #222);
+  color: #1a2a4a;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -145,8 +147,7 @@
 
 .card-preview {
   font-size: 13px;
-  opacity: 0.75;
-  color: var(--ion-text-color, #222);
+  color: #4a5568;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -154,8 +155,7 @@
 
 .card-date {
   font-size: 11px;
-  opacity: 0.55;
-  color: var(--ion-text-color, #222);
+  color: #5a6578;
 }
 
 .delete-btn {
@@ -171,4 +171,17 @@
   color: var(--chat-gold-accent);
   font-size: 18px;
   flex-shrink: 0;
+}
+
+// ============================================================
+// Tema oscuro
+// ============================================================
+// La tarjeta pasa a #1c2b45 por la regla global de "-card".
+:host-context(body.theme-dark) {
+  .card-title   { color: #eef2f8; }
+  .card-preview { color: #c3cee0; }
+  .card-date    { color: #a9b6cc; }
+
+  // Papelera: el rojo oscuro no se ve sobre la tarjeta oscura
+  .delete-btn   { color: #ff8a80; }
 }

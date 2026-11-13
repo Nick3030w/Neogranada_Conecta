@@ -382,6 +382,16 @@ ion-content.library-content {
   .horario-dia {
     color: #eef2f8;
   }
+
+  // Botón dorado: texto oscuro como en el tema claro
+  .btn-volver {
+    color: #1a2e5a;
+  }
+
+  // Placeholder del buscador sobre la fila oscura
+  .search-input::placeholder {
+    color: #a9b6cc;
+  }
 }
 
 // Botón volver

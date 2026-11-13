@@ -112,7 +112,7 @@ ion-content.map-content {
   color: #1a1a1a;
   outline: none;
 
-  &::placeholder { color: #6b6b6b; }
+  &::placeholder { color: #555; }
 }
 
 .search-icon {
@@ -228,7 +228,8 @@ ion-content.map-content {
   .search-input {
     color: #1a1a1a !important;
     -webkit-text-fill-color: #1a1a1a;
-    &::placeholder { color: #6b6b6b !important; }
+    // Sin -webkit-text-fill-color propio, el placeholder heredaría el del texto
+    &::placeholder { color: #555 !important; -webkit-text-fill-color: #555; }
   }
 
   .search-icon { color: #555 !important; }

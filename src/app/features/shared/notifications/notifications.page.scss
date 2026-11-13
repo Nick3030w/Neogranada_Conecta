@@ -151,7 +151,7 @@ ion-content.notif-content {
   }
 
   .notif-time {
-    color: #999;
+    color: #666;
     font-size: 11px;
     margin-top: 2px;
   }
@@ -167,7 +167,7 @@ ion-content.notif-content {
 .empty-notif {
   text-align: center;
   padding: 40px 0;
-  color: #9aa5b4;
+  color: #666;
 
   ion-icon {
     font-size: 48px;
@@ -186,9 +186,11 @@ ion-content.notif-content {
   &:active { transform: scale(0.98); }
 }
 
-.notif-chevron {
+// Dorado oscuro: el dorado claro no contrastaba con la fila gris. El selector
+// anidado le gana a la regla global de texto claro del tema oscuro.
+.notif-row .notif-chevron {
   font-size: 18px;
-  color: #c9a000;
+  color: #8a6a00;
   flex-shrink: 0;
   align-self: center;
 }

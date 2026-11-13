@@ -407,6 +407,11 @@ body.theme-dark {
       color: #eef2f8 !important;
       background: #16233a !important;
     }
+
+    // Íconos de las opciones: Ionic los pinta negros al 54 %, invisibles aquí
+    .action-sheet-icon {
+      color: var(--nc-gold) !important;
+    }
   }
 
   .select-action-sheet .action-sheet-button {
@@ -553,4 +558,20 @@ body.theme-dark {
     color: #eef2f8 !important;
     background: transparent !important;
   }
+}
+
+// ============================================================
+// Legibilidad en ambos temas — overlays y clases utilitarias
+// ============================================================
+// Mensaje de los ion-alert: Ionic usa un gris (#737373) que no contrasta
+// con el fondo azul de los alerts en ningún tema.
+ion-alert .alert-wrapper .alert-message {
+  color: #c3cee0;
+}
+
+// En tema oscuro `--nc-white` es una superficie (#1c2b45), no un color de
+// texto: las clases que lo usan como texto se fijan en blanco.
+body.theme-dark {
+  ion-toolbar { --color: #ffffff; }
+  .nc-page-title { color: #ffffff; }
 }
