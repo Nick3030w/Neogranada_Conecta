@@ -105,7 +105,7 @@ ion-content.students-content {
   color: #1a1a1a;
   padding: 0;
 
-  &::placeholder { color: #bbb; }
+  &::placeholder { color: #6b7280; }
 
   // Oculta la X nativa del type=search (usamos la propia)
   &::-webkit-search-cancel-button { display: none; }
@@ -120,12 +120,12 @@ ion-content.students-content {
   align-items: center;
   flex-shrink: 0;
 
-  ion-icon { font-size: 18px; color: #b0bec5; }
+  ion-icon { font-size: 18px; color: #5a6578; }
 }
 
 .search-hint {
   font-size: 11px;
-  color: #777;
+  color: #666;
   margin: 0 0 2px;
   padding-left: 4px;
   line-height: 1.35;
@@ -241,7 +241,7 @@ ion-content.students-content {
     .search-input {
       color: #1a2a4a !important;
       -webkit-text-fill-color: #1a2a4a;
-      &::placeholder { color: #9aa5b4 !important; -webkit-text-fill-color: #9aa5b4; }
+      &::placeholder { color: #6b7280 !important; -webkit-text-fill-color: #6b7280; }
     }
   }
 

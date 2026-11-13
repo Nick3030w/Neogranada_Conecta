@@ -308,4 +308,10 @@ ion-content.catalog-content {
   .catalog-card--favorite .card-label {
     color: var(--nc-gold);
   }
+
+  // Posiciones 4 a 6 del ranking: el círculo gris claro conserva su
+  // fondo, así que el número debe seguir oscuro
+  .rank-number:not(.rank-gold):not(.rank-silver):not(.rank-bronze) {
+    color: #1a2a4a;
+  }
 }

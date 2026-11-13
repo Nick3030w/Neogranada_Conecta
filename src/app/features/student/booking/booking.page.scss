@@ -538,6 +538,10 @@ ion-content.booking-content { --background: #1a2e5a; }
 
   ion-icon { font-size: 22px; flex-shrink: 0; }
 
+  // El texto va en un <span>: hereda el color del estado (en tema oscuro
+  // la regla global de los paneles lo pintaría claro sobre fondo claro)
+  span { color: inherit; }
+
   &.available {
     background: #e8f5e9;
     border: 2px solid #4caf50;
@@ -571,13 +575,13 @@ ion-content.booking-content { --background: #1a2e5a; }
 }
 
 // ── Errores ───────────────────────────────────────────────────
-.field-error { display: block; color: #e74c3c; font-size: 11px; margin-top: 4px; }
+.field-error { display: block; color: #c0392b; font-size: 11px; margin-top: 4px; }
 .error-box {
   background: rgba(231,76,60,0.08);
   border: 1px solid #e74c3c;
   border-radius: 8px;
   padding: 10px 14px;
-  color: #e74c3c;
+  color: #c0392b;
   font-size: 13px;
   margin-bottom: 14px;
 }
@@ -624,16 +628,37 @@ ion-content.booking-content { --background: #1a2e5a; }
 
   // Estados de carga / vacío del listado de recursos
   .loading-resources,
-  .empty-resources { color: #a9b6cc !important; }
+  .empty-resources,
+  .empty-resources p { color: #a9b6cc !important; }
 
-  // Días del mini-calendario del dropdown (fondo oscuro → texto claro)
+  // Spinner de carga: dorado para que se vea sobre el panel oscuro
+  .res-spinner { color: var(--nc-gold); }
+
+  // Días del mini-calendario del dropdown (fondo oscuro → texto claro).
+  // El número va en un <span> que la regla global pinta directamente,
+  // así que se le obliga a heredar el color del día.
   .cal-cell {
     color: #eef2f8 !important;
-    &.past  { color: #5a6b88 !important; }
-    &:not(.empty):not(.past):not(.selected):hover { background: #223354 !important; }
+    span { color: inherit !important; }
+    &.past     { color: #8493ad !important; }
+    &.today    { color: #1a2a4a !important; }   // fondo dorado claro
+    &.selected { color: #f0c040 !important; }
+    &:not(.empty):not(.past):not(.selected):not(.today):hover { background: #223354 !important; }
   }
   .cal-head,
   .cal-month-label { color: #a9b6cc !important; }
+
+  // Horas: botones dorados claros → texto oscuro; la elegida es azul con texto dorado
+  .time-slot          { color: #1a2a4a; }
+  .time-slot.selected { color: #f0c040; }
+
+  // Botón dorado CONFIRMAR RESERVA: texto oscuro, como en el tema claro
+  .btn-continuar,
+  .btn-continuar span { color: #1a2e5a; }
+
+  // Errores: rojo claro legible sobre el panel oscuro
+  .field-error,
+  .error-box { color: #ff8a80; }
 
   // El select de recurso (caja dorada) conserva su identidad;
   // su texto ya es oscuro sobre dorado → sin cambios.
@@ -663,7 +688,8 @@ ion-content.booking-content { --background: #1a2e5a; }
     .native-textarea {
       color: #1a2a4a !important;
       -webkit-text-fill-color: #1a2a4a;
-      &::placeholder { color: #9aa5b4 !important; }
+      // Sin -webkit-text-fill-color propio, el placeholder heredaría el del texto
+      &::placeholder { color: #4a5568 !important; -webkit-text-fill-color: #4a5568; }
     }
   }
 }

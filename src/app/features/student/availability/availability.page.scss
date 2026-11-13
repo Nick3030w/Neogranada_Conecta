@@ -180,7 +180,6 @@ ion-content.avail-content {
     background: #f5a0a0;
     border: 2px solid #c0392b;
     cursor: not-allowed;
-    opacity: 0.8;
     span { color: #7b0000; }
     .badge-icon { color: #7b0000; }
   }
@@ -280,5 +279,10 @@ ion-content.avail-content {
 
   .load-spinner {
     color: var(--nc-gold);
+  }
+
+  // Botón dorado: texto oscuro como en el tema claro
+  .btn-back {
+    color: #1a2a4a;
   }
 }

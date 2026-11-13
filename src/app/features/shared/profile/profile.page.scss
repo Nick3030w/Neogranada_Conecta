@@ -274,7 +274,9 @@ ion-content.profile-content {
 
   &:focus-within { border-color: #c9a000; }
   &.has-error    { border-color: #e74c3c; }
-  &.disabled-field { opacity: 0.65; }
+  // Solo lectura: fondo gris en vez de transparencia, para que el texto
+  // siga siendo legible
+  &.disabled-field { background: #f1f3f6; }
 }
 
 .field-label {
@@ -298,8 +300,8 @@ ion-content.profile-content {
   padding: 0;
   line-height: 1.4;
 
-  &::placeholder { color: #bbb; }
-  &[readonly]     { color: #666; cursor: default; }
+  &::placeholder { color: #6b7280; }
+  &[readonly]     { color: #4a5568; cursor: default; }
 }
 
 // Selects de preferencias dentro del recuadro blanco
@@ -310,8 +312,10 @@ ion-content.profile-content {
 .field-select {
   width: 100%;
   min-height: 24px;
-  --color: #1a1a1a;
-  --placeholder-color: #bbb;
+  // ion-select no tiene --color: el valor elegido hereda `color`
+  color: #1a1a1a;
+  --placeholder-color: #6b7280;
+  --placeholder-opacity: 1;
   --padding-start: 0;
   --padding-end: 0;
   font-size: 14px;
@@ -407,8 +411,19 @@ ion-content.profile-content {
   }
 }
 
-.btn-cancel {
-  background: #8a8a8a;
+// Colores con contraste suficiente: blanco sobre gris oscuro y azul oscuro
+// sobre dorado. Los selectores anidados le ganan a la regla global de texto
+// claro del tema oscuro.
+.bottom-actions .btn-cancel {
+  background: #6b6b6b;
+  color: #ffffff;
+}
+
+.bottom-actions .btn-confirm {
+  color: #1a2e5a;
+
+  ion-spinner,
+  span { color: #1a2e5a; }
 }
 
 // ── Mensajes ──────────────────────────────────────────────────
@@ -435,19 +450,24 @@ ion-content.profile-content {
   .field-box {
     background: #ffffff !important;
 
+    // Solo lectura: mismo fondo gris que en el tema claro
+    &.disabled-field { background: #f1f3f6 !important; }
+
     .field-label { color: #1a2a4a !important; }
 
     .field-input {
       color: #1a2a4a !important;
       -webkit-text-fill-color: #1a2a4a;
-      &::placeholder { color: #9aa5b4 !important; -webkit-text-fill-color: #9aa5b4; }
+      &::placeholder { color: #6b7280 !important; -webkit-text-fill-color: #6b7280; }
       &[readonly]    { color: #4a5568 !important; -webkit-text-fill-color: #4a5568; }
     }
 
-    // El select vive dentro del recuadro blanco: su texto sigue siendo oscuro
+    // El select vive dentro del recuadro blanco: su texto sigue siendo oscuro.
+    // ion-select no tiene --color: el valor elegido hereda `color`.
     .field-select {
-      --color: #1a2a4a !important;
-      --placeholder-color: #9aa5b4 !important;
+      color: #1a2a4a !important;
+      --placeholder-color: #6b7280 !important;
+      --placeholder-opacity: 1;
     }
 
     .pref-icon { color: #c9a000 !important; }

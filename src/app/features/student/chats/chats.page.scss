@@ -90,7 +90,7 @@ ion-content.chats-content {
 
   .empty-text {
     font-size: 14px;
-    color: #777;
+    color: #666;
     text-align: center;
     line-height: 1.4;
   }
@@ -165,7 +165,7 @@ ion-content.chats-content {
 
 .chat-date {
   font-size: 11px;
-  color: #888;
+  color: #666;
 }
 
 .chat-last-msg {
@@ -175,14 +175,14 @@ ion-content.chats-content {
   overflow: hidden;
   text-overflow: ellipsis;
 
-  &.no-msg { color: #aaa; font-style: italic; }
+  &.no-msg { color: #666; font-style: italic; }
 }
 
 // ── Badge de no leídos ────────────────────────────────────────
 .unread-badge {
   min-width: 22px;
   height: 22px;
-  background: #e74c3c;
+  background: #c0392b;
   color: #ffffff;
   border-radius: 11px;
   font-size: 11px;
@@ -221,9 +221,10 @@ ion-content.chats-content {
 
   ion-icon { font-size: 16px; flex-shrink: 0; }
 
+  // Azul oscuro sobre dorado: el blanco no contrastaba
   &.active {
     background: #c9a000;
-    color: #ffffff;
+    color: #1a2e5a;
     box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.25);
   }
 
@@ -238,7 +239,7 @@ ion-content.chats-content {
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
-  background: #e74c3c;
+  background: #c0392b;
   color: #ffffff;
   border: 1.5px solid #ffffff;
   border-radius: 9px;
@@ -328,11 +329,18 @@ ion-content.chats-content {
 
     &.active {
       background: #c9a000;
-      color: #ffffff;
+      color: #1a2e5a;
+
+      // La regla global pinta el ícono directamente: se reafirma el azul
+      ion-icon { color: #1a2e5a; }
     }
   }
 
   .tab-dot { border-color: #1c2b45; }
+
+  // Contadores rojos: texto blanco (la regla global los dejaba gris claro)
+  .tab-dot,
+  .unread-badge { color: #ffffff; }
 
   .new-chat-btn {
     background: #223354;
@@ -350,7 +358,7 @@ ion-content.chats-content {
   .chat-resource { color: #ffffff !important; }
   .chat-date     { color: #a9b6cc !important; }
   .chat-last-msg { color: #cbd5e6 !important; }
-  .chat-last-msg.no-msg { color: #8493ad !important; }
+  .chat-last-msg.no-msg { color: #a9b6cc !important; }
 
   .chat-item.unread {
     background: #2a3554 !important;
