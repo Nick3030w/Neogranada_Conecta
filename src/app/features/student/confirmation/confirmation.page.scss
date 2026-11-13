@@ -272,3 +272,19 @@ ion-content.conf-content {
     color: #4a5e7a;
   }
 }
+
+// ============================================================
+// Tema oscuro
+// ============================================================
+// La píldora superior pasa a superficie oscura (regla global de .top-pill),
+// pero su texto conservaba el color oscuro del tema claro.
+:host-context(body.theme-dark) {
+  .top-pill {
+    border-color: var(--nc-gold);
+
+    span { color: #eef2f8; }
+  }
+
+  // Rueda de carga: aspas claras para que se vea sobre el panel oscuro
+  .spinner-blade { background: #eef2f8; }
+}

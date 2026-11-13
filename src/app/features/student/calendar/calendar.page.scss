@@ -289,7 +289,7 @@ ion-content.cal-content {
 }
 
 .bookings-count-pill {
-  background: #6b7fa3;
+  background: #4a5e7a;
   border-radius: 20px;
   padding: 10px 18px;
   color: #ffffff;
@@ -325,10 +325,17 @@ ion-content.cal-content {
     background: #e8857a !important;
   }
 
-  .cal-day-header { color: #1a1a1a !important; }
+  // Termina en "-header": sin esto la regla global le pone fondo azul oscuro
+  .cal-day-header {
+    background: transparent !important;
+    color: #1a1a1a !important;
+  }
 
   .cal-day {
     color: #1a1a1a !important;
+
+    // El número va en un <span> que la regla global pinta directamente
+    > span { color: inherit !important; }
 
     &.other-month { color: #4a2e28 !important; }
     &.today       { background: #1a2e5a !important; color: #ffffff !important; }
@@ -347,6 +354,12 @@ ion-content.cal-content {
 
   // El título de la lista de reservas se aclara
   .day-bookings-title { color: #eef2f8 !important; }
+
+  // Barra de préstamos: la píldora gris clara pasa a superficie oscura
+  .bookings-label-pill {
+    background: #223354 !important;
+    color: #eef2f8 !important;
+  }
 
   // Los badges de estado conservan sus colores (buen contraste propio)
 }
