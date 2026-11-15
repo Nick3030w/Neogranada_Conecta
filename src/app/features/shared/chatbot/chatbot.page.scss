@@ -203,7 +203,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  // El margen inferior suma la altura de la barra de navegación del celular,
+  // que Capacitor informa en --ion-safe-area-bottom (vale 0 con el teclado
+  // abierto o si la barra no tapa la app), para que no tape la caja de texto.
+  padding: 8px 12px calc(8px + var(--ion-safe-area-bottom, 0px));
   // La barra acompaña el fondo navy de la página en ambos temas, para que el
   // input gris claro resalte con buen contraste en lugar de confundirse.
   background: var(--nc-blue);
