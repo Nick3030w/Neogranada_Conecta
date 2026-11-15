@@ -20,7 +20,11 @@
 
 .empty-chat { flex: 1; display: flex; align-items: center; justify-content: center; p { color: var(--nc-gray-medium); font-size: var(--nc-font-size-sm); text-align: center; } }
 
-.chat-input-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--nc-blue-dark); border-top: 1px solid rgba(255,255,255,0.1); }
+// Barra de escritura. El margen inferior suma la altura de la barra de navegación
+// del celular: Capacitor la informa y Ionic la expone en --ion-safe-area-bottom.
+// Vale 0 si la barra no tapa la app o si el teclado está abierto, así que la caja
+// de texto queda justo encima de la barra o del teclado.
+.chat-input-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px calc(8px + var(--ion-safe-area-bottom, 0px)); background: var(--nc-blue-dark); border-top: 1px solid rgba(255,255,255,0.1); }
 // Texto blanco fijo: en tema oscuro --nc-white es una superficie (#1c2b45), no un
 // color de texto. Ionic pinta el placeholder al 60 % salvo que se fije la opacidad.
 .chat-input { --background: rgba(255,255,255,0.1); --color: #ffffff; --placeholder-color: #a9b6cc; --placeholder-opacity: 1; --border-radius: 20px; --padding-start: 14px; --padding-end: 14px; flex: 1; font-size: var(--nc-font-size-sm); }
